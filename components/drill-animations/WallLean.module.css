@@ -1,0 +1,18 @@
+/* Wall Lean: body tilted forward (bodyLean=15), strong alternating knee drives.
+ * Shin folds sharply on each knee drive. Arms near-static (hands on wall). */
+
+@keyframes wlLeftThigh  { 0%,100%{transform:rotate(35deg)}  50%{transform:rotate(-10deg)} }
+@keyframes wlRightThigh { 0%,100%{transform:rotate(-10deg)} 50%{transform:rotate(35deg)}  }
+@keyframes wlLeftShin   { 0%,100%{transform:rotate(-65deg)} 50%{transform:rotate(-5deg)}  }
+@keyframes wlRightShin  { 0%,100%{transform:rotate(-5deg)}  50%{transform:rotate(-65deg)} }
+@keyframes wlUA         { 0%,100%{transform:rotate(-5deg)}  50%{transform:rotate(5deg)}   }
+@keyframes wlFA         { 0%,100%{transform:rotate(-85deg)} 50%{transform:rotate(-85deg)} }
+
+.leftThigh     { animation: wlLeftThigh  1.0s ease-in-out infinite; }
+.rightThigh    { animation: wlRightThigh 1.0s ease-in-out infinite; }
+.leftShin      { animation: wlLeftShin   1.0s ease-in-out infinite; }
+.rightShin     { animation: wlRightShin  1.0s ease-in-out infinite; }
+.leftUpperArm  { animation: wlUA         1.0s ease-in-out infinite; }
+.rightUpperArm { animation: wlUA         1.0s ease-in-out infinite; }
+.leftForearm   { animation: wlFA         1.0s ease-in-out infinite; }
+.rightForearm  { animation: wlFA         1.0s ease-in-out infinite; }

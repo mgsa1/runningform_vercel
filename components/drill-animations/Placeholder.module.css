@@ -1,0 +1,18 @@
+/* Generic easy jog — fallback for any unregistered drill */
+
+@keyframes pLeftThigh  { 0%,100%{transform:rotate(25deg)}  50%{transform:rotate(-20deg)} }
+@keyframes pRightThigh { 0%,100%{transform:rotate(-20deg)} 50%{transform:rotate(25deg)}  }
+@keyframes pLeftShin   { 0%,100%{transform:rotate(-55deg)} 50%{transform:rotate(-5deg)}  }
+@keyframes pRightShin  { 0%,100%{transform:rotate(-5deg)}  50%{transform:rotate(-55deg)} }
+@keyframes pLeftUA     { 0%,100%{transform:rotate(-25deg)} 50%{transform:rotate(25deg)}  }
+@keyframes pRightUA    { 0%,100%{transform:rotate(25deg)}  50%{transform:rotate(-25deg)} }
+@keyframes pForearm    { 0%,100%{transform:rotate(-75deg)} 50%{transform:rotate(-65deg)} }
+
+.leftThigh     { animation: pLeftThigh  0.75s ease-in-out infinite; }
+.rightThigh    { animation: pRightThigh 0.75s ease-in-out infinite; }
+.leftShin      { animation: pLeftShin   0.75s ease-in-out infinite; }
+.rightShin     { animation: pRightShin  0.75s ease-in-out infinite; }
+.leftUpperArm  { animation: pLeftUA     0.75s ease-in-out infinite; }
+.rightUpperArm { animation: pRightUA    0.75s ease-in-out infinite; }
+.leftForearm   { animation: pForearm    0.75s ease-in-out infinite; }
+.rightForearm  { animation: pForearm    0.75s ease-in-out infinite; }

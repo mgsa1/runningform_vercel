@@ -1,0 +1,61 @@
+/* High Knees: thigh near-horizontal, shin fully folded, rapid cadence */
+
+/* 4-phase gait cycle: drive → descend → trail → recover */
+@keyframes hkLeftThigh {
+  0%   { transform: rotate(48deg); }   /* peak knee drive */
+  20%  { transform: rotate(14deg); }   /* foot descending */
+  50%  { transform: rotate(-5deg); }   /* trailing, other leg drives */
+  80%  { transform: rotate(18deg); }   /* swinging through */
+  100% { transform: rotate(48deg); }
+}
+@keyframes hkRightThigh {
+  0%   { transform: rotate(-5deg); }
+  20%  { transform: rotate(18deg); }
+  50%  { transform: rotate(48deg); }
+  80%  { transform: rotate(14deg); }
+  100% { transform: rotate(-5deg); }
+}
+@keyframes hkLeftShin {
+  0%   { transform: rotate(-92deg); }  /* fully folded at peak */
+  20%  { transform: rotate(-32deg); }  /* unfolding to land */
+  50%  { transform: rotate(-5deg); }   /* extended, toe-off */
+  80%  { transform: rotate(-55deg); }  /* folding again */
+  100% { transform: rotate(-92deg); }
+}
+@keyframes hkRightShin {
+  0%   { transform: rotate(-5deg); }
+  20%  { transform: rotate(-55deg); }
+  50%  { transform: rotate(-92deg); }
+  80%  { transform: rotate(-32deg); }
+  100% { transform: rotate(-5deg); }
+}
+/* Contralateral arms — bigger, visible range */
+@keyframes hkLeftUA {
+  0%   { transform: rotate(35deg); }
+  50%  { transform: rotate(-35deg); }
+  100% { transform: rotate(35deg); }
+}
+@keyframes hkRightUA {
+  0%   { transform: rotate(-35deg); }
+  50%  { transform: rotate(35deg); }
+  100% { transform: rotate(-35deg); }
+}
+@keyframes hkLeftFA {
+  0%   { transform: rotate(-57deg); }
+  50%  { transform: rotate(-84deg); }
+  100% { transform: rotate(-57deg); }
+}
+@keyframes hkRightFA {
+  0%   { transform: rotate(-84deg); }
+  50%  { transform: rotate(-57deg); }
+  100% { transform: rotate(-84deg); }
+}
+
+.leftThigh     { animation: hkLeftThigh  0.55s ease-in-out infinite; }
+.rightThigh    { animation: hkRightThigh 0.55s ease-in-out infinite; }
+.leftShin      { animation: hkLeftShin   0.55s ease-in-out infinite; }
+.rightShin     { animation: hkRightShin  0.55s ease-in-out infinite; }
+.leftUpperArm  { animation: hkLeftUA     0.55s ease-in-out infinite; }
+.rightUpperArm { animation: hkRightUA    0.55s ease-in-out infinite; }
+.leftForearm   { animation: hkLeftFA     0.55s ease-in-out infinite; }
+.rightForearm  { animation: hkRightFA    0.55s ease-in-out infinite; }

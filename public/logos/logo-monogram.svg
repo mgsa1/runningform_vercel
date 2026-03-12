@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 130" width="200" height="130">
+  <rect width="200" height="130" fill="#030712"/>
+
+  <!-- "R" lettermark — custom path where the diagonal leg becomes a runner's kick -->
+  <!-- R vertical stem -->
+  <rect x="28" y="18" width="8" height="60" rx="2" fill="white"/>
+  <!-- R bowl top -->
+  <path d="M36 18 Q72 18 72 36 Q72 54 36 54" fill="none" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <!-- R diagonal leg (stylised as runner kick: straight down then angled forward like a stride) -->
+  <!-- Upper part of leg -->
+  <line x1="36" y1="54" x2="52" y2="70" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Lower part: kicked forward (foot) -->
+  <line x1="52" y1="70" x2="68" y2="78" stroke="white" stroke-width="6" stroke-linecap="round"/>
+  <!-- Small circle "knee" joint for runner feel -->
+  <circle cx="52" cy="70" r="3.5" fill="#60a5fa"/>
+
+  <!-- "F" in blue-400 -->
+  <!-- F vertical stem -->
+  <rect x="86" y="18" width="8" height="60" rx="2" fill="#60a5fa"/>
+  <!-- F top bar -->
+  <rect x="86" y="18" width="36" height="8" rx="2" fill="#60a5fa"/>
+  <!-- F middle bar -->
+  <rect x="86" y="43" width="26" height="7" rx="2" fill="#60a5fa"/>
+
+  <!-- Full wordmark beneath, small caps style -->
+  <text
+    x="100"
+    y="106"
+    text-anchor="middle"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="11"
+    font-weight="600"
+    letter-spacing="4"
+    fill="#9ca3af"
+  >RUNNINGFORM</text>
+</svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80" width="400" height="80">
+  <rect width="400" height="80" fill="#030712"/>
+
+  <!-- Motion lines -->
+  <line x1="4" y1="34" x2="22" y2="34" stroke="#4b5563" stroke-width="2" stroke-linecap="round"/>
+  <line x1="8" y1="42" x2="20" y2="42" stroke="#4b5563" stroke-width="2" stroke-linecap="round"/>
+  <line x1="12" y1="50" x2="20" y2="50" stroke="#4b5563" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Runner: head -->
+  <circle cx="46" cy="18" r="6" fill="#60a5fa"/>
+
+  <!-- Runner: torso (leaning forward) -->
+  <line x1="46" y1="24" x2="42" y2="42" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Runner: rear arm (swinging back and up) -->
+  <line x1="45" y1="29" x2="36" y2="24" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Runner: front arm (driving forward) -->
+  <line x1="45" y1="29" x2="54" y2="34" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Runner: front leg (driving forward, knee up) -->
+  <line x1="42" y1="42" x2="50" y2="54" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="50" y1="54" x2="58" y2="62" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Runner: rear leg (pushing off, extended behind) -->
+  <line x1="42" y1="42" x2="34" y2="56" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="34" y1="56" x2="30" y2="64" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Wordmark -->
+  <text
+    x="76"
+    y="52"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="32"
+    font-weight="700"
+    letter-spacing="-1"
+    fill="white"
+  >RunningForm</text>
+</svg>

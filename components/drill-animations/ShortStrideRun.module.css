@@ -1,0 +1,18 @@
+/* Short Stride Run: reduced swing amplitude, foot lands under hips, arms compact */
+
+@keyframes ssLeftThigh  { 0%,100%{transform:rotate(14deg)}  50%{transform:rotate(-14deg)} }
+@keyframes ssRightThigh { 0%,100%{transform:rotate(-14deg)} 50%{transform:rotate(14deg)}  }
+@keyframes ssLeftShin   { 0%,100%{transform:rotate(-30deg)} 50%{transform:rotate(-5deg)}  }
+@keyframes ssRightShin  { 0%,100%{transform:rotate(-5deg)}  50%{transform:rotate(-30deg)} }
+@keyframes ssLeftUA     { 0%,100%{transform:rotate(-15deg)} 50%{transform:rotate(15deg)}  }
+@keyframes ssRightUA    { 0%,100%{transform:rotate(15deg)}  50%{transform:rotate(-15deg)} }
+@keyframes ssForearm    { 0%,100%{transform:rotate(-75deg)} 50%{transform:rotate(-65deg)} }
+
+.leftThigh     { animation: ssLeftThigh  0.65s ease-in-out infinite; }
+.rightThigh    { animation: ssRightThigh 0.65s ease-in-out infinite; }
+.leftShin      { animation: ssLeftShin   0.65s ease-in-out infinite; }
+.rightShin     { animation: ssRightShin  0.65s ease-in-out infinite; }
+.leftUpperArm  { animation: ssLeftUA     0.65s ease-in-out infinite; }
+.rightUpperArm { animation: ssRightUA    0.65s ease-in-out infinite; }
+.leftForearm   { animation: ssForearm    0.65s ease-in-out infinite; }
+.rightForearm  { animation: ssForearm    0.65s ease-in-out infinite; }

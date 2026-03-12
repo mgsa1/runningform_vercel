@@ -1,0 +1,19 @@
+/* Cadence Builder: 170 spm — compact stride, fast turnover.
+ * Duration = 120/170 = 0.706 s per gait cycle (L+R step). */
+
+@keyframes cbLeftThigh  { 0%,100%{transform:rotate(18deg)}  50%{transform:rotate(-18deg)} }
+@keyframes cbRightThigh { 0%,100%{transform:rotate(-18deg)} 50%{transform:rotate(18deg)}  }
+@keyframes cbLeftShin   { 0%,100%{transform:rotate(-35deg)} 50%{transform:rotate(-5deg)}  }
+@keyframes cbRightShin  { 0%,100%{transform:rotate(-5deg)}  50%{transform:rotate(-35deg)} }
+@keyframes cbLeftUA     { 0%,100%{transform:rotate(-20deg)} 50%{transform:rotate(20deg)}  }
+@keyframes cbRightUA    { 0%,100%{transform:rotate(20deg)}  50%{transform:rotate(-20deg)} }
+@keyframes cbForearm    { 0%,100%{transform:rotate(-75deg)} 50%{transform:rotate(-65deg)} }
+
+.leftThigh     { animation: cbLeftThigh  0.706s ease-in-out infinite; }
+.rightThigh    { animation: cbRightThigh 0.706s ease-in-out infinite; }
+.leftShin      { animation: cbLeftShin   0.706s ease-in-out infinite; }
+.rightShin     { animation: cbRightShin  0.706s ease-in-out infinite; }
+.leftUpperArm  { animation: cbLeftUA     0.706s ease-in-out infinite; }
+.rightUpperArm { animation: cbRightUA    0.706s ease-in-out infinite; }
+.leftForearm   { animation: cbForearm    0.706s ease-in-out infinite; }
+.rightForearm  { animation: cbForearm    0.706s ease-in-out infinite; }

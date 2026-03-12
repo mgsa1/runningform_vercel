@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 68" width="310" height="68">
+  <rect width="310" height="68" fill="#030712"/>
+
+  <defs>
+    <!-- Shift emoji hue to blue so runner reads as blue-clad, not white -->
+    <filter id="blue-runner" color-interpolation-filters="sRGB">
+      <feColorMatrix type="hueRotate" values="195"/>
+      <feComponentTransfer>
+        <feFuncR type="linear" slope="0.85"/>
+        <feFuncG type="linear" slope="0.95"/>
+        <feFuncB type="linear" slope="1.3" intercept="0.05"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+
+  <!-- Wordmark -->
+  <text
+    x="50"
+    y="52"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="36"
+    font-weight="700"
+    letter-spacing="-1"
+    fill="white"
+  >RunningForm</text>
+
+  <!-- Runner emoji: 28% larger than text, flipped left, blue-tinted, overlapping first letters -->
+  <g transform="translate(80,0) scale(-1,1)" filter="url(#blue-runner)">
+    <text y="55" font-size="46">🏃</text>
+  </g>
+</svg>

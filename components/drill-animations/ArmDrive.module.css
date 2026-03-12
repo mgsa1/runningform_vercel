@@ -1,0 +1,19 @@
+/* Arm Drive: large front-to-back arm swing dominates; legs barely move.
+ * Forearm bends ≈90° at elbow, angle varies subtly through the swing. */
+
+@keyframes adLeftUA     { 0%,100%{transform:rotate(-50deg)} 50%{transform:rotate(35deg)}  }
+@keyframes adRightUA    { 0%,100%{transform:rotate(35deg)}  50%{transform:rotate(-50deg)} }
+@keyframes adLeftFA     { 0%,100%{transform:rotate(-90deg)} 50%{transform:rotate(-70deg)} }
+@keyframes adRightFA    { 0%,100%{transform:rotate(-70deg)} 50%{transform:rotate(-90deg)} }
+@keyframes adLeftThigh  { 0%,100%{transform:rotate(-5deg)}  50%{transform:rotate(5deg)}   }
+@keyframes adRightThigh { 0%,100%{transform:rotate(5deg)}   50%{transform:rotate(-5deg)}  }
+@keyframes adShin       { 0%,100%{transform:rotate(-15deg)} 50%{transform:rotate(-15deg)} }
+
+.leftUpperArm  { animation: adLeftUA     0.9s ease-in-out infinite; }
+.rightUpperArm { animation: adRightUA    0.9s ease-in-out infinite; }
+.leftForearm   { animation: adLeftFA     0.9s ease-in-out infinite; }
+.rightForearm  { animation: adRightFA    0.9s ease-in-out infinite; }
+.leftThigh     { animation: adLeftThigh  0.9s ease-in-out infinite; }
+.rightThigh    { animation: adRightThigh 0.9s ease-in-out infinite; }
+.leftShin      { animation: adShin       0.9s ease-in-out infinite; }
+.rightShin     { animation: adShin       0.9s ease-in-out infinite; }

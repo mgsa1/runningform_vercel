@@ -1,0 +1,18 @@
+/* Butt Kicks: thigh barely moves, shin flicks heel all the way to glute */
+
+@keyframes bkLeftThigh  { 0%,100%{transform:rotate(8deg)}   50%{transform:rotate(-8deg)}  }
+@keyframes bkRightThigh { 0%,100%{transform:rotate(-8deg)}  50%{transform:rotate(8deg)}   }
+@keyframes bkLeftShin   { 0%,100%{transform:rotate(-5deg)}  50%{transform:rotate(-100deg)} }
+@keyframes bkRightShin  { 0%,100%{transform:rotate(-100deg)}50%{transform:rotate(-5deg)}  }
+@keyframes bkLeftUA     { 0%,100%{transform:rotate(-15deg)} 50%{transform:rotate(15deg)}  }
+@keyframes bkRightUA    { 0%,100%{transform:rotate(15deg)}  50%{transform:rotate(-15deg)} }
+@keyframes bkForearm    { 0%,100%{transform:rotate(-72deg)} 50%{transform:rotate(-62deg)} }
+
+.leftThigh     { animation: bkLeftThigh  0.55s ease-in-out infinite; }
+.rightThigh    { animation: bkRightThigh 0.55s ease-in-out infinite; }
+.leftShin      { animation: bkLeftShin   0.55s ease-in-out infinite; }
+.rightShin     { animation: bkRightShin  0.55s ease-in-out infinite; }
+.leftUpperArm  { animation: bkLeftUA     0.55s ease-in-out infinite; }
+.rightUpperArm { animation: bkRightUA    0.55s ease-in-out infinite; }
+.leftForearm   { animation: bkForearm    0.55s ease-in-out infinite; }
+.rightForearm  { animation: bkForearm    0.55s ease-in-out infinite; }

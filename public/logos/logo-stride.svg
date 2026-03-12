@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 90" width="420" height="90">
+  <rect width="420" height="90" fill="#030712"/>
+
+  <!-- Runner silhouette (filled, path-based, mid-stride leaning forward) -->
+  <g fill="white">
+    <!-- Head -->
+    <circle cx="38" cy="14" r="7"/>
+    <!-- Body -->
+    <path d="M34 21 Q30 35 28 45 Q33 44 38 44 Q41 35 40 21 Z"/>
+    <!-- Front leg: thigh up, shin forward -->
+    <path d="M36 44 L44 58 L40 60 L30 46 Z"/>
+    <path d="M44 58 L54 70 L51 72 L41 60 Z"/>
+    <!-- Rear leg: extended back and down -->
+    <path d="M30 44 L20 58 L24 61 L34 47 Z"/>
+    <path d="M20 58 L16 70 L20 71 L24 59 Z"/>
+    <!-- Front arm: driving forward -->
+    <path d="M38 26 L50 34 L48 37 L36 29 Z"/>
+    <!-- Rear arm: swinging back -->
+    <path d="M36 26 L24 20 L25 17 L37 23 Z"/>
+  </g>
+
+  <!-- Swoosh underline -->
+  <path
+    d="M16 76 Q80 68 160 74 Q240 80 340 72"
+    fill="none"
+    stroke="#60a5fa"
+    stroke-width="2.5"
+    stroke-linecap="round"
+  />
+
+  <!-- Wordmark: "Running" white + "Form" blue -->
+  <text
+    x="76"
+    y="56"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="30"
+    font-weight="400"
+    fill="white"
+  >Running</text>
+  <text
+    x="232"
+    y="56"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="30"
+    font-weight="700"
+    fill="#60a5fa"
+  >Form</text>
+</svg>

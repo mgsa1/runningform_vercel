@@ -1,0 +1,18 @@
+/* A-Skip: high knee drive with heel tucked, contra-lateral arm swing */
+
+@keyframes asLeftThigh  { 0%,100%{transform:rotate(40deg)}  50%{transform:rotate(-15deg)} }
+@keyframes asRightThigh { 0%,100%{transform:rotate(-15deg)} 50%{transform:rotate(40deg)}  }
+@keyframes asLeftShin   { 0%,100%{transform:rotate(-80deg)} 50%{transform:rotate(-5deg)}  }
+@keyframes asRightShin  { 0%,100%{transform:rotate(-5deg)}  50%{transform:rotate(-80deg)} }
+@keyframes asLeftUA     { 0%,100%{transform:rotate(-30deg)} 50%{transform:rotate(30deg)}  }
+@keyframes asRightUA    { 0%,100%{transform:rotate(30deg)}  50%{transform:rotate(-30deg)} }
+@keyframes asForearm    { 0%,100%{transform:rotate(-78deg)} 50%{transform:rotate(-68deg)} }
+
+.leftThigh     { animation: asLeftThigh  0.75s ease-in-out infinite; }
+.rightThigh    { animation: asRightThigh 0.75s ease-in-out infinite; }
+.leftShin      { animation: asLeftShin   0.75s ease-in-out infinite; }
+.rightShin     { animation: asRightShin  0.75s ease-in-out infinite; }
+.leftUpperArm  { animation: asLeftUA     0.75s ease-in-out infinite; }
+.rightUpperArm { animation: asRightUA    0.75s ease-in-out infinite; }
+.leftForearm   { animation: asForearm    0.75s ease-in-out infinite; }
+.rightForearm  { animation: asForearm    0.75s ease-in-out infinite; }

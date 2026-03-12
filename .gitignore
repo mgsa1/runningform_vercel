@@ -29,6 +29,13 @@ Thumbs.db
 *.swp
 *.swo
 
+# Claude Code local settings (machine-specific)
+.claude/
+
+# Video files (test/development only)
+*.mp4
+*.mov
+
 # Logs
 *.log
 npm-debug.log*
