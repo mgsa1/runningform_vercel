@@ -17,6 +17,9 @@ export default function RootLayout({
       <body className="bg-gray-950">
         <Nav />
         {children}
+        <footer className="text-center text-xs text-gray-700 py-6">
+          Made with love in SF. — mgsa
+        </footer>
       </body>
     </html>
   );
