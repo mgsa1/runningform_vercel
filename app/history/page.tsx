@@ -132,7 +132,7 @@ export default async function HistoryPage() {
                 ? `/sessions/${session.id}/status`
                 : null
 
-              const CardContent = (
+              const CardInner = (
                 <div className="p-4 rounded-lg border border-gray-800 bg-gray-900 space-y-3 hover:border-gray-600 transition-colors">
                   {/* Top row: filename + date */}
                   <div className="flex items-start justify-between gap-4">
@@ -181,25 +181,23 @@ export default async function HistoryPage() {
                         {result.usefulness_rating === 5 ? '👍' : '👎'}
                       </span>
                     )}
-
-                    {/* Delete button for non-completed sessions */}
-                    {!isComplete && (
-                      <div className="ml-auto">
-                        <DeleteSessionButton sessionId={session.id} />
-                      </div>
-                    )}
                   </div>
                 </div>
               )
 
               return (
-                <li key={session.id}>
+                <li key={session.id} className="relative">
                   {href ? (
                     <Link href={href} className="block">
-                      {CardContent}
+                      {CardInner}
                     </Link>
                   ) : (
-                    CardContent
+                    CardInner
+                  )}
+                  {!isComplete && (
+                    <div className="absolute bottom-4 right-4">
+                      <DeleteSessionButton sessionId={session.id} />
+                    </div>
                   )}
                 </li>
               )
