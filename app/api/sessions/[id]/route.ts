@@ -26,10 +26,10 @@ export async function DELETE(
     return NextResponse.json({ error: 'Session not found' }, { status: 404 })
   }
 
-  // Only allow deleting failed sessions
-  if (session.status !== 'failed') {
+  // Only allow deleting non-completed sessions
+  if (session.status === 'completed') {
     return NextResponse.json(
-      { error: 'Only failed sessions can be deleted' },
+      { error: 'Completed sessions cannot be deleted' },
       { status: 409 }
     )
   }
