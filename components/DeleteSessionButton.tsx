@@ -16,7 +16,7 @@ export default function DeleteSessionButton({ sessionId }: Props) {
     setDeleting(true)
     try {
       await fetch(`/api/sessions/${sessionId}`, { method: 'DELETE' })
-      router.refresh()
+      router.push('/history')
     } finally {
       setDeleting(false)
       setConfirming(false)
