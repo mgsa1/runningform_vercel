@@ -12,10 +12,12 @@ function getServiceClient() {
   )
 }
 
-const systemPrompt = fs.readFileSync(
-  path.join(process.cwd(), 'data/systemprompt_runningCoach.md'),
-  'utf-8'
-)
+function getSystemPrompt() {
+  return fs.readFileSync(
+    path.join(process.cwd(), 'data/systemprompt_runningCoach.md'),
+    'utf-8'
+  )
+}
 
 // Zod schema matching the system prompt output schema exactly
 const FormAnalysisItemSchema = z.object({
@@ -123,7 +125,7 @@ export const analysisFunction = inngest.createFunction(
       const response = await client.messages.create({
         model: 'claude-sonnet-4-6',
         max_tokens: 2048,
-        system: systemPrompt,
+        system: getSystemPrompt(),
         tools: [
           {
             name: 'submit_analysis',
