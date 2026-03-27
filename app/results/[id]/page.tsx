@@ -278,9 +278,11 @@ export default async function ResultsPage({
                             />
                           </svg>
                         </summary>
-                        <p className="mt-3 text-sm text-gray-400 leading-relaxed border-t border-gray-700 pt-3">
-                          {drillLib.instructions}
-                        </p>
+                        <ol className="mt-3 text-sm text-gray-400 leading-relaxed border-t border-gray-700 pt-3 list-decimal list-inside space-y-1.5">
+                          {drillLib.instructions.split('. ').filter(Boolean).map((step: string, si: number) => (
+                            <li key={si}>{step.replace(/\.$/, '')}</li>
+                          ))}
+                        </ol>
                       </details>
                     )}
                   </div>
