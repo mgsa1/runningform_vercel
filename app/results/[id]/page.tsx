@@ -55,10 +55,10 @@ function matchDrill(item: FormAnalysisItem, drills: Drill[]): Drill | null {
   )
 }
 
-function severityTopAccent(severity: string) {
-  if (severity === 'critical') return 'border-t-2 border-t-red-500'
-  if (severity === 'moderate') return 'border-t-2 border-t-amber-500'
-  if (severity === 'minor') return 'border-t-2 border-t-blue-400'
+function severityAccent(severity: string) {
+  if (severity === 'critical') return 'border-l-2 border-l-red-500'
+  if (severity === 'moderate') return 'border-l-2 border-l-amber-500'
+  if (severity === 'minor') return 'border-l-2 border-l-blue-400'
   return ''
 }
 
@@ -203,7 +203,7 @@ export default async function ResultsPage({
             {topFixes.map(({ item, drillLib }, i) => (
               <div
                 key={i}
-                className={`rounded-xl border border-gray-800 bg-gray-900 overflow-hidden ${severityTopAccent(item.severity)}`}
+                className={`rounded-xl border border-gray-800 bg-gray-900 overflow-hidden ${severityAccent(item.severity)}`}
               >
                 {/* Issue header */}
                 <div className="px-4 pt-4 pb-3 space-y-1.5">
