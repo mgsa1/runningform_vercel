@@ -2,7 +2,6 @@ import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import drillsData from '@/data/drills.json'
-import RatingButtons from './RatingButtons'
 import AnalysisHero from '@/components/AnalysisHero'
 import FormScoreRing from '@/components/FormScoreRing'
 import FrameGallery from '@/components/FrameGallery'
@@ -114,7 +113,7 @@ export default async function ResultsPage({
   const { data: row } = await supabase
     .from('analysis_results')
     .select(
-      'id, result, llm_model, frame_count, usefulness_rating, created_at, session_id, analysis_sessions(original_filename, frame_paths)'
+      'id, result, llm_model, frame_count, created_at, session_id, analysis_sessions(original_filename, frame_paths)'
     )
     .eq('id', params.id)
     .eq('user_id', user.id)
@@ -133,17 +132,24 @@ export default async function ResultsPage({
     (p) => `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/frames/${p}`
   )
 
-  // Fetch biomechanics separately (column may not exist if migration 004 is not applied)
+  // Fetch biomechanics + pose data separately (columns may not exist if migration 004 is not applied)
   let biomechanics: Record<string, unknown> | null = null
-  const { data: sessionBio, error: bioError } = await supabase
+  type PoseFrame = { frameIndex: number; landmarks: { x: number; y: number; z: number; visibility: number }[] }
+  let poseFrames: PoseFrame[] | null = null
+  const { data: sessionExtra, error: extraError } = await supabase
     .from('analysis_sessions')
-    .select('biomechanics')
+    .select('biomechanics, pose_data')
     .eq('id', row.session_id)
     .single()
-  if (bioError) {
-    console.error('[results] biomechanics fetch error:', bioError.message)
-  } else if (sessionBio?.biomechanics) {
-    biomechanics = sessionBio.biomechanics as Record<string, unknown>
+  if (extraError) {
+    console.error('[results] session data fetch error:', extraError.message)
+  } else {
+    if (sessionExtra?.biomechanics) {
+      biomechanics = sessionExtra.biomechanics as Record<string, unknown>
+    }
+    if (sessionExtra?.pose_data && Array.isArray(sessionExtra.pose_data)) {
+      poseFrames = sessionExtra.pose_data as PoseFrame[]
+    }
   }
 
   const createdAt = new Date(row.created_at).toLocaleDateString('en-GB', {
@@ -162,12 +168,6 @@ export default async function ResultsPage({
   const goodTraits = formAnalysis
     .filter((item) => item.status === 'good')
     .map((item) => ({ trait: item.trait, observation: item.observation }))
-
-  // Focus traits for highlights
-  const focusTraits = formAnalysis
-    .filter((item) => item.status === 'needs_work')
-    .sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity])
-    .map((item) => ({ trait: item.trait, severity: item.severity }))
 
   // Top 4 needs_work items sorted by severity — these are the priority fixes
   const topFixes = formAnalysis
@@ -203,11 +203,13 @@ export default async function ResultsPage({
         </div>
 
         {/* ── Frame gallery ── */}
-        {frameUrls.length > 0 && <FrameGallery frameUrls={frameUrls} />}
+        {frameUrls.length > 0 && (
+          <FrameGallery frameUrls={frameUrls} poseFrames={poseFrames ?? undefined} />
+        )}
 
-        {/* ── Highlights: strengths + focus areas ── */}
-        {(goodTraits.length > 0 || focusTraits.length > 0) && (
-          <AnalysisHighlights goodTraits={goodTraits} focusTraits={focusTraits} />
+        {/* ── Highlights: strengths ── */}
+        {goodTraits.length > 0 && (
+          <AnalysisHighlights goodTraits={goodTraits} />
         )}
 
         {/* ── Priority fixes with drills ── */}
@@ -343,15 +345,6 @@ export default async function ResultsPage({
         {biomechanics && (
           <BiomechanicsCard biomechanics={biomechanics as never} />
         )}
-
-        {/* ── Rating ── */}
-        <section className="pt-2 space-y-2">
-          <RatingButtons
-            resultId={row.id}
-            initialRating={row.usefulness_rating ?? null}
-          />
-          <p className="text-xs text-gray-600">Your rating helps us improve future analyses.</p>
-        </section>
 
         {/* ── Disclaimer ── */}
         <p className="text-xs text-gray-500 leading-relaxed border-t border-gray-800 pt-6">

@@ -17,11 +17,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { sessionId, framePaths, runnerContext, biomechanics } = body as {
+  const { sessionId, framePaths, runnerContext, biomechanics, poseData } = body as {
     sessionId?: unknown
     framePaths?: unknown
     runnerContext?: { pace?: string; fatigue?: number }
     biomechanics?: unknown
+    poseData?: unknown
   }
 
   if (typeof sessionId !== 'string' || sessionId.trim() === '') {
@@ -31,11 +32,11 @@ export async function POST(request: NextRequest) {
   if (
     !Array.isArray(framePaths) ||
     framePaths.length === 0 ||
-    framePaths.length > 15 ||
+    framePaths.length > 30 ||
     framePaths.some((p) => typeof p !== 'string')
   ) {
     return NextResponse.json(
-      { error: 'framePaths must be a non-empty array of strings (max 15)' },
+      { error: 'framePaths must be a non-empty array of strings (max 30)' },
       { status: 422 }
     )
   }
@@ -70,8 +71,19 @@ export async function POST(request: NextRequest) {
       .eq('id', sessionId.trim())
   }
 
+  // Store per-frame pose landmarks for skeleton overlay on results page
+  // ~5-10KB for 10 frames × 33 landmarks — trivial JSONB size
+  if (poseData) {
+    const { error: poseError } = await supabase
+      .from('analysis_sessions')
+      .update({ pose_data: poseData })
+      .eq('id', sessionId.trim())
+    if (poseError) {
+      console.error('[submit] Failed to store pose_data:', poseError.message)
+    }
+  }
+
   // Store biomechanics summary — requires migration 004
-  // Raw pose data is NOT sent from client (too large); only the computed summary
   if (biomechanics) {
     const { error: bioError } = await supabase
       .from('analysis_sessions')

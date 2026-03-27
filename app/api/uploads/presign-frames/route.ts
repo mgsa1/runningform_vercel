@@ -22,8 +22,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'filename must be a non-empty string' }, { status: 422 })
   }
 
-  if (typeof frameCount !== 'number' || !Number.isInteger(frameCount) || frameCount < 1 || frameCount > 15) {
-    return NextResponse.json({ error: 'frameCount must be an integer between 1 and 15' }, { status: 422 })
+  if (typeof frameCount !== 'number' || !Number.isInteger(frameCount) || frameCount < 1 || frameCount > 30) {
+    return NextResponse.json({ error: 'frameCount must be an integer between 1 and 30' }, { status: 422 })
   }
 
   // TODO: Re-enable rate limit before production launch

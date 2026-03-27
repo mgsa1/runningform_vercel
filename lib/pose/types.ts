@@ -14,8 +14,14 @@ export interface FramePoseData {
   worldLandmarks: Landmark[] // real-world 3D coordinates in meters
 }
 
+export interface SelectedPoseFrame {
+  frameIndex: number
+  landmarks: Landmark[]
+}
+
 export interface PoseExtractionResult {
   frames: FramePoseData[]
+  selectedFrames?: SelectedPoseFrame[]
   modelVersion: string
   extractedAt: string
   visibleSide: 'left' | 'right' | 'frontal'

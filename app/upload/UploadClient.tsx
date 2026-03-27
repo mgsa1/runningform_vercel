@@ -96,6 +96,7 @@ export default function UploadClient({ userId }: Props) {
           framePaths,
           runnerContext: Object.keys(runnerContext).length ? runnerContext : undefined,
           biomechanics: biomechanics ?? undefined,
+          poseData: poseData?.selectedFrames ?? undefined,
         }),
       })
 

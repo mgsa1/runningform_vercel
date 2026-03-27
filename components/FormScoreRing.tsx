@@ -8,22 +8,15 @@ function getScoreColor(score: number) {
   return { stroke: '#ef4444', text: 'text-red-400' }
 }
 
-function getScoreLabel(score: number) {
-  if (score >= 75) return 'Great form'
-  if (score >= 50) return 'Room to improve'
-  return 'Needs attention'
-}
-
 export default function FormScoreRing({ score }: FormScoreRingProps) {
   const radius = 50
   const circumference = 2 * Math.PI * radius
   const progress = (score / 100) * circumference
   const offset = circumference - progress
-  const { stroke, text } = getScoreColor(score)
-  const label = getScoreLabel(score)
+  const { stroke } = getScoreColor(score)
 
   return (
-    <div className="flex flex-col items-center gap-1 shrink-0">
+    <div className="flex flex-col items-center shrink-0">
       <svg
         width="120"
         height="120"
@@ -75,7 +68,6 @@ export default function FormScoreRing({ score }: FormScoreRingProps) {
           / 100
         </text>
       </svg>
-      <span className={`text-sm font-medium ${text}`}>{label}</span>
     </div>
   )
 }

@@ -178,9 +178,6 @@ export default function BiomechanicsCard({ biomechanics }: BiomechanicsCardProps
       {/* Foot strike callout */}
       {footStrikeType && (
         <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gray-800/70 border border-gray-700">
-          <span className="text-2xl">
-            {footStrikeType.type === 'heel' ? '🦶' : footStrikeType.type === 'forefoot' ? '🩰' : '👟'}
-          </span>
           <div>
             <p className="text-sm font-medium text-white capitalize">
               {footStrikeType.type} strike
@@ -223,6 +220,9 @@ export default function BiomechanicsCard({ biomechanics }: BiomechanicsCardProps
           <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
             Asymmetry
           </h3>
+          <p className="text-xs text-gray-500 leading-relaxed">
+            Difference between left and right side. Under 3% is normal — larger gaps may reduce running efficiency.
+          </p>
           <div className="grid grid-cols-2 gap-3">
             {contactTimeAsymmetry && (
               <AsymmetryChip label="Contact time" metric={contactTimeAsymmetry} />

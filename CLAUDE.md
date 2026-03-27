@@ -26,7 +26,7 @@ This is the RunningForm MVP: a web app where runners upload videos, the browser 
 - All DB writes from the Inngest worker use `SUPABASE_SERVICE_ROLE_KEY`
 - **Pose detection** runs client-side via MediaPipe WASM — no server cost
 - 50 dense frames extracted at ~17fps from a 3s window for gait cycle analysis
-- 10 key gait-phase frames selected and sent to Claude (not evenly spaced)
+- 30 key gait-phase frames selected and sent to Claude (not evenly spaced)
 - Biomechanics computed client-side, stored in `analysis_sessions.biomechanics`
 - Biomechanics data appended to Claude prompt for measured+interpreted analysis
 
@@ -127,7 +127,7 @@ The Claude `tool_use` call enforces this schema (see `lib/workers/analysis.ts` f
 ```
 GET/PATCH /api/profile
 POST      /api/profile/consent
-POST      /api/uploads/presign-frames   ← enforces: JPEG only, ≤3MB/frame, ≤15 frames, ≤3 sessions/user/day
+POST      /api/uploads/presign-frames   ← enforces: JPEG only, ≤3MB/frame, ≤30 frames, ≤3 sessions/user/day
 POST      /api/uploads/submit
 GET       /api/jobs/:session_id
 GET       /api/results/:result_id

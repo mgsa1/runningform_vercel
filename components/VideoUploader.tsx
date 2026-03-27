@@ -12,7 +12,7 @@ import type {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const POSE_FRAME_COUNT = 50       // dense frames for pose detection (~17fps from 3s)
-const CLAUDE_FRAME_COUNT = 10     // frames sent to Claude for visual analysis
+const CLAUDE_FRAME_COUNT = 30     // frames sent to Claude for visual analysis
 const POSE_WINDOW_S = 3           // seconds of video to extract dense frames from
 const CANVAS_WIDTH = 640
 const CANVAS_HEIGHT = 360
@@ -218,9 +218,18 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
         selectedFrameIndices = poseModule.selectFramesEvenly(frameCount, CLAUDE_FRAME_COUNT)
       }
 
+      // Build selected frames' pose data (strip worldLandmarks to save space)
+      const selectedFrames = selectedFrameIndices
+        .filter((idx) => poseFrames[idx])
+        .map((idx) => ({
+          frameIndex: idx,
+          landmarks: poseFrames[idx].landmarks,
+        }))
+
       // Build the pose extraction result
       const poseExtractionResult: PoseExtractionResult = {
         frames: poseFrames,
+        selectedFrames,
         modelVersion: 'pose_landmarker_lite',
         extractedAt: new Date().toISOString(),
         visibleSide,
