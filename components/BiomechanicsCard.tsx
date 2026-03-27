@@ -45,15 +45,15 @@ const paceLabels: Record<string, string> = {
 }
 
 const assessmentColors: Record<string, { bar: string; text: string; bg: string }> = {
-  good: { bar: 'bg-green-500', text: 'text-green-400', bg: 'bg-green-500/10' },
-  moderate: { bar: 'bg-amber-500', text: 'text-amber-400', bg: 'bg-amber-500/10' },
-  significant: { bar: 'bg-red-500', text: 'text-red-400', bg: 'bg-red-500/10' },
+  good: { bar: 'bg-green-500', text: 'text-green-300', bg: 'bg-green-500/10' },
+  moderate: { bar: 'bg-amber-500', text: 'text-amber-300', bg: 'bg-amber-500/10' },
+  significant: { bar: 'bg-red-500', text: 'text-red-300', bg: 'bg-red-500/10' },
 }
 
 const confidenceBadge: Record<string, string> = {
-  high: 'text-green-500',
-  medium: 'text-amber-500',
-  low: 'text-gray-500',
+  high: 'text-green-300',
+  medium: 'text-amber-300',
+  low: 'text-gray-400',
 }
 
 function RangeBar({ metric }: { metric: MeasuredMetric }) {

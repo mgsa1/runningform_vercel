@@ -36,31 +36,31 @@ function statusBadge(status: string) {
   const map: Record<string, { label: string; classes: string }> = {
     queued: {
       label: 'Queued',
-      classes: 'bg-gray-500/20 text-gray-400',
+      classes: 'bg-gray-500/20 text-gray-300',
     },
     processing: {
       label: 'Processing',
-      classes: 'bg-blue-500/20 text-blue-400',
+      classes: 'bg-blue-500/20 text-blue-300',
     },
     completed: {
       label: 'Complete',
-      classes: 'bg-green-500/20 text-green-400',
+      classes: 'bg-green-500/20 text-green-300',
     },
     failed: {
       label: 'Failed',
-      classes: 'bg-red-500/20 text-red-400',
+      classes: 'bg-red-500/20 text-red-300',
     },
   }
-  return map[status] ?? { label: status, classes: 'bg-gray-500/20 text-gray-400' }
+  return map[status] ?? { label: status, classes: 'bg-gray-500/20 text-gray-300' }
 }
 
 function qualityBadge(quality: string) {
   const map: Record<string, string> = {
-    good: 'bg-green-500/20 text-green-400',
-    fair: 'bg-amber-500/20 text-amber-400',
-    poor: 'bg-red-500/20 text-red-400',
+    good: 'bg-green-500/20 text-green-300',
+    fair: 'bg-amber-500/20 text-amber-300',
+    poor: 'bg-red-500/20 text-red-300',
   }
-  return map[quality] ?? 'bg-gray-500/20 text-gray-400'
+  return map[quality] ?? 'bg-gray-500/20 text-gray-300'
 }
 
 // ── Page ─────────────────────────────────────────────────────────────────────

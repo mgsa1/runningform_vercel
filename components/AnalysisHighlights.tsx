@@ -9,7 +9,7 @@ export default function AnalysisHighlights({
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-green-400">
+      <h3 className="text-sm font-semibold text-green-300">
         Doing well
       </h3>
       <div className="grid grid-cols-1 gap-2">
@@ -32,7 +32,7 @@ export default function AnalysisHighlights({
               </svg>
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-green-300">
+              <p className="text-sm font-medium text-green-200">
                 {item.trait}
               </p>
               <p className="text-xs text-gray-400 mt-0.5 line-clamp-2">
