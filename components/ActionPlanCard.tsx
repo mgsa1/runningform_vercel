@@ -4,9 +4,9 @@ interface ActionPlanCardProps {
 
 export default function ActionPlanCard({ href = '#drill-plan' }: ActionPlanCardProps) {
   return (
-    <div className="p-6 rounded-2xl border border-blue-500/30 bg-gradient-to-br from-blue-600/10 to-indigo-600/10 text-center space-y-3">
+    <div className="p-6 rounded-2xl border border-blue-500/30 bg-blue-600/5 text-center space-y-3">
       <div className="space-y-1">
-        <p className="text-xs font-semibold text-blue-400 uppercase tracking-wide">Next step</p>
+        <p className="text-xs font-semibold text-blue-300 uppercase tracking-wide">Next step</p>
         <h3 className="text-base font-semibold text-white">Ready to improve?</h3>
         <p className="text-sm text-gray-400">
           We&apos;ve selected drills tailored to your focus areas below.
