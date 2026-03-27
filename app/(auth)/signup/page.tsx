@@ -64,19 +64,19 @@ export default function SignupPage() {
 
   if (awaitingConfirmation) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center space-y-4">
+      <div className="bg-gray-900 rounded-2xl border border-gray-800 p-8 text-center space-y-4">
         <div className="text-4xl">📬</div>
-        <h1 className="text-2xl font-semibold text-gray-900">Check your inbox</h1>
-        <p className="text-sm text-gray-500">
-          We sent a confirmation link to <strong>{email}</strong>. Click it to activate your
+        <h1 className="font-heading text-2xl font-semibold text-white">Check your inbox</h1>
+        <p className="text-sm text-gray-400">
+          We sent a confirmation link to <strong className="text-white">{email}</strong>. Click it to activate your
           account, then sign in.
         </p>
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-gray-500">
           Didn&apos;t receive it? Check your spam folder.
         </p>
         <Link
           href="/login"
-          className="inline-block mt-2 text-sm font-medium text-gray-900 hover:underline"
+          className="inline-block mt-2 text-sm font-medium text-white hover:underline"
         >
           Go to sign in →
         </Link>
@@ -85,15 +85,15 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+    <div className="bg-gray-900 rounded-2xl border border-gray-800 p-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-gray-900">Create an account</h1>
-        <p className="mt-1 text-sm text-gray-500">Start analysing your running form</p>
+        <h1 className="font-heading text-2xl font-semibold text-white">Create an account</h1>
+        <p className="mt-1 text-sm text-gray-400">Start analysing your running form</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label htmlFor="display-name" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="display-name" className="block text-sm font-medium text-gray-300 mb-1">
             Display name
           </label>
           <input
@@ -103,13 +103,13 @@ export default function SignupPage() {
             required
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+            className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Alex"
           />
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
             Email
           </label>
           <input
@@ -119,13 +119,13 @@ export default function SignupPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+            className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="you@example.com"
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
             Password
           </label>
           <div className="relative">
@@ -137,13 +137,13 @@ export default function SignupPage() {
               minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              className="w-full px-3 py-2 pr-10 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="••••••••"
             />
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-gray-600"
+              className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-300"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? (
@@ -159,11 +159,11 @@ export default function SignupPage() {
               )}
             </button>
           </div>
-          <p className="mt-1 text-xs text-gray-400">Minimum 6 characters</p>
+          <p className="mt-1 text-xs text-gray-500">Minimum 6 characters</p>
         </div>
 
         {error && (
-          <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+          <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
             {error}
           </p>
         )}
@@ -171,15 +171,15 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-2.5 px-4 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full py-2.5 px-4 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {loading ? 'Creating account…' : 'Create account'}
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-500">
+      <p className="mt-6 text-center text-sm text-gray-400">
         Already have an account?{' '}
-        <Link href="/login" className="font-medium text-gray-900 hover:underline">
+        <Link href="/login" className="font-medium text-white hover:underline">
           Sign in
         </Link>
       </p>

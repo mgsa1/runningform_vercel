@@ -7,6 +7,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        heading: ['var(--font-heading)', 'ui-sans-serif', 'system-ui'],
+      },
       keyframes: {
         progress: {
           '0%': { transform: 'translateX(-100%) scaleX(0.5)' },
