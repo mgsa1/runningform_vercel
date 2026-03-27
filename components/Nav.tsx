@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import NavLinks from './NavLinks'
 import SignOutButton from './SignOutButton'
 
 export default async function Nav() {
@@ -21,18 +22,7 @@ export default async function Nav() {
         </Link>
         {user && (
           <nav className="flex items-center gap-6">
-            <Link
-              href="/upload"
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              Upload
-            </Link>
-            <Link
-              href="/history"
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              History
-            </Link>
+            <NavLinks />
             <SignOutButton />
           </nav>
         )}
