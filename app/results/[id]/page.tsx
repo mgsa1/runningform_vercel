@@ -55,33 +55,11 @@ function matchDrill(item: FormAnalysisItem, drills: Drill[]): Drill | null {
   )
 }
 
-function severityBadgeClasses(severity: string) {
-  if (severity === 'critical') return 'bg-red-500/20 text-red-300'
-  if (severity === 'moderate') return 'bg-amber-500/20 text-amber-300'
-  return 'bg-blue-500/20 text-blue-300'
-}
-
-function difficultyClasses(difficulty: string) {
-  const map: Record<string, string> = {
-    beginner: 'bg-green-500/20 text-green-300',
-    intermediate: 'bg-amber-500/20 text-amber-300',
-    advanced: 'bg-red-500/20 text-red-300',
-  }
-  return map[difficulty] ?? 'bg-gray-500/20 text-gray-300'
-}
-
 function severityTopAccent(severity: string) {
   if (severity === 'critical') return 'border-t-2 border-t-red-500'
   if (severity === 'moderate') return 'border-t-2 border-t-amber-500'
   if (severity === 'minor') return 'border-t-2 border-t-blue-400'
   return ''
-}
-
-function severityNumberClasses(severity: string) {
-  if (severity === 'critical') return 'bg-red-500/20 text-red-300 border border-red-500/30'
-  if (severity === 'moderate') return 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-  if (severity === 'minor') return 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-  return 'bg-gray-500/20 text-gray-300 border border-gray-500/30'
 }
 
 function computeFormScore(items: FormAnalysisItem[]): number {
@@ -229,20 +207,11 @@ export default async function ResultsPage({
               >
                 {/* Issue header */}
                 <div className="px-4 pt-4 pb-3 space-y-1.5">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span
-                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${severityNumberClasses(item.severity)}`}
-                    >
-                      {i + 1}
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-500">
+                      {i + 1}.
                     </span>
                     <span className="font-semibold text-white">{item.trait}</span>
-                    {item.severity !== 'none' && (
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${severityBadgeClasses(item.severity)}`}
-                      >
-                        {item.severity}
-                      </span>
-                    )}
                   </div>
                   <p className="text-sm text-gray-300 leading-relaxed">{item.observation}</p>
 
@@ -270,26 +239,19 @@ export default async function ResultsPage({
                   <div className="mx-4 mb-4 rounded-lg bg-gray-800/70 border border-gray-700 p-4 space-y-3">
 
                     {/* Drill header row */}
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs font-semibold text-green-400 uppercase tracking-wide">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
                         Drill
                       </span>
                       <span className="font-medium text-white text-sm">
                         {drillLib?.name ?? item.drill!.name}
                       </span>
-                      {drillLib && (
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${difficultyClasses(drillLib.difficulty)}`}
-                        >
-                          {drillLib.difficulty}
-                        </span>
-                      )}
                       {drillLib?.video_url && (
                         <a
                           href={drillLib.video_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="ml-auto inline-flex items-center gap-1.5 rounded-md bg-red-600/20 border border-red-500/30 px-2.5 py-1 text-xs font-medium text-red-300 hover:bg-red-600/30 hover:text-red-200 transition-colors"
+                          className="ml-auto inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
