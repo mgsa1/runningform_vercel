@@ -37,34 +37,32 @@ export default async function LandingPage() {
           </Link>
         </div>
 
-        <ol className="mt-16 flex flex-col sm:flex-row max-w-2xl w-full text-left">
+        <div className="mt-16 max-w-md w-full text-left space-y-6">
           {[
             {
-              num: '01',
-              title: 'Upload a clip',
-              body: 'MP4, MOV or WebM — any phone or action camera footage works.',
+              title: 'Film a short clip',
+              body: 'Any phone or action camera. 30 seconds of running is all you need.',
             },
             {
-              num: '02',
-              title: 'AI analysis',
-              body: 'Claude analyses your stride, arm drive, lean, and more from extracted frames.',
+              title: 'Get frame-by-frame analysis',
+              body: 'AI examines your stride, arm drive, lean, and posture from extracted frames.',
             },
             {
-              num: '03',
-              title: 'Targeted drills',
-              body: 'Get matched drills based on exactly what needs work in your form.',
+              title: 'Practice with matched drills',
+              body: 'Specific drills for what needs work — not generic advice.',
             },
-          ].map(({ num, title, body }) => (
-            <li
-              key={title}
-              className="flex-1 p-5 border-t-2 border-blue-600"
-            >
-              <span className="text-xs font-mono text-blue-500 tracking-widest">{num}</span>
-              <p className="mt-2 font-semibold text-white">{title}</p>
-              <p className="mt-1 text-sm text-gray-400 leading-relaxed">{body}</p>
-            </li>
+          ].map(({ title, body }, i) => (
+            <div key={title} className="flex gap-4 items-start">
+              <span className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600/10 text-blue-400 text-sm font-medium flex items-center justify-center">
+                {i + 1}
+              </span>
+              <div>
+                <p className="font-semibold text-white">{title}</p>
+                <p className="mt-1 text-sm text-gray-400 leading-relaxed">{body}</p>
+              </div>
+            </div>
           ))}
-        </ol>
+        </div>
 
         <p className="mt-12 text-xs text-gray-600 max-w-sm">
           AI-generated analysis only. Not a substitute for advice from a
