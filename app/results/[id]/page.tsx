@@ -70,11 +70,11 @@ function difficultyClasses(difficulty: string) {
   return map[difficulty] ?? 'bg-gray-500/20 text-gray-300'
 }
 
-function severityLeftBorder(severity: string) {
-  if (severity === 'critical') return 'border-l-2 border-l-red-500'
-  if (severity === 'moderate') return 'border-l-2 border-l-amber-500'
-  if (severity === 'minor') return 'border-l-2 border-l-blue-400'
-  return 'border-l-2 border-l-gray-500'
+function severityTopAccent(severity: string) {
+  if (severity === 'critical') return 'border-t-2 border-t-red-500'
+  if (severity === 'moderate') return 'border-t-2 border-t-amber-500'
+  if (severity === 'minor') return 'border-t-2 border-t-blue-400'
+  return ''
 }
 
 function severityNumberClasses(severity: string) {
@@ -225,7 +225,7 @@ export default async function ResultsPage({
             {topFixes.map(({ item, drillLib }, i) => (
               <div
                 key={i}
-                className={`rounded-xl border border-gray-800 bg-gray-900 overflow-hidden ${severityLeftBorder(item.severity)}`}
+                className={`rounded-xl border border-gray-800 bg-gray-900 overflow-hidden ${severityTopAccent(item.severity)}`}
               >
                 {/* Issue header */}
                 <div className="px-4 pt-4 pb-3 space-y-1.5">
@@ -267,7 +267,7 @@ export default async function ResultsPage({
 
                 {/* Drill block */}
                 {(drillLib || item.drill?.name) && (
-                  <div className="mx-4 mb-4 rounded-lg bg-gray-800/70 border border-gray-700 border-l-2 border-l-green-500/60 p-4 space-y-3">
+                  <div className="mx-4 mb-4 rounded-lg bg-gray-800/70 border border-gray-700 p-4 space-y-3">
 
                     {/* Drill header row */}
                     <div className="flex items-center gap-2 flex-wrap">
