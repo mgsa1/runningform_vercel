@@ -206,20 +206,24 @@ export default async function ResultsPage({
                 className={`rounded-xl border border-gray-800 bg-gray-900 overflow-hidden ${severityAccent(item.severity)}`}
               >
                 {/* Issue header */}
-                <div className="px-4 pt-4 pb-3 flex gap-4">
-                  <div className="flex-1 min-w-0 space-y-1.5">
-                    <h3 className="text-base font-semibold text-white">{item.trait}</h3>
-                    <p className="text-sm text-gray-300 leading-relaxed">{item.observation}</p>
-                  </div>
+                <div className="px-4 pt-4 pb-3 space-y-1.5">
+                  <h3 className="text-base font-semibold text-white">{item.trait}</h3>
+                  <p className="text-sm text-gray-300 leading-relaxed">{item.observation}</p>
 
-                  {/* Measured value + reference range — stacked right */}
+                  {/* Measured value + reference range */}
                   {(item.measured_value || item.reference_range) && (
-                    <div className="shrink-0 text-right space-y-1 pt-1">
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 px-3 py-2 rounded-md bg-gray-800/80">
                       {item.measured_value && (
-                        <p className="text-sm font-mono text-white font-medium">{item.measured_value}</p>
+                        <span className="text-sm font-mono">
+                          <span className="text-gray-400">You: </span>
+                          <span className="text-white font-medium">{item.measured_value}</span>
+                        </span>
                       )}
                       {item.reference_range && (
-                        <p className="text-xs font-mono text-gray-500">target: {item.reference_range}</p>
+                        <span className="text-sm font-mono">
+                          <span className="text-gray-400">Target: </span>
+                          <span className="text-green-300">{item.reference_range}</span>
+                        </span>
                       )}
                     </div>
                   )}
