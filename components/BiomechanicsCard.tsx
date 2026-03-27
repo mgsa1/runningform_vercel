@@ -50,11 +50,6 @@ const assessmentColors: Record<string, { bar: string; text: string; bg: string }
   significant: { bar: 'bg-red-500', text: 'text-red-300', bg: 'bg-red-500/10' },
 }
 
-const confidenceBadge: Record<string, string> = {
-  high: 'text-green-300',
-  medium: 'text-amber-300',
-  low: 'text-gray-400',
-}
 
 function RangeBar({ metric }: { metric: MeasuredMetric }) {
   const { value, referenceRange, assessment } = metric
@@ -101,28 +96,15 @@ function MetricRow({
   metric: MeasuredMetric
   subtitle?: string
 }) {
-  const colors = assessmentColors[metric.assessment] ?? assessmentColors.moderate
   const pace = paceLabels[metric.paceContext] ?? ''
 
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="text-sm font-medium text-gray-200 truncate">{label}</span>
-          <span className={`text-sm ${confidenceBadge[metric.confidence]}`}>
-            {metric.confidence}
-          </span>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <span className="text-sm font-mono text-white">
-            {formatValue(metric.value, metric.unit)}
-          </span>
-          <span
-            className={`px-1.5 py-0.5 rounded text-xs font-medium capitalize ${colors.text} ${colors.bg}`}
-          >
-            {metric.assessment}
-          </span>
-        </div>
+        <span className="text-sm font-medium text-gray-200 truncate">{label}</span>
+        <span className="text-sm font-mono text-white">
+          {formatValue(metric.value, metric.unit)}
+        </span>
       </div>
       <RangeBar metric={metric} />
       <div className="flex items-center justify-between text-xs text-gray-500">
