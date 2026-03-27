@@ -250,15 +250,15 @@ export default async function ResultsPage({
                   {(item.measured_value || item.reference_range) && (
                     <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 px-3 py-2 rounded-md bg-gray-800/80">
                       {item.measured_value && (
-                        <span className="text-xs font-mono">
-                          <span className="text-gray-500">You: </span>
+                        <span className="text-sm font-mono">
+                          <span className="text-gray-400">You: </span>
                           <span className="text-white font-medium">{item.measured_value}</span>
                         </span>
                       )}
                       {item.reference_range && (
-                        <span className="text-xs font-mono">
-                          <span className="text-gray-500">Target: </span>
-                          <span className="text-green-400">{item.reference_range}</span>
+                        <span className="text-sm font-mono">
+                          <span className="text-gray-400">Target: </span>
+                          <span className="text-green-300">{item.reference_range}</span>
                         </span>
                       )}
                     </div>
@@ -347,7 +347,7 @@ export default async function ResultsPage({
         )}
 
         {/* ── Disclaimer ── */}
-        <p className="text-xs text-gray-500 leading-relaxed border-t border-gray-800 pt-6">
+        <p className="text-sm text-gray-400 leading-relaxed border-t border-gray-800 pt-6">
           This analysis is AI-generated and intended for educational purposes only. It is not a
           substitute for advice from a qualified running coach or physiotherapist.
         </p>

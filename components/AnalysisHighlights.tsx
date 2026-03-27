@@ -35,7 +35,7 @@ export default function AnalysisHighlights({
               <p className="text-sm font-medium text-green-200">
                 {item.trait}
               </p>
-              <p className="text-xs text-gray-400 mt-0.5 line-clamp-2">
+              <p className="text-sm text-gray-400 mt-0.5 line-clamp-2">
                 {item.observation}
               </p>
             </div>

@@ -109,7 +109,7 @@ function MetricRow({
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-sm font-medium text-gray-200 truncate">{label}</span>
-          <span className={`text-xs ${confidenceBadge[metric.confidence]}`}>
+          <span className={`text-sm ${confidenceBadge[metric.confidence]}`}>
             {metric.confidence}
           </span>
         </div>
