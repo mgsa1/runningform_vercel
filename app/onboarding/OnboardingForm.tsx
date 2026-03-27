@@ -53,13 +53,13 @@ export default function OnboardingForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 space-y-6"
+      className="bg-gray-900 rounded-2xl border border-gray-800 p-8 space-y-6"
     >
       {/* Display name */}
       <div>
         <label
           htmlFor="display_name"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-300 mb-1"
         >
           Display name
         </label>
@@ -69,7 +69,7 @@ export default function OnboardingForm({
           type="text"
           required
           defaultValue={defaultDisplayName}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           placeholder="Alex"
         />
       </div>
@@ -78,7 +78,7 @@ export default function OnboardingForm({
       <div>
         <label
           htmlFor="experience_level"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-300 mb-1"
         >
           Experience level
         </label>
@@ -87,7 +87,7 @@ export default function OnboardingForm({
           name="experience_level"
           required
           defaultValue=""
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent bg-white"
+          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           <option value="" disabled>
             Select your level…
@@ -102,10 +102,10 @@ export default function OnboardingForm({
 
       {/* Goals */}
       <div>
-        <p className="block text-sm font-medium text-gray-700 mb-0.5">
-          Goals <span className="font-normal text-gray-400">(select all that apply)</span>
+        <p className="block text-sm font-medium text-gray-300 mb-0.5">
+          Goals <span className="font-normal text-gray-500">(select all that apply)</span>
         </p>
-        <p className="text-xs text-gray-400 mb-2">
+        <p className="text-xs text-gray-500 mb-2">
           We&apos;ll tailor drill recommendations to what matters most to you.
         </p>
         <div className="space-y-2">
@@ -120,24 +120,24 @@ export default function OnboardingForm({
                 value={value}
                 checked={selectedGoals.includes(value)}
                 onChange={() => toggleGoal(value)}
-                className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                className="h-4 w-4 rounded border-gray-700 text-blue-500 focus:ring-blue-500 bg-gray-800"
               />
-              <span className="text-sm text-gray-700">{label}</span>
+              <span className="text-sm text-gray-300">{label}</span>
             </label>
           ))}
         </div>
       </div>
 
       {/* Consent */}
-      <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+      <div className="border border-gray-700 rounded-lg p-4 bg-gray-800/50">
         <label className="flex items-start gap-3 cursor-pointer">
           <input
             type="checkbox"
             name="video_consent"
             required
-            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900 shrink-0"
+            className="mt-0.5 h-4 w-4 rounded border-gray-700 text-blue-500 focus:ring-blue-500 bg-gray-800 shrink-0"
           />
-          <span className="text-sm text-gray-600 leading-relaxed">
+          <span className="text-sm text-gray-400 leading-relaxed">
             Your video frames are sent to an AI for form analysis. They are never
             used to train AI models and are deleted after 30 days.
           </span>
@@ -145,7 +145,7 @@ export default function OnboardingForm({
       </div>
 
       {error && (
-        <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+        <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
           {error}
         </p>
       )}
@@ -153,7 +153,7 @@ export default function OnboardingForm({
       <button
         type="submit"
         disabled={isPending}
-        className="w-full py-2.5 px-4 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full py-2.5 px-4 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         {isPending ? 'Saving…' : 'Continue to upload'}
       </button>
