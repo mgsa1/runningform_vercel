@@ -135,7 +135,7 @@ export default async function ResultsPage({
 
         {/* ── Header ── */}
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold">Running Form Analysis</h1>
+          <h1 className="font-heading text-2xl font-bold">Running Form Analysis</h1>
           <p className="text-sm text-gray-400">
             {filename && <span className="mr-2">{filename}</span>}
             <span>{createdAt}</span>

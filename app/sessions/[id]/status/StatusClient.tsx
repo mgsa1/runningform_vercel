@@ -122,7 +122,7 @@ export default function StatusClient({ sessionId }: Props) {
       <div className="min-h-screen flex items-center justify-center bg-gray-950 px-4">
         <div className="max-w-md w-full text-center space-y-4">
           <div className="text-5xl mb-2">⚠️</div>
-          <h1 className="text-2xl font-bold text-white">Analysis failed</h1>
+          <h1 className="font-heading text-2xl font-bold text-white">Analysis failed</h1>
           {jobData.originalFilename && (
             <p className="text-gray-400 text-sm truncate">{jobData.originalFilename}</p>
           )}
@@ -162,7 +162,7 @@ export default function StatusClient({ sessionId }: Props) {
         </div>
 
         <div className="space-y-3">
-          <h1 className="text-2xl font-bold text-white">
+          <h1 className="font-heading text-2xl font-bold text-white">
             Analysing your running form
           </h1>
           <p className="text-gray-400 text-sm">

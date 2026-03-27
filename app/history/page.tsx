@@ -90,7 +90,7 @@ export default async function HistoryPage() {
 
         {/* ── Header ── */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Your Analyses</h1>
+          <h1 className="font-heading text-2xl font-bold">Your Analyses</h1>
           <Link
             href="/upload"
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
