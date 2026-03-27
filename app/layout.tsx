@@ -25,10 +25,10 @@ export default function RootLayout({
       <body className={`${jakarta.className} bg-gray-950`}>
         <Nav />
         {children}
-        <footer className="text-center text-xs text-gray-700 py-6 space-y-1">
+        <footer className="text-center text-sm text-gray-500 py-8 space-y-1">
           <p>made with love in sf</p>
           <p>mgsa</p>
-          <Link href="/research" className="text-gray-600 hover:text-gray-400 transition-colors">
+          <Link href="/research" className="inline-block py-2 text-gray-400 hover:text-gray-300 transition-colors">
             Research basis
           </Link>
         </footer>
