@@ -12,6 +12,7 @@ This is the RunningForm MVP: a web app where runners upload videos, the browser 
 | Database + Auth + Storage | Supabase | `@supabase/ssr` 0.5.x |
 | Job Queue | Inngest | v3.x (pinned) |
 | AI Analysis | Anthropic Claude 3.5 Sonnet | `@anthropic-ai/sdk` latest |
+| Pose Detection | MediaPipe Pose Landmarker | `@mediapipe/tasks-vision` latest |
 | Hosting | Vercel | — |
 | Validation | Zod | — |
 
@@ -23,6 +24,11 @@ This is the RunningForm MVP: a web app where runners upload videos, the browser 
 - Analysis results are stored as JSONB in `analysis_results.result`
 - Async jobs handled by Inngest; worker runs inside Next.js at `/api/inngest`
 - All DB writes from the Inngest worker use `SUPABASE_SERVICE_ROLE_KEY`
+- **Pose detection** runs client-side via MediaPipe WASM — no server cost
+- 50 dense frames extracted at ~17fps from a 3s window for gait cycle analysis
+- 10 key gait-phase frames selected and sent to Claude (not evenly spaced)
+- Biomechanics computed client-side, stored in `analysis_sessions.biomechanics`
+- Biomechanics data appended to Claude prompt for measured+interpreted analysis
 
 ## Critical Implementation Rules
 
@@ -87,7 +93,7 @@ This is the RunningForm MVP: a web app where runners upload videos, the browser 
 
 ```sql
 profiles (id, display_name, experience_level, goals[], video_consent, consent_given_at, created_at)
-analysis_sessions (id, user_id, frame_paths[], frame_count, original_filename, status, error, attempts, queued_at, started_at, completed_at)
+analysis_sessions (id, user_id, frame_paths[], frame_count, original_filename, status, error, attempts, runner_context JSONB, pose_data JSONB, biomechanics JSONB, queued_at, started_at, completed_at)
 analysis_results (id, session_id, user_id, result JSONB, llm_model, frame_count, usefulness_rating, created_at)
 ```
 
@@ -95,22 +101,24 @@ RLS: `auth.uid() = user_id` on SELECT/INSERT/UPDATE/DELETE for all three tables.
 
 ## AI Analysis JSON Schema
 
-The Claude `tool_use` call must enforce this exact schema:
+The Claude `tool_use` call enforces this schema (see `lib/workers/analysis.ts` for full tool definition):
 
 ```typescript
 {
-  overall_quality: "good" | "fair" | "poor"
-  confidence: "high" | "medium" | "low"
-  video_quality_note: string | null
-  observations: Array<{
-    area: "overstriding" | "arm_crossing" | "forward_lean" | "head_position" | "foot_strike" | "arm_drive" | "hip_drop" | "vertical_oscillation" | "positive" | "other"
-    severity: "positive" | "minor" | "moderate" | "significant"
-    description: string  // 1-2 sentences, hedged language ("appears to", "may indicate")
-    confidence: "high" | "medium" | "low"
-    drill_tags: string[]  // must match tags in /data/drills.json
+  summary: {
+    headline: string
+    videoQuality: "Good" | "Fair" | "Poor"
+    qualityNotes: string
+  }
+  form_analysis: Array<{
+    trait: string
+    status: "good" | "needs_work"
+    severity: "critical" | "moderate" | "minor" | "none"
+    observation: string
+    measured_value: string | null    // e.g. "0.05 ahead of hip" — from biomechanics
+    reference_range: string | null   // e.g. "< 0.03 at tempo pace"
+    drill: { name: string | null, why: string | null }
   }>
-  analysis_limitations: string | null
-  disclaimer: string
 }
 ```
 
@@ -151,16 +159,30 @@ POST      /api/inngest                  ← Inngest webhook (no JWT auth, uses s
   /supabase/client.ts  ← createBrowserClient factory
   /anthropic.ts        ← Claude API call wrapper
   /frames.ts           ← base64 conversion helper
+  /pose/types.ts       ← pose, gait, biomechanics types
+  /pose/landmarks.ts   ← MediaPipe 33 landmark indices + visibility threshold
+  /pose/detector.ts    ← MediaPipe PoseLandmarker wrapper (client-side)
+  /pose/geometry.ts    ← angle/distance math utilities
+  /pose/gait.ts        ← gait cycle detection + foot strike classification
+  /pose/biomechanics.ts ← 4 core metrics computation
+  /pose/referenceRanges.ts ← pace-tiered reference ranges
+  /pose/frameSelection.ts ← gait-phase-based frame picking for Claude
+  /pose/quality.ts     ← pre-submission video quality assessment
+  /pose/index.ts       ← barrel exports
+  /workers/analysis.ts ← Inngest worker: Claude API + biomechanics prompt
 /data
-  /drills.json         ← drill library (10-15 drills)
+  /drills.json                    ← drill library
+  /systemprompt_runningCoach.md   ← Claude system prompt with biomechanics rules
 /components
-  /VideoUploader.tsx   ← canvas frame extraction
+  /VideoUploader.tsx   ← frame extraction + pose detection + upload
+/scripts
+  /setup-mediapipe.sh  ← copies WASM + downloads model to public/mediapipe/
 ```
 
 ## What This App Must NOT Claim
 
-- No injury risk predictions or medical claims
-- No precise biomechanics metrics (stride length, ground contact time)
+- No medical claims or injury diagnoses — use hedged language ("associated with", "may increase risk of", "correlates with")
+- Biomechanics metrics are estimates from 2D side-view video, not lab-grade measurements — present with appropriate confidence levels
 - No guarantee of accuracy
 - Every results page must show: "This analysis is AI-generated and intended for educational purposes only. It is not a substitute for advice from a qualified running coach or physiotherapist."
 
@@ -187,11 +209,9 @@ Follow these steps in order. Complete and verify each before moving to the next.
 
 Stay focused. Do not build the following, for example:
 no raw video upload/storage
-no pose estimation
 no Python worker
 no Redis/BullMQ
 no custom JWT auth
-no charts/dashboard beyond history list
 no admin panel
 no email notifications
 no payments

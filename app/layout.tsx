@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 import Nav from "@/components/Nav";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -24,9 +25,12 @@ export default function RootLayout({
       <body className={`${jakarta.className} bg-gray-950`}>
         <Nav />
         {children}
-        <footer className="text-center text-xs text-gray-700 py-6">
+        <footer className="text-center text-xs text-gray-700 py-6 space-y-1">
           <p>made with love in sf</p>
           <p>mgsa</p>
+          <Link href="/research" className="text-gray-600 hover:text-gray-400 transition-colors">
+            Research basis
+          </Link>
         </footer>
       </body>
     </html>

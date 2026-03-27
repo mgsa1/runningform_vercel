@@ -32,6 +32,9 @@ Thumbs.db
 # Claude Code local settings (machine-specific)
 .claude/
 
+# MediaPipe WASM + model assets (copied at install time)
+public/mediapipe/
+
 # Video files (test/development only)
 *.mp4
 *.mov

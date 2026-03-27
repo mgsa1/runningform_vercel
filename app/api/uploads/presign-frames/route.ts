@@ -26,23 +26,22 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'frameCount must be an integer between 1 and 15' }, { status: 422 })
   }
 
-  // Rate limit: max 3 sessions per user per UTC day
-  const startOfDay = new Date()
-  startOfDay.setUTCHours(0, 0, 0, 0)
-
-  const { count } = await supabase
-    .from('analysis_sessions')
-    .select('id', { count: 'exact', head: true })
-    .eq('user_id', user.id)
-    .gte('queued_at', startOfDay.toISOString())
-    .not('frame_paths', 'eq', '{}')
-
-  if ((count ?? 0) >= 3) {
-    return NextResponse.json(
-      { error: 'Daily limit reached. You can run up to 3 analyses per day.' },
-      { status: 429 }
-    )
-  }
+  // TODO: Re-enable rate limit before production launch
+  // Rate limit: max 3 sessions per user per UTC day (disabled for dev)
+  // const startOfDay = new Date()
+  // startOfDay.setUTCHours(0, 0, 0, 0)
+  // const { count } = await supabase
+  //   .from('analysis_sessions')
+  //   .select('id', { count: 'exact', head: true })
+  //   .eq('user_id', user.id)
+  //   .gte('queued_at', startOfDay.toISOString())
+  //   .not('frame_paths', 'eq', '{}')
+  // if ((count ?? 0) >= 3) {
+  //   return NextResponse.json(
+  //     { error: 'Daily limit reached. You can run up to 3 analyses per day.' },
+  //     { status: 429 }
+  //   )
+  // }
 
   const { data: session, error: insertError } = await supabase
     .from('analysis_sessions')

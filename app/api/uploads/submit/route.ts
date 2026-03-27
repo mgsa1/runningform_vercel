@@ -17,10 +17,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { sessionId, framePaths, runnerContext } = body as {
+  const { sessionId, framePaths, runnerContext, biomechanics } = body as {
     sessionId?: unknown
     framePaths?: unknown
     runnerContext?: { pace?: string; fatigue?: number }
+    biomechanics?: unknown
   }
 
   if (typeof sessionId !== 'string' || sessionId.trim() === '') {
@@ -69,16 +70,40 @@ export async function POST(request: NextRequest) {
       .eq('id', sessionId.trim())
   }
 
+  // Store biomechanics summary — requires migration 004
+  // Raw pose data is NOT sent from client (too large); only the computed summary
+  if (biomechanics) {
+    const { error: bioError } = await supabase
+      .from('analysis_sessions')
+      .update({ biomechanics })
+      .eq('id', sessionId.trim())
+    if (bioError) {
+      console.error('[submit] Failed to store biomechanics:', bioError.message)
+    } else {
+      console.log('[submit] Biomechanics stored for session', sessionId.trim())
+    }
+  } else {
+    console.warn('[submit] No biomechanics data received')
+  }
+
   // Fire the Inngest event
-  await inngest.send({
-    name: 'analysis/requested',
-    data: {
-      sessionId: sessionId.trim(),
-      userId: user.id,
-      framePaths,
-      runnerContext: runnerContext ?? null,
-    },
-  })
+  try {
+    await inngest.send({
+      name: 'analysis/requested',
+      data: {
+        sessionId: sessionId.trim(),
+        userId: user.id,
+        framePaths,
+        runnerContext: runnerContext ?? null,
+      },
+    })
+  } catch (inngestError) {
+    console.error('Inngest send failed:', inngestError)
+    return NextResponse.json(
+      { error: 'Failed to queue analysis job. Is the Inngest dev server running?' },
+      { status: 502 }
+    )
+  }
 
   return NextResponse.json({ sessionId: sessionId.trim(), status: 'queued' })
 }

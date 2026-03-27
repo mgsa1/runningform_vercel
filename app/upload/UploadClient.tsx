@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import VideoUploader from '@/components/VideoUploader'
+import type { PoseExtractionResult, BiomechanicsReport } from '@/lib/pose/types'
 
 interface RunnerContext {
   pace?: string
@@ -14,11 +15,12 @@ interface Props {
 }
 
 const FILMING_TIPS = [
-  'Film from the side',
-  'Camera at hip height',
-  'Show the full runner body (head, feet, and ground)',
-  'Run at a comfortable pace',
-  'Ensure good lighting',
+  'Film from the SIDE — perpendicular to your running direction',
+  'Set your phone at hip height on a stable surface',
+  'Run past showing 3-4 full strides at your normal pace',
+  'Show head to feet, including the ground',
+  'Normal speed video is fine — no slow-mo needed',
+  'Good lighting helps — outdoor daylight is ideal',
 ]
 
 export default function UploadClient({ userId }: Props) {
@@ -32,13 +34,30 @@ export default function UploadClient({ userId }: Props) {
   async function handleUploadComplete(
     _videoSessionId: string,
     framePaths: string[],
-    filename: string
+    filename: string,
+    poseData: PoseExtractionResult | null,
+    biomechanicsRaw: BiomechanicsReport | null
   ) {
     setError(null)
 
     const runnerContext: RunnerContext = {}
     if (paceValue.trim()) runnerContext.pace = `${paceValue.trim()} /${paceUnit}`
     if (fatigue !== '') runnerContext.fatigue = Number(fatigue)
+
+    // Re-compute biomechanics with pace context if pose data is available
+    let biomechanics = biomechanicsRaw
+    if (poseData && poseData.frames.length > 0 && runnerContext.pace) {
+      try {
+        const { parsePaceTier, computeBiomechanics, analyzeGait } = await import('@/lib/pose')
+        const paceTier = parsePaceTier(runnerContext.pace)
+        const gaitResult = analyzeGait(poseData.frames, poseData.visibleSide)
+        if (gaitResult.gaitCyclesDetected >= 1) {
+          biomechanics = computeBiomechanics(poseData.frames, gaitResult, paceTier)
+        }
+      } catch {
+        // Fall back to the raw biomechanics computed without pace context
+      }
+    }
 
     // Step 1: Create the DB session via presign-frames
     let sessionId: string
@@ -67,6 +86,7 @@ export default function UploadClient({ userId }: Props) {
     }
 
     // Step 2: Attach frame paths, runner context, and trigger the Inngest job
+    console.log('[submit] biomechanics:', biomechanics ? `present (cycles=${biomechanics.gaitCyclesDetected})` : 'null')
     try {
       const submitRes = await fetch('/api/uploads/submit', {
         method: 'POST',
@@ -75,6 +95,7 @@ export default function UploadClient({ userId }: Props) {
           sessionId,
           framePaths,
           runnerContext: Object.keys(runnerContext).length ? runnerContext : undefined,
+          biomechanics: biomechanics ?? undefined,
         }),
       })
 

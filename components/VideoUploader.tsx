@@ -2,10 +2,18 @@
 
 import { useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import type {
+  FramePoseData,
+  PoseExtractionResult,
+  BiomechanicsReport,
+  VideoQualityFeedback,
+} from '@/lib/pose/types'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const FRAME_COUNT = 10
+const POSE_FRAME_COUNT = 50       // dense frames for pose detection (~17fps from 3s)
+const CLAUDE_FRAME_COUNT = 10     // frames sent to Claude for visual analysis
+const POSE_WINDOW_S = 3           // seconds of video to extract dense frames from
 const CANVAS_WIDTH = 640
 const CANVAS_HEIGHT = 360
 const JPEG_QUALITY = 0.85
@@ -15,17 +23,22 @@ const ACCEPTED_MIME = new Set(['video/mp4', 'video/quicktime', 'video/webm'])
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Status = 'idle' | 'validating' | 'ready' | 'extracting' | 'uploading' | 'done' | 'error'
+type Status = 'idle' | 'validating' | 'ready' | 'extracting' | 'detecting' | 'uploading' | 'done' | 'error'
 
 interface Props {
   userId: string
-  onUploadComplete: (sessionId: string, framePaths: string[], filename: string) => void
+  onUploadComplete: (
+    sessionId: string,
+    framePaths: string[],
+    filename: string,
+    poseData: PoseExtractionResult | null,
+    biomechanics: BiomechanicsReport | null
+  ) => void
   onError: (message: string) => void
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-/** Wraps the 'seeked' event in a Promise — required by P5 before calling drawImage */
 function seekToTime(video: HTMLVideoElement, time: number): Promise<void> {
   return new Promise((resolve) => {
     function onSeeked() {
@@ -47,7 +60,6 @@ function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
   })
 }
 
-/** Loads only video metadata to check duration — uses a throwaway element */
 function loadDuration(file: File): Promise<number> {
   return new Promise((resolve, reject) => {
     const video = document.createElement('video')
@@ -72,9 +84,9 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [progressMsg, setProgressMsg] = useState('')
   const [isDragging, setIsDragging] = useState(false)
+  const [qualityFeedback, setQualityFeedback] = useState<VideoQualityFeedback | null>(null)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
-  // Hidden video + canvas kept in DOM for reliable cross-browser seek support
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -92,6 +104,7 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
 
     setStatus('validating')
     setProgressMsg('Checking video…')
+    setQualityFeedback(null)
 
     let duration: number
     try {
@@ -115,7 +128,7 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
     setProgressMsg('')
   }
 
-  // ─── Frame extraction + upload ─────────────────────────────────────────────
+  // ─── Frame extraction + pose detection + upload ─────────────────────────────
 
   async function startUpload() {
     if (!selectedFile || !videoRef.current || !canvasRef.current) return
@@ -126,12 +139,10 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
     const canvas = canvasRef.current
     const ctx = canvas.getContext('2d')!
 
-    // Load the file into the hidden video element
     const objectUrl = URL.createObjectURL(selectedFile)
     video.src = objectUrl
 
     try {
-      // Wait for metadata so video.duration is available
       await new Promise<void>((resolve, reject) => {
         video.onloadedmetadata = () => resolve()
         video.onerror = () => reject(new Error('Your video format could not be read. Please try a .mp4 or .mov file.'))
@@ -139,33 +150,112 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
 
       const duration = video.duration
 
-      // ── Phase 1: Extract frames ──────────────────────────────────────────
+      // ── Phase 1: Dense frame extraction from middle window ─────────────
       setStatus('extracting')
-      const blobs: Blob[] = []
 
-      for (let i = 0; i < FRAME_COUNT; i++) {
-        // Evenly spaced across the video, with a half-segment margin at each end
-        const time = duration * (i + 0.5) / FRAME_COUNT
-        setProgressMsg(`Extracting frame ${i + 1} of ${FRAME_COUNT}…`)
+      // Calculate extraction window: middle of the video, up to POSE_WINDOW_S
+      const windowDuration = Math.min(POSE_WINDOW_S, duration)
+      const windowStart = (duration - windowDuration) / 2
+      const frameCount = duration < POSE_WINDOW_S
+        ? Math.min(POSE_FRAME_COUNT, Math.round(duration * 17))  // ~17fps for short videos
+        : POSE_FRAME_COUNT
 
-        // P5: MUST await 'seeked' before drawing
+      // Extract all dense frames to canvas and save as blobs
+      const allBlobs: Blob[] = []
+      const frameTimestamps: number[] = []
+
+      for (let i = 0; i < frameCount; i++) {
+        const time = windowStart + windowDuration * (i + 0.5) / frameCount
+        setProgressMsg(`Extracting frame ${i + 1} of ${frameCount}…`)
+
         await seekToTime(video, time)
         ctx.drawImage(video, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
         const blob = await canvasToBlob(canvas)
-        blobs.push(blob)
+        allBlobs.push(blob)
+        frameTimestamps.push(time)
       }
 
-      // ── Phase 2: Upload frames ───────────────────────────────────────────
+      // ── Phase 2: Pose detection ────────────────────────────────────────
+      setStatus('detecting')
+      setProgressMsg('Loading pose model…')
+
+      // Lazy-load the pose module to avoid bundling WASM in initial page load
+      const poseModule = await import('@/lib/pose')
+      await poseModule.initPoseDetector()
+
+      const poseFrames: FramePoseData[] = []
+
+      for (let i = 0; i < frameCount; i++) {
+        setProgressMsg(`Analyzing stride ${i + 1} of ${frameCount}…`)
+
+        // Re-seek and draw for pose detection (canvas already processed,
+        // but we need to re-render each frame)
+        const time = frameTimestamps[i]
+        await seekToTime(video, time)
+        ctx.drawImage(video, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+
+        const poseData = await poseModule.detectPose(canvas, i, time)
+        if (poseData) {
+          poseFrames.push(poseData)
+        }
+      }
+
+      // ── Phase 3: Gait analysis + frame selection ───────────────────────
+      setProgressMsg('Analyzing gait cycle…')
+
+      const visibleSide = poseModule.detectVisibleSide(poseFrames)
+      const gaitResult = poseModule.analyzeGait(poseFrames, visibleSide)
+
+      // Quality feedback
+      const feedback = poseModule.assessVideoQuality(poseFrames, frameCount, gaitResult)
+      setQualityFeedback(feedback)
+
+      // Select the 10 best frames for Claude
+      let selectedFrameIndices: number[]
+      if (gaitResult.gaitCyclesDetected >= 1) {
+        selectedFrameIndices = poseModule.selectFramesForClaude(poseFrames, gaitResult, CLAUDE_FRAME_COUNT)
+      } else {
+        selectedFrameIndices = poseModule.selectFramesEvenly(frameCount, CLAUDE_FRAME_COUNT)
+      }
+
+      // Build the pose extraction result
+      const poseExtractionResult: PoseExtractionResult = {
+        frames: poseFrames,
+        modelVersion: 'pose_landmarker_lite',
+        extractedAt: new Date().toISOString(),
+        visibleSide,
+        framesWithValidPose: poseFrames.length,
+      }
+
+      // Compute biomechanics (done client-side to avoid server cost)
+      let biomechanicsReport: BiomechanicsReport | null = null
+      console.log(`[pose] Gait analysis: ${gaitResult.gaitCyclesDetected} cycles detected, ${gaitResult.contactFrameIndices.length} contacts, ${poseFrames.length}/${frameCount} frames with valid pose, side=${visibleSide}`)
+      if (gaitResult.gaitCyclesDetected >= 1) {
+        biomechanicsReport = poseModule.computeBiomechanics(poseFrames, gaitResult, 'unknown')
+        console.log('[pose] Biomechanics computed:', JSON.stringify({
+          footPlacement: biomechanicsReport.footPlacement?.value,
+          trunkLean: biomechanicsReport.trunkLean?.value,
+          vo: biomechanicsReport.verticalOscillation?.value,
+          strike: biomechanicsReport.footStrikeType?.type,
+        }))
+      } else {
+        console.warn('[pose] No gait cycles detected — biomechanics will be null')
+      }
+
+      // ── Phase 4: Upload selected frames ────────────────────────────────
       setStatus('uploading')
       const framePaths: string[] = []
 
-      for (let i = 0; i < blobs.length; i++) {
-        setProgressMsg(`Uploading frame ${i + 1} of ${FRAME_COUNT}…`)
+      for (let i = 0; i < selectedFrameIndices.length; i++) {
+        const blobIdx = selectedFrameIndices[i]
+        if (blobIdx >= allBlobs.length) continue
+
+        setProgressMsg(`Uploading frame ${i + 1} of ${selectedFrameIndices.length}…`)
         const path = `frames/${userId}/${sessionId}/${i}.jpg`
 
         const { error } = await supabase.storage
           .from('frames')
-          .upload(path, blobs[i], { contentType: 'image/jpeg', upsert: false })
+          .upload(path, allBlobs[blobIdx], { contentType: 'image/jpeg', upsert: false })
 
         if (error) {
           setStatus('error')
@@ -178,7 +268,13 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
 
       setStatus('done')
       setProgressMsg('')
-      onUploadComplete(sessionId, framePaths, selectedFile.name)
+      onUploadComplete(
+        sessionId,
+        framePaths,
+        selectedFile.name,
+        poseExtractionResult,
+        biomechanicsReport
+      )
     } catch (err) {
       setStatus('error')
       onError(err instanceof Error ? err.message : 'An unexpected error occurred.')
@@ -203,7 +299,6 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
   }
 
   function handleDragLeave(e: React.DragEvent) {
-    // Only clear when leaving the zone itself, not a child element
     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
       setIsDragging(false)
     }
@@ -213,18 +308,19 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
     setSelectedFile(null)
     setStatus('idle')
     setProgressMsg('')
+    setQualityFeedback(null)
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
   // ─── Derived state ─────────────────────────────────────────────────────────
 
-  const isProcessing = ['validating', 'extracting', 'uploading'].includes(status)
+  const isProcessing = ['validating', 'extracting', 'detecting', 'uploading'].includes(status)
 
   // ─── Render ────────────────────────────────────────────────────────────────
 
   return (
     <div className="space-y-4">
-      {/* Hidden video + canvas — kept in DOM for cross-browser seek reliability */}
+      {/* Hidden video + canvas */}
       <video
         ref={videoRef}
         muted
@@ -308,8 +404,8 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
         <p className="text-center text-sm text-gray-500">{progressMsg}</p>
       )}
 
-      {/* Progress bar (extracting + uploading) */}
-      {(status === 'extracting' || status === 'uploading') && (() => {
+      {/* Progress bar */}
+      {(status === 'extracting' || status === 'detecting' || status === 'uploading') && (() => {
         const match = progressMsg.match(/(\d+) of (\d+)/)
         if (!match) return null
         const current = parseInt(match[1])
@@ -318,12 +414,32 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
         return (
           <div className="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
             <div
-              className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                status === 'detecting' ? 'bg-purple-500' : 'bg-blue-500'
+              }`}
               style={{ width: `${pct}%` }}
             />
           </div>
         )
       })()}
+
+      {/* Quality feedback warnings */}
+      {qualityFeedback && qualityFeedback.issues.length > 0 && (
+        <div className="space-y-2">
+          {qualityFeedback.issues.map((issue, i) => (
+            <div
+              key={i}
+              className={`text-sm px-4 py-3 rounded-lg ${
+                issue.severity === 'error'
+                  ? 'bg-red-500/10 border border-red-500/30 text-red-400'
+                  : 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
+              }`}
+            >
+              {issue.message}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Action button */}
       {status === 'ready' && (
@@ -338,7 +454,7 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
 
       {isProcessing && (
         <div className="w-full py-2.5 px-4 bg-gray-800 text-gray-400 text-sm font-medium rounded-lg text-center select-none">
-          Processing…
+          {status === 'detecting' ? 'Analyzing your running form…' : 'Processing…'}
         </div>
       )}
 
