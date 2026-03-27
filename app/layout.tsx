@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={jakarta.variable}>
-      <body className="bg-gray-950">
+      <body className={`${jakarta.className} bg-gray-950`}>
         <Nav />
         {children}
         <footer className="text-center text-xs text-gray-700 py-6">
