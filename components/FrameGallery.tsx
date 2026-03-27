@@ -24,14 +24,14 @@ export default function FrameGallery({ frameUrls, poseFrames }: FrameGalleryProp
   const currentPose = hasPose ? poseFrames[selected] : null
 
   return (
-    <div className="flex gap-2 rounded-xl overflow-hidden bg-gray-800">
-      {/* Main frame */}
-      <div className="relative flex-1 min-w-0 aspect-video">
+    <div className="rounded-xl overflow-hidden bg-gray-800">
+      {/* Main frame — fixed aspect ratio */}
+      <div className="relative w-full aspect-video">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={frameUrls[selected]}
           alt={`Frame ${selected + 1}`}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain bg-black"
         />
 
         {/* Pose overlay with fade transition */}
@@ -39,6 +39,13 @@ export default function FrameGallery({ frameUrls, poseFrames }: FrameGalleryProp
           <div className={`transition-opacity duration-300 ${showSkeleton ? 'opacity-100' : 'opacity-0'}`}>
             <PoseOverlay landmarks={currentPose.landmarks} />
           </div>
+        )}
+
+        {/* Frame counter — top-right */}
+        {frameUrls.length > 1 && (
+          <span className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/60 text-xs text-gray-300 font-mono backdrop-blur-sm">
+            {selected + 1} / {frameUrls.length}
+          </span>
         )}
 
         {/* Overlay toggle — bottom-left corner */}
@@ -64,26 +71,18 @@ export default function FrameGallery({ frameUrls, poseFrames }: FrameGalleryProp
         )}
       </div>
 
-      {/* Vertical thumbnail strip */}
+      {/* Slider to select frame */}
       {frameUrls.length > 1 && (
-        <div className="w-14 flex flex-col gap-1 overflow-y-auto p-1 bg-gray-900/60">
-          {frameUrls.map((url, i) => (
-            <button
-              key={i}
-              onClick={() => setSelected(i)}
-              className={`flex-shrink-0 rounded overflow-hidden border-2 transition-colors ${
-                i === selected ? 'border-blue-500' : 'border-transparent'
-              }`}
-              aria-label={`Frame ${i + 1}`}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={url}
-                alt={`Thumbnail ${i + 1}`}
-                className="w-full aspect-video object-cover"
-              />
-            </button>
-          ))}
+        <div className="px-3 py-2.5 bg-gray-900/60 flex items-center gap-3">
+          <input
+            type="range"
+            min={0}
+            max={frameUrls.length - 1}
+            value={selected}
+            onChange={(e) => setSelected(Number(e.target.value))}
+            className="flex-1 h-1.5 accent-blue-500 cursor-pointer"
+            aria-label="Select frame"
+          />
         </div>
       )}
     </div>

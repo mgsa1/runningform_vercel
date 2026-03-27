@@ -52,36 +52,44 @@ const assessmentColors: Record<string, { bar: string; text: string; bg: string }
 
 
 function RangeBar({ metric }: { metric: MeasuredMetric }) {
-  const { value, referenceRange, assessment } = metric
-  const colors = assessmentColors[assessment] ?? assessmentColors.moderate
-
-  // Position the marker on a 0-1 scale relative to the range
-  // range.min = good boundary start, range.max = moderate boundary end
+  const { value, referenceRange } = metric
   const rangeSpan = referenceRange.max - referenceRange.min
-  const extended = rangeSpan * 1.5 // show some space beyond the range
-  const barMin = Math.max(0, referenceRange.min - rangeSpan * 0.25)
-  const barMax = referenceRange.max + extended * 0.5
 
-  const markerPos = Math.min(
-    100,
-    Math.max(0, ((value - barMin) / (barMax - barMin)) * 100)
+  // Bar always starts at 0; extends to ~2x the range max so the good zone
+  // occupies roughly the left half and there's room for out-of-range values
+  const barMin = 0
+  const barMax = Math.max(
+    referenceRange.max + rangeSpan * 0.8,
+    value * 1.15 // ensure the dot is always visible even if way out of range
   )
 
-  // Good zone position
-  const goodStart = ((referenceRange.min - barMin) / (barMax - barMin)) * 100
-  const goodEnd = ((referenceRange.max - barMin) / (barMax - barMin)) * 100
+  const toPercent = (v: number) =>
+    Math.min(100, Math.max(0, ((v - barMin) / (barMax - barMin)) * 100))
+
+  const goodStart = toPercent(referenceRange.min)
+  const goodEnd = toPercent(referenceRange.max)
+  const markerPos = toPercent(value)
+
+  // Dot color: green if inside range, orange if within 10% of boundary, red if outside
+  const margin = rangeSpan * 0.1
+  let dotColor = 'bg-green-500' // inside
+  if (value < referenceRange.min - margin || value > referenceRange.max + margin) {
+    dotColor = 'bg-red-500' // outside
+  } else if (value < referenceRange.min || value > referenceRange.max) {
+    dotColor = 'bg-amber-500' // on the border
+  }
 
   return (
     <div className="relative h-2 rounded-full bg-gray-800 overflow-hidden">
       {/* Good zone */}
       <div
-        className="absolute h-full bg-green-500/20 rounded-full"
+        className="absolute h-full bg-green-500/25 rounded-full"
         style={{ left: `${goodStart}%`, width: `${goodEnd - goodStart}%` }}
       />
-      {/* Marker */}
+      {/* Value dot */}
       <div
-        className={`absolute top-0 h-full w-1.5 rounded-full ${colors.bar}`}
-        style={{ left: `${markerPos}%`, transform: 'translateX(-50%)' }}
+        className={`absolute top-1/2 w-2.5 h-2.5 rounded-full ${dotColor} ring-2 ring-gray-900`}
+        style={{ left: `${markerPos}%`, transform: 'translate(-50%, -50%)' }}
       />
     </div>
   )
