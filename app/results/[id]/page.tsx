@@ -207,12 +207,7 @@ export default async function ResultsPage({
               >
                 {/* Issue header */}
                 <div className="px-4 pt-4 pb-3 space-y-1.5">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base font-medium text-gray-500">
-                      {i + 1}.
-                    </span>
-                    <span className="text-base font-semibold text-white">{item.trait}</span>
-                  </div>
+                  <h3 className="text-base font-semibold text-white">{item.trait}</h3>
                   <p className="text-sm text-gray-300 leading-relaxed">{item.observation}</p>
 
                   {/* Measured value + reference range */}
