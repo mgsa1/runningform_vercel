@@ -330,7 +330,7 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
         <button
           type="button"
           onClick={startUpload}
-          className="w-full py-2.5 px-4 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors"
+          className="w-full py-2.5 px-4 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
         >
           Analyse my run
         </button>
@@ -343,7 +343,7 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
       )}
 
       {status === 'done' && (
-        <div className="w-full py-2.5 px-4 bg-green-50 text-green-700 border border-green-200 text-sm font-medium rounded-lg text-center">
+        <div className="w-full py-2.5 px-4 bg-green-500/10 text-green-400 border border-green-500/30 text-sm font-medium rounded-lg text-center">
           Frames uploaded — preparing analysis…
         </div>
       )}
