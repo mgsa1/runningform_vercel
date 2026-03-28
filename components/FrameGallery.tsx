@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import PoseOverlay from '@/components/PoseOverlay'
 import type { Landmark } from '@/lib/pose/types'
 
@@ -14,9 +14,50 @@ interface FrameGalleryProps {
   poseFrames?: PoseFrame[]
 }
 
+/** Check if an image is mostly black by sampling pixel brightness. */
+function isFrameDark(img: HTMLImageElement, threshold = 15): boolean {
+  const canvas = document.createElement('canvas')
+  const size = 64 // downsample for speed
+  canvas.width = size
+  canvas.height = size
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return false
+  ctx.drawImage(img, 0, 0, size, size)
+  const { data } = ctx.getImageData(0, 0, size, size)
+  let totalBrightness = 0
+  const pixelCount = size * size
+  for (let i = 0; i < data.length; i += 4) {
+    totalBrightness += (data[i] + data[i + 1] + data[i + 2]) / 3
+  }
+  return totalBrightness / pixelCount < threshold
+}
+
 export default function FrameGallery({ frameUrls, poseFrames }: FrameGalleryProps) {
   const [selected, setSelected] = useState(0)
   const [showSkeleton, setShowSkeleton] = useState(true)
+
+  // Skip leading dark/black frames
+  useEffect(() => {
+    let cancelled = false
+    async function findFirstBrightFrame() {
+      for (let i = 0; i < Math.min(frameUrls.length, 5); i++) {
+        const img = new Image()
+        img.crossOrigin = 'anonymous'
+        img.src = frameUrls[i]
+        await new Promise<void>((resolve) => {
+          img.onload = () => resolve()
+          img.onerror = () => resolve()
+        })
+        if (cancelled) return
+        if (!isFrameDark(img)) {
+          if (i > 0) setSelected(i)
+          return
+        }
+      }
+    }
+    findFirstBrightFrame()
+    return () => { cancelled = true }
+  }, [frameUrls])
 
   if (frameUrls.length === 0) return null
 
