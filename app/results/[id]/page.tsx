@@ -7,6 +7,7 @@ import FormScoreRing from '@/components/FormScoreRing'
 import FrameGallery from '@/components/FrameGallery'
 import AnalysisHighlights from '@/components/AnalysisHighlights'
 import BiomechanicsCard from '@/components/BiomechanicsCard'
+import { computeFormScore } from '@/lib/scoring'
 
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -70,42 +71,6 @@ function severityAccent(severity: string) {
   return ''
 }
 
-function computeFormScore(items: FormAnalysisItem[]): number {
-  if (items.length === 0) return 0
-
-  const basePoints: Record<string, Record<string, number>> = {
-    good:       { none: 100, minor: 100, moderate: 100, critical: 100 },
-    needs_work: { none: 70,  minor: 55,  moderate: 30,  critical: 5   },
-  }
-
-  function getImportance(trait: string): number {
-    const t = trait.toLowerCase()
-    if (
-      t.includes('overstrid') || t.includes('trunk lean') ||
-      t.includes('vertical oscill') || t.includes('foot place') ||
-      t.includes('foot strike') || t.includes('cadence')
-    ) {
-      return 1.5 // HIGH — biomechanically critical
-    }
-    if (
-      t.includes('head') || t.includes('arm') ||
-      t.includes('shoulder') || t.includes('asymmetr')
-    ) {
-      return 0.6 // LOW — secondary
-    }
-    return 1.0
-  }
-
-  let weightedSum = 0
-  let importanceSum = 0
-  for (const item of items) {
-    const points = basePoints[item.status]?.[item.severity] ?? 50
-    const importance = getImportance(item.trait)
-    weightedSum += points * importance
-    importanceSum += importance
-  }
-  return importanceSum === 0 ? 0 : Math.round(weightedSum / importanceSum)
-}
 
 function DosageBlock({ dosage }: { dosage: DrillDosage }) {
   return (

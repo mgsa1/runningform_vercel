@@ -4,6 +4,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { z } from 'zod'
 import fs from 'fs'
 import path from 'path'
+import { computeFormScore } from '@/lib/scoring'
 
 function getServiceClient() {
   return createClient(
@@ -441,6 +442,8 @@ export const analysisFunction = inngest.createFunction(
 
       const supabase = getServiceClient()
 
+      const formScore = computeFormScore(validated.form_analysis)
+
       const { data, error: insertError } = await supabase
         .from('analysis_results')
         .insert({
@@ -449,6 +452,7 @@ export const analysisFunction = inngest.createFunction(
           result: validated,
           llm_model: 'claude-sonnet-4-6',
           frame_count: framePaths.length,
+          form_score: formScore,
         })
         .select('id')
         .single()
