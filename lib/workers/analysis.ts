@@ -23,7 +23,7 @@ function getSystemPrompt() {
 // Zod schema matching the system prompt output schema
 const FormAnalysisItemSchema = z.object({
   trait: z.string(),
-  status: z.enum(['good', 'needs_work']),
+  status: z.enum(['good', 'needs_work', 'not_assessable']),
   severity: z.enum(['critical', 'moderate', 'minor', 'none']),
   observation: z.string(),
   measured_value: z.string().nullable().optional(),
@@ -35,8 +35,8 @@ const FormAnalysisItemSchema = z.object({
     })
     .nullable(),
 }).refine(
-  (item) => item.status !== 'good' || item.severity === 'none',
-  { message: 'severity must be "none" when status is "good"' }
+  (item) => (item.status !== 'good' && item.status !== 'not_assessable') || item.severity === 'none',
+  { message: 'severity must be "none" when status is "good" or "not_assessable"' }
 )
 
 const RunnerCoachResultSchema = z.object({
@@ -245,6 +245,20 @@ export const analysisFunction = inngest.createFunction(
       return bio
     })
 
+    // Step 2c: Fetch prior analysis for trait continuity
+    const priorAnalysis = await step.run('fetch-prior-analysis', async () => {
+      const supabase = getServiceClient()
+      const { data } = await supabase
+        .from('analysis_results')
+        .select('result, created_at')
+        .eq('user_id', userId)
+        .neq('session_id', sessionId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+      return data ?? null
+    })
+
     // Step 3: Call Claude API with system prompt, biomechanics, and schema
     const rawAnalysis = await step.run('call-claude', async () => {
       const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
@@ -280,6 +294,21 @@ export const analysisFunction = inngest.createFunction(
       // Biomechanics data
       if (biomechanicsData) {
         contextParts.push(`<biomechanics>\n${formatBiomechanicsForPrompt(biomechanicsData, runnerContext)}\n</biomechanics>`)
+      }
+
+      // Prior trait continuity
+      type PriorFormItem = { trait: string; status: string; severity: string }
+      const priorResult = (priorAnalysis as { result?: { form_analysis?: PriorFormItem[] } } | null)?.result
+      const priorNeedsWork = (priorResult?.form_analysis ?? []).filter(
+        (item) => item.status === 'needs_work'
+      )
+      if (priorNeedsWork.length > 0) {
+        const traitList = priorNeedsWork
+          .map((item) => `- ${item.trait} (${item.severity})`)
+          .join('\n')
+        contextParts.push(
+          `<prior_traits>\nIn this runner's previous analysis, the following traits needed work. Explicitly comment on each of them in your form_analysis — mark as good if improved, update severity if still present, or mark as not_assessable if not visible in this video.\n${traitList}\n</prior_traits>`
+        )
       }
 
       contextParts.push(
@@ -340,8 +369,8 @@ export const analysisFunction = inngest.createFunction(
                       },
                       status: {
                         type: 'string',
-                        enum: ['good', 'needs_work'],
-                        description: 'Whether this trait is good or needs work.',
+                        enum: ['good', 'needs_work', 'not_assessable'],
+                        description: 'Whether this trait is good, needs work, or could not be assessed in this video (only valid for traits listed in <prior_traits>).',
                       },
                       severity: {
                         type: 'string',

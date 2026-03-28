@@ -14,7 +14,7 @@ import { computeFormScore } from '@/lib/scoring'
 
 interface FormAnalysisItem {
   trait: string
-  status: 'good' | 'needs_work'
+  status: 'good' | 'needs_work' | 'not_assessable'
   severity: 'critical' | 'moderate' | 'minor' | 'none'
   observation: string
   measured_value: string | null
@@ -182,6 +182,9 @@ export default async function ResultsPage({
     .slice(0, 4)
     .map((item) => ({ item, drillLib: matchDrill(item, drills) }))
 
+  // Prior traits not assessable in this video
+  const notAssessableItems = formAnalysis.filter((item) => item.status === 'not_assessable')
+
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       <div className="max-w-2xl mx-auto px-4 py-10 space-y-8">
@@ -328,6 +331,24 @@ export default async function ResultsPage({
                 )}
               </div>
             ))}
+          </section>
+        )}
+
+        {/* ── Prior traits not assessable in this video ── */}
+        {notAssessableItems.length > 0 && (
+          <section className="space-y-2">
+            <h2 className="text-sm font-medium text-gray-500">Couldn&apos;t assess from this video</h2>
+            <div className="rounded-xl border border-gray-800 bg-gray-900/50 divide-y divide-gray-800">
+              {notAssessableItems.map((item, i) => (
+                <div key={i} className="px-4 py-3 flex items-start gap-3">
+                  <span className="mt-0.5 text-gray-600">—</span>
+                  <div>
+                    <p className="text-sm font-medium text-gray-400">{item.trait}</p>
+                    <p className="text-xs text-gray-600 mt-0.5">{item.observation}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </section>
         )}
 
