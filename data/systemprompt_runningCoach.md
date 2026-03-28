@@ -57,8 +57,12 @@ When interpreting biomechanics data, use these pace-adjusted ranges:
 | Trunk lean | 2-8° good | 3-9° good | 3-10° good |
 | Vertical oscillation | < 5.5% body ht good | < 6.0% good | < 6.5% good |
 | Contact time asymmetry | < 3% good | < 3% good | < 3% good |
+| Cadence | 165–180 spm good | 170–185 spm good | 175–195 spm good |
+| Ground contact time | 240–300 ms good | 200–260 ms good | 170–220 ms good |
 
 Important notes on these ranges:
 - Trunk lean: elite runners maintain ~3° regardless of speed (Preece et al. 2016). Do NOT tell runners they need MORE lean if they are already at 3-5° — that is efficient form.
 - Asymmetry: frame as a running economy concern, NOT an injury predictor (Malisoux et al. 2024, n=836, found no injury link). Say "associated with reduced running efficiency," not "increases injury risk."
 - Foot placement and vertical oscillation are expressed as % of estimated body height (shoulder-to-ankle distance) for camera-independence.
+- Cadence: low cadence (<160 spm) strongly co-occurs with overstriding. If both are flagged, treat them as one related finding rather than two separate issues. Cadence is estimated as 120 / avg_stride_time from video.
+- Ground contact time: only mention if assessment is MODERATE or HIGH. Higher GCT at a given pace indicates less elastic energy return. Do not flag GCT independently if overstriding is already the primary finding — they share the same root cause.

@@ -6,7 +6,13 @@
     "instructions": "Run at an easy pace while counting your steps for 30 seconds. Multiply by 2 to get steps per minute. Aim to increase this by 5–10% using a metronome app set to your target cadence. Run 4 × 2 minutes at target cadence with 1 minute easy between each.",
     "video_url": "https://www.youtube.com/watch?v=6tTcyQiTPXE",
     "difficulty": "beginner",
-    "tags": ["overstriding", "vertical_oscillation"]
+    "tags": ["overstriding", "vertical_oscillation"],
+    "dosage": {
+      "frequency": "3× per week",
+      "volume": "4 × 2 min at target cadence, 1 min easy between",
+      "when": "main session",
+      "retest_after_weeks": 3
+    }
   },
   {
     "id": "short-stride-run",
@@ -15,7 +21,13 @@
     "instructions": "On a flat surface, run at a comfortable pace while consciously shortening each stride. Imagine your feet landing directly under your centre of mass, not in front of your body. Run 3 × 5 minutes with full recovery between sets. Focus on the feeling — not speed.",
     "video_url": "https://www.youtube.com/watch?v=2fyX06OlVuM",
     "difficulty": "beginner",
-    "tags": ["overstriding", "foot_strike"]
+    "tags": ["overstriding", "foot_strike"],
+    "dosage": {
+      "frequency": "3× per week",
+      "volume": "3 × 5 min with full recovery",
+      "when": "main session",
+      "retest_after_weeks": 3
+    }
   },
   {
     "id": "arm-drive-drill",
@@ -24,7 +36,13 @@
     "instructions": "Stand in front of a mirror. Drive your arms back and forth parallel to your body — elbows bent at 90°, hands relaxed (imagine holding crisps without crushing them). Arms should swing front-to-back, not across your body. Practise for 60 seconds standing, then carry this into a 10-minute easy run. Check in every 2 minutes.",
     "video_url": "https://www.youtube.com/watch?v=0pHOZva0Gic",
     "difficulty": "beginner",
-    "tags": ["arm_crossing", "arm_drive"]
+    "tags": ["arm_crossing", "arm_drive"],
+    "dosage": {
+      "frequency": "2–3× per week",
+      "volume": "3 × 60 s standing + 10 min easy run focus",
+      "when": "warm-up",
+      "retest_after_weeks": 2
+    }
   },
   {
     "id": "elbow-angle-check",
@@ -33,7 +51,13 @@
     "instructions": "Before your next run, set an alarm for every 3 minutes. Each time it goes off, check: are your elbows at roughly 90°? Are your hands crossing your body's centre line? Correct if needed. Run 20–30 minutes total. Over time this becomes automatic.",
     "video_url": "https://www.youtube.com/watch?v=0WBRoMiwmeg",
     "difficulty": "beginner",
-    "tags": ["arm_crossing", "arm_drive"]
+    "tags": ["arm_crossing", "arm_drive"],
+    "dosage": {
+      "frequency": "every run for 2 weeks",
+      "volume": "check every 3 min during a 20–30 min run",
+      "when": "main session",
+      "retest_after_weeks": 2
+    }
   },
   {
     "id": "wall-lean-drill",
@@ -42,7 +66,13 @@
     "instructions": "Stand facing a wall, arms out, fingertips touching it. Lean your entire body forward as one unit from your ankles (like a falling plank). Hold for 5 seconds. Reset. Repeat 10 times. This is the feeling to replicate when running. Follow with a 10-minute run, focusing on leaning from ankles.",
     "video_url": "https://www.youtube.com/watch?v=cX1ISVWSBEw",
     "difficulty": "beginner",
-    "tags": ["forward_lean"]
+    "tags": ["forward_lean"],
+    "dosage": {
+      "frequency": "daily",
+      "volume": "10 × 5 s holds, then 10 min run with lean focus",
+      "when": "warm-up",
+      "retest_after_weeks": 2
+    }
   },
   {
     "id": "posture-tall-run",
@@ -51,7 +81,13 @@
     "instructions": "Before running, stand tall: imagine a string pulling you up from the crown of your head. Squeeze your glutes gently. Roll your shoulders back and down. Hold this for 10 seconds. Now start running, maintaining this tall feeling. Every 5 minutes, do a mental posture check: am I collapsing forward at the waist?",
     "video_url": "https://www.youtube.com/watch?v=QJwiY_m2h04",
     "difficulty": "beginner",
-    "tags": ["forward_lean", "head_position"]
+    "tags": ["forward_lean", "head_position"],
+    "dosage": {
+      "frequency": "every run for 3 weeks",
+      "volume": "posture check every 5 min throughout run",
+      "when": "main session",
+      "retest_after_weeks": 3
+    }
   },
   {
     "id": "gaze-drill",
@@ -60,7 +96,13 @@
     "instructions": "Pick a landmark 10–15 metres ahead of you on your next run (a lamppost, a crack in the pavement). Keep your gaze on it as you run. When you pass it, pick the next one. Your head should feel level — not tucked down toward your chest. Practice this for the first 5–10 minutes of your next 3 runs.",
     "video_url": "https://www.youtube.com/watch?v=BeEpN_NdlCo",
     "difficulty": "beginner",
-    "tags": ["head_position"]
+    "tags": ["head_position"],
+    "dosage": {
+      "frequency": "3× per week",
+      "volume": "first 5–10 min of each run",
+      "when": "warm-up",
+      "retest_after_weeks": 2
+    }
   },
   {
     "id": "a-skip",
@@ -69,7 +111,13 @@
     "instructions": "Walk forward. On each step, drive one knee up to hip height while rising onto the ball of your standing foot. Place your foot back down beneath your hip — not in front of it. Progress to a marching pace then a skipping rhythm. 3 × 20 metres. Focus on the foot landing under the hip each time.",
     "video_url": "https://www.youtube.com/watch?v=V2rjA0q-a9k",
     "difficulty": "beginner",
-    "tags": ["foot_strike", "overstriding"]
+    "tags": ["foot_strike", "overstriding"],
+    "dosage": {
+      "frequency": "3× per week",
+      "volume": "3 × 20 m",
+      "when": "warm-up",
+      "retest_after_weeks": 3
+    }
   },
   {
     "id": "barefoot-strides",
@@ -78,7 +126,13 @@
     "instructions": "Find a clean, flat grassy area. Remove shoes and socks. Run 4–6 × 60-metre strides at a comfortable pace. The ground feedback will naturally encourage your foot to land underneath your body rather than heel-striking out in front. Walk back between each stride. Cool down with shoes on.",
     "video_url": "https://www.youtube.com/watch?v=zSIDRHUWlVo",
     "difficulty": "beginner",
-    "tags": ["foot_strike"]
+    "tags": ["foot_strike"],
+    "dosage": {
+      "frequency": "2× per week",
+      "volume": "4–6 × 60 m strides",
+      "when": "post-run",
+      "retest_after_weeks": 3
+    }
   },
   {
     "id": "single-leg-balance",
@@ -87,7 +141,13 @@
     "instructions": "Stand on one leg. Hold for 30 seconds without letting your pelvis drop to the opposite side. To progress: close your eyes, or stand on a folded towel for an unstable surface. 3 × 30 seconds each leg. When you can do this easily, add small knee bends (mini single-leg squats) while keeping your pelvis level.",
     "video_url": "https://www.youtube.com/watch?v=3qmC9QkM0OA",
     "difficulty": "beginner",
-    "tags": ["hip_drop"]
+    "tags": ["hip_drop"],
+    "dosage": {
+      "frequency": "daily",
+      "volume": "3 × 30 s each leg",
+      "when": "cool-down or standalone",
+      "retest_after_weeks": 3
+    }
   },
   {
     "id": "glute-bridge",
@@ -96,7 +156,13 @@
     "instructions": "Lie on your back, knees bent, feet flat on the floor hip-width apart. Push through your heels and lift your hips until your body forms a straight line from shoulders to knees. Squeeze your glutes at the top. Hold 2 seconds. Lower slowly. 3 × 15 reps. Progress to single-leg glute bridges when ready.",
     "video_url": "https://www.youtube.com/watch?v=22WOUdt9KGk",
     "difficulty": "beginner",
-    "tags": ["hip_drop"]
+    "tags": ["hip_drop"],
+    "dosage": {
+      "frequency": "3× per week",
+      "volume": "3 × 15 reps",
+      "when": "cool-down or standalone",
+      "retest_after_weeks": 4
+    }
   },
   {
     "id": "bounding-drill",
@@ -105,7 +171,13 @@
     "instructions": "From a jog, push off with one foot and drive forward — not upward. Think of skimming the ground like a stone. Land softly on the ball of the opposite foot and immediately push forward again. 4 × 30 metres. The goal is distance per bound, not height. Focus on feeling like you are running along a low ceiling.",
     "video_url": "https://www.youtube.com/watch?v=fPcGgGDz6_8",
     "difficulty": "intermediate",
-    "tags": ["vertical_oscillation"]
+    "tags": ["vertical_oscillation"],
+    "dosage": {
+      "frequency": "2× per week",
+      "volume": "4 × 30 m",
+      "when": "warm-up (after easy jog)",
+      "retest_after_weeks": 4
+    }
   },
   {
     "id": "high-knees",
@@ -114,7 +186,13 @@
     "instructions": "Run in place (or slowly forward), driving each knee up toward hip height alternately. Keep your torso upright and tall. Arms drive back and forth at 90°. Land softly on the ball of each foot. 3 × 30 seconds with 30 seconds rest. Focus on staying light and quick rather than lifting as high as possible.",
     "video_url": "https://www.youtube.com/watch?v=DKyukKLmNUc",
     "difficulty": "beginner",
-    "tags": ["overstriding", "hip_drop", "arm_drive"]
+    "tags": ["overstriding", "hip_drop", "arm_drive"],
+    "dosage": {
+      "frequency": "3× per week",
+      "volume": "3 × 30 s with 30 s rest",
+      "when": "warm-up",
+      "retest_after_weeks": 3
+    }
   },
   {
     "id": "butt-kicks",
@@ -123,7 +201,13 @@
     "instructions": "Jog slowly, flicking each heel up toward your glutes as quickly as possible after toe-off. Keep your thighs perpendicular to the ground — resist swinging them forward. Stay on your toes. 3 × 30 seconds. Think of your heels as being on a spring — quick and light.",
     "video_url": "https://www.youtube.com/watch?v=g36vM-JmtU4",
     "difficulty": "beginner",
-    "tags": ["overstriding", "vertical_oscillation"]
+    "tags": ["overstriding", "vertical_oscillation"],
+    "dosage": {
+      "frequency": "3× per week",
+      "volume": "3 × 30 s with 30 s rest",
+      "when": "warm-up",
+      "retest_after_weeks": 3
+    }
   },
   {
     "id": "relaxed-shoulders-run",
@@ -132,6 +216,12 @@
     "instructions": "Every 5 minutes during your next run, do a tension check: are your shoulders creeping up toward your ears? Deliberately drop them down and back. Shake out your hands as if you are trying to flick water off your fingertips — this releases grip tension throughout the arm. Make this a habit on every run.",
     "video_url": "https://www.youtube.com/watch?v=IqIRwV-WPZA",
     "difficulty": "beginner",
-    "tags": ["arm_crossing", "arm_drive", "forward_lean"]
+    "tags": ["arm_crossing", "arm_drive", "forward_lean"],
+    "dosage": {
+      "frequency": "every run",
+      "volume": "tension check every 5 min throughout run",
+      "when": "main session",
+      "retest_after_weeks": 2
+    }
   }
 ]

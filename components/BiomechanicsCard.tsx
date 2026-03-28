@@ -25,6 +25,8 @@ interface BiomechanicsReport {
   footStrikeType: FootStrikeResult | null
   trunkLean: TrunkLeanMetric | null
   verticalOscillation: MeasuredMetric | null
+  cadence: MeasuredMetric | null
+  groundContactTime: MeasuredMetric | null
   contactTimeAsymmetry: MeasuredMetric | null
   footPlacementAsymmetry: MeasuredMetric | null
   visibleSide: 'left' | 'right' | 'frontal'
@@ -35,6 +37,7 @@ interface BiomechanicsReport {
 
 interface BiomechanicsCardProps {
   biomechanics: BiomechanicsReport
+  heightCm?: number
 }
 
 const paceLabels: Record<string, string> = {
@@ -99,10 +102,12 @@ function MetricRow({
   label,
   metric,
   subtitle,
+  cmValue,
 }: {
   label: string
   metric: MeasuredMetric
   subtitle?: string
+  cmValue?: string
 }) {
   const pace = paceLabels[metric.paceContext] ?? ''
 
@@ -110,8 +115,11 @@ function MetricRow({
     <div className="space-y-1.5">
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm font-medium text-gray-200 truncate">{label}</span>
-        <span className="text-sm font-mono text-white">
-          {formatValue(metric.value, metric.unit)}
+        <span className="flex items-baseline gap-1.5">
+          <span className="text-sm font-mono text-white">
+            {formatValue(metric.value, metric.unit)}
+          </span>
+          {cmValue && <span className="text-xs text-gray-500">{cmValue}</span>}
         </span>
       </div>
       <RangeBar metric={metric} />
@@ -132,6 +140,8 @@ function formatValue(value: number, unit: string): string {
   if (unit === '% body height') return `${value.toFixed(1)}%`
   if (unit === '%') return `${value.toFixed(0)}%`
   if (unit === 'ratio') return value.toFixed(3)
+  if (unit === 'spm') return `${Math.round(value)} spm`
+  if (unit === 'ms') return `${Math.round(value)} ms`
   return value.toFixed(2)
 }
 
@@ -141,18 +151,27 @@ function leanSourceLabel(source: string): string {
   return 'mixed source'
 }
 
-export default function BiomechanicsCard({ biomechanics }: BiomechanicsCardProps) {
+// Converts a "% body height" metric value to approximate real centimetres.
+// Pose-estimated shoulder-to-ankle distance ≈ 78% of true body height,
+// so: real_cm = (percent / 100) × (heightCm × 0.78)
+function toCm(percent: number, heightCm: number): string {
+  return `≈ ${Math.round((percent / 100) * heightCm * 0.78)} cm`
+}
+
+export default function BiomechanicsCard({ biomechanics, heightCm }: BiomechanicsCardProps) {
   const {
     footPlacement,
     footStrikeType,
     trunkLean,
     verticalOscillation,
+    cadence,
+    groundContactTime,
     contactTimeAsymmetry,
     footPlacementAsymmetry,
     gaitCyclesDetected,
   } = biomechanics
 
-  const hasMetrics = footPlacement || trunkLean || verticalOscillation
+  const hasMetrics = footPlacement || trunkLean || verticalOscillation || cadence || groundContactTime
 
   if (!hasMetrics && !footStrikeType) return null
 
@@ -183,8 +202,17 @@ export default function BiomechanicsCard({ biomechanics }: BiomechanicsCardProps
 
       {/* Metric rows */}
       <div className="space-y-4">
+        {cadence && (
+          <MetricRow label="Cadence" metric={cadence} />
+        )}
+
         {footPlacement && (
-          <MetricRow label="Foot placement" metric={footPlacement} subtitle="ahead of hip" />
+          <MetricRow
+            label="Foot placement"
+            metric={footPlacement}
+            subtitle="ahead of hip"
+            cmValue={heightCm ? toCm(footPlacement.value, heightCm) : undefined}
+          />
         )}
 
         {trunkLean && (
@@ -200,7 +228,12 @@ export default function BiomechanicsCard({ biomechanics }: BiomechanicsCardProps
             label="Vertical oscillation"
             metric={verticalOscillation}
             subtitle="% of body height"
+            cmValue={heightCm ? toCm(verticalOscillation.value, heightCm) : undefined}
           />
+        )}
+
+        {groundContactTime && (
+          <MetricRow label="Ground contact time" metric={groundContactTime} />
         )}
       </div>
 

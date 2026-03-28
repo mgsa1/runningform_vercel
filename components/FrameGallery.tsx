@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import PoseOverlay from '@/components/PoseOverlay'
+import AnnotationOverlay from '@/components/AnnotationOverlay'
 import type { Landmark } from '@/lib/pose/types'
 
 interface PoseFrame {
@@ -12,6 +13,7 @@ interface PoseFrame {
 interface FrameGalleryProps {
   frameUrls: string[]
   poseFrames?: PoseFrame[]
+  visibleSide?: 'left' | 'right' | 'frontal'
 }
 
 /** Check if an image is mostly black by sampling pixel brightness. */
@@ -32,7 +34,7 @@ function isFrameDark(img: HTMLImageElement, threshold = 15): boolean {
   return totalBrightness / pixelCount < threshold
 }
 
-export default function FrameGallery({ frameUrls, poseFrames }: FrameGalleryProps) {
+export default function FrameGallery({ frameUrls, poseFrames, visibleSide }: FrameGalleryProps) {
   const [selected, setSelected] = useState(0)
   const [showSkeleton, setShowSkeleton] = useState(true)
 
@@ -75,9 +77,15 @@ export default function FrameGallery({ frameUrls, poseFrames }: FrameGalleryProp
           className="w-full h-full object-contain bg-black"
         />
 
-        {/* Pose overlay with fade transition */}
+        {/* Pose + annotation overlays with fade transition */}
         {currentPose && (
           <div className={`transition-opacity duration-300 ${showSkeleton ? 'opacity-100' : 'opacity-0'}`}>
+            {visibleSide && (
+              <AnnotationOverlay
+                landmarks={currentPose.landmarks}
+                visibleSide={visibleSide}
+              />
+            )}
             <PoseOverlay landmarks={currentPose.landmarks} />
           </div>
         )}
@@ -107,7 +115,7 @@ export default function FrameGallery({ frameUrls, poseFrames }: FrameGalleryProp
               <line x1="12" y1="14" x2="8" y2="20" />
               <line x1="12" y1="14" x2="16" y2="20" />
             </svg>
-            {showSkeleton ? 'Hide skeleton' : 'Show skeleton'}
+            {showSkeleton ? 'Hide overlay' : 'Show overlay'}
           </button>
         )}
       </div>

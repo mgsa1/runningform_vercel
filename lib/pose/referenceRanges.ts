@@ -138,6 +138,42 @@ export const ASYMMETRY_RANGES: RangeSpec = {
   moderate: { min: 0, max: 6 },
 }
 
+/**
+ * Running cadence in steps per minute.
+ * Computed as 120 / avg(strideTimes) where strideTimes are full gait cycles
+ * (same-foot to same-foot = 2 steps per cycle).
+ *
+ * Research basis:
+ * - Heiderscheit et al. 2011 (MSSE): 165-180 spm typical for recreational runners;
+ *   +5-10% cadence reduces peak knee loading ~20%
+ * - Stöggl & Schießl 2017: elite marathoners average ~180-185 spm
+ * - Bramah et al. 2019: cadence <160 associated with overstriding patterns
+ */
+export const CADENCE_RANGES: MetricRanges = {
+  easy:    { good: { min: 165, max: 180 }, moderate: { min: 155, max: 190 } },
+  tempo:   { good: { min: 170, max: 185 }, moderate: { min: 160, max: 195 } },
+  fast:    { good: { min: 175, max: 195 }, moderate: { min: 165, max: 205 } },
+  unknown: { good: { min: 165, max: 180 }, moderate: { min: 155, max: 190 } },
+}
+
+/**
+ * Ground contact time (GCT) in milliseconds.
+ * Duration from initial contact to toe-off for the visible foot.
+ * Lower GCT at a given speed indicates greater leg stiffness and elastic energy return.
+ *
+ * Research basis:
+ * - Morin et al. 2011 (Eur J Appl Physiol): recreational runners 240-300ms at easy pace
+ * - Weyand et al. 2000 (J Appl Physiol): faster running achieved primarily by reducing GCT
+ * - Heise & Martin 2001 (Med Sci Sports Exerc): GCT strongly inversely correlated with speed
+ * - Nummela et al. 2007: GCT ~200ms at 4:00/km, ~160ms at 3:00/km for trained runners
+ */
+export const GCT_RANGES: MetricRanges = {
+  easy:    { good: { min: 240, max: 300 }, moderate: { min: 210, max: 340 } },
+  tempo:   { good: { min: 200, max: 260 }, moderate: { min: 175, max: 290 } },
+  fast:    { good: { min: 170, max: 220 }, moderate: { min: 150, max: 250 } },
+  unknown: { good: { min: 240, max: 300 }, moderate: { min: 210, max: 340 } },
+}
+
 // ─── Assessment function ─────────────────────────────────────────────────────
 
 /**

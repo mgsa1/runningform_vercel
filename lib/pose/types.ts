@@ -85,6 +85,10 @@ export interface BiomechanicsReport {
   trunkLean: TrunkLeanMetric | null
   verticalOscillation: MeasuredMetric | null
 
+  // Derived gait metrics
+  cadence: MeasuredMetric | null
+  groundContactTime: MeasuredMetric | null
+
   // Asymmetry (free from side view when both legs visible)
   contactTimeAsymmetry: MeasuredMetric | null
   footPlacementAsymmetry: MeasuredMetric | null

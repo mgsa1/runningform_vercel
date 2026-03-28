@@ -100,6 +100,27 @@ export default function OnboardingForm({
         </select>
       </div>
 
+      {/* Height (optional) */}
+      <div>
+        <label htmlFor="height_cm" className="block text-sm font-medium text-gray-300 mb-1">
+          Height <span className="font-normal text-gray-500">(optional)</span>
+        </label>
+        <div className="flex items-center gap-2">
+          <input
+            id="height_cm"
+            name="height_cm"
+            type="number"
+            min={100}
+            max={250}
+            step={1}
+            className="w-28 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="175"
+          />
+          <span className="text-sm text-gray-500">cm</span>
+        </div>
+        <p className="mt-1 text-xs text-gray-600">Helps display oscillation and foot placement in centimetres</p>
+      </div>
+
       {/* Goals */}
       <div>
         <p className="block text-sm font-medium text-gray-300 mb-0.5">

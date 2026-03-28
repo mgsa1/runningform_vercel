@@ -56,6 +56,8 @@ interface BiomechanicsReport {
   footStrikeType: { type: string; confidence: string; contactCount: number } | null
   trunkLean: { value: number; unit: string; assessment: string; confidence: string; paceContext: string; leanSource: string; referenceRange: { min: number; max: number } } | null
   verticalOscillation: { value: number; unit: string; assessment: string; confidence: string; paceContext: string; referenceRange: { min: number; max: number } } | null
+  cadence: { value: number; unit: string; assessment: string; confidence: string; paceContext: string; referenceRange: { min: number; max: number } } | null
+  groundContactTime: { value: number; unit: string; assessment: string; confidence: string; paceContext: string; referenceRange: { min: number; max: number } } | null
   contactTimeAsymmetry: { value: number; unit: string; assessment: string } | null
   footPlacementAsymmetry: { value: number; unit: string; assessment: string } | null
   visibleSide: string
@@ -77,6 +79,18 @@ function formatBiomechanicsForPrompt(
   }
   lines.push(`View: ${bio.visibleSide} side | Gait cycles: ${bio.gaitCyclesDetected} | Frames analyzed: ${bio.framesWithValidPose}/${bio.framesAnalyzed}`)
   lines.push('')
+
+  if (bio.cadence) {
+    const c = bio.cadence
+    const cPaceCtx = c.paceContext === 'unknown' ? 'unspecified pace' : `${c.paceContext} pace`
+    const cLabel = c.assessment === 'good' ? 'GOOD' :
+      c.assessment === 'moderate' ? 'BELOW TARGET — cadence drills recommended' :
+      'LOW — associated with overstriding and higher impact loading'
+    lines.push(`Cadence: ${c.value} ${c.unit} (${cPaceCtx} reference: ${c.referenceRange.min}–${c.referenceRange.max} spm)`)
+    lines.push(`  Assessment: ${cLabel}`)
+    lines.push(`  Confidence: ${c.confidence.toUpperCase()}`)
+    lines.push('')
+  }
 
   if (bio.footPlacement) {
     const fp = bio.footPlacement
@@ -118,6 +132,18 @@ function formatBiomechanicsForPrompt(
     lines.push(`Vertical Oscillation: ${vo.value}${vo.unit} (${paceLabel} reference: < ${vo.referenceRange.max}${vo.unit})`)
     lines.push(`  Assessment: ${label}`)
     lines.push(`  Confidence: ${vo.confidence.toUpperCase()}`)
+    lines.push('')
+  }
+
+  if (bio.groundContactTime) {
+    const gct = bio.groundContactTime
+    const gctPaceCtx = gct.paceContext === 'unknown' ? 'unspecified pace' : `${gct.paceContext} pace`
+    const gctLabel = gct.assessment === 'good' ? 'GOOD' :
+      gct.assessment === 'moderate' ? 'ELEVATED for pace' :
+      'HIGH — significantly above efficient range; may indicate reduced leg stiffness'
+    lines.push(`Ground Contact Time: ${gct.value} ${gct.unit} (${gctPaceCtx} reference: ${gct.referenceRange.min}–${gct.referenceRange.max} ms)`)
+    lines.push(`  Assessment: ${gctLabel}`)
+    lines.push(`  Confidence: ${gct.confidence.toUpperCase()}`)
     lines.push('')
   }
 

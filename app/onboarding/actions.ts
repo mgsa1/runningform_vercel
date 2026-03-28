@@ -18,6 +18,8 @@ export async function createProfile(
   const experienceLevel = formData.get('experience_level') as string
   const goals = formData.getAll('goals') as string[]
   const videoConsent = formData.get('video_consent') === 'on'
+  const heightRaw = formData.get('height_cm') as string | null
+  const heightCm = heightRaw && heightRaw.trim() !== '' ? parseInt(heightRaw, 10) : null
 
   const { error } = await supabase.from('profiles').insert({
     id: user.id,
@@ -26,6 +28,7 @@ export async function createProfile(
     goals,
     video_consent: videoConsent,
     consent_given_at: videoConsent ? new Date().toISOString() : null,
+    height_cm: heightCm,
   })
 
   if (error) return { error: error.message }

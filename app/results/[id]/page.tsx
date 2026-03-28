@@ -30,6 +30,13 @@ interface RunnerCoachResult {
   form_analysis: FormAnalysisItem[]
 }
 
+interface DrillDosage {
+  frequency: string
+  volume: string
+  when: string
+  retest_after_weeks: number
+}
+
 interface Drill {
   id: string
   name: string
@@ -38,6 +45,7 @@ interface Drill {
   video_url: string
   difficulty: string
   tags: string[]
+  dosage?: DrillDosage
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -64,14 +72,60 @@ function severityAccent(severity: string) {
 
 function computeFormScore(items: FormAnalysisItem[]): number {
   if (items.length === 0) return 0
-  const weights: Record<string, Record<string, number>> = {
-    good: { none: 100, minor: 100, moderate: 100, critical: 100 },
-    needs_work: { none: 70, minor: 55, moderate: 30, critical: 5 },
+
+  const basePoints: Record<string, Record<string, number>> = {
+    good:       { none: 100, minor: 100, moderate: 100, critical: 100 },
+    needs_work: { none: 70,  minor: 55,  moderate: 30,  critical: 5   },
   }
-  const total = items.reduce((sum, item) => {
-    return sum + (weights[item.status]?.[item.severity] ?? 50)
-  }, 0)
-  return Math.round(total / items.length)
+
+  function getImportance(trait: string): number {
+    const t = trait.toLowerCase()
+    if (
+      t.includes('overstrid') || t.includes('trunk lean') ||
+      t.includes('vertical oscill') || t.includes('foot place') ||
+      t.includes('foot strike') || t.includes('cadence')
+    ) {
+      return 1.5 // HIGH — biomechanically critical
+    }
+    if (
+      t.includes('head') || t.includes('arm') ||
+      t.includes('shoulder') || t.includes('asymmetr')
+    ) {
+      return 0.6 // LOW — secondary
+    }
+    return 1.0
+  }
+
+  let weightedSum = 0
+  let importanceSum = 0
+  for (const item of items) {
+    const points = basePoints[item.status]?.[item.severity] ?? 50
+    const importance = getImportance(item.trait)
+    weightedSum += points * importance
+    importanceSum += importance
+  }
+  return importanceSum === 0 ? 0 : Math.round(weightedSum / importanceSum)
+}
+
+function DosageBlock({ dosage }: { dosage: DrillDosage }) {
+  return (
+    <div className="mt-3 space-y-1.5">
+      <div className="flex flex-wrap gap-2">
+        <span className="inline-flex items-center rounded-full bg-gray-800 border border-gray-700 px-2.5 py-1 text-xs text-gray-300">
+          {dosage.frequency}
+        </span>
+        <span className="inline-flex items-center rounded-full bg-gray-800 border border-gray-700 px-2.5 py-1 text-xs text-gray-300">
+          {dosage.volume}
+        </span>
+        <span className="inline-flex items-center rounded-full bg-gray-800 border border-gray-700 px-2.5 py-1 text-xs text-gray-300">
+          {dosage.when}
+        </span>
+      </div>
+      <p className="text-xs text-gray-500">
+        Re-test in {dosage.retest_after_weeks} week{dosage.retest_after_weeks !== 1 ? 's' : ''}
+      </p>
+    </div>
+  )
 }
 
 // ── Page ─────────────────────────────────────────────────────────────────────
@@ -130,6 +184,15 @@ export default async function ResultsPage({
     }
   }
 
+  // Fetch height_cm from user profile
+  let heightCm: number | null = null
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('height_cm')
+    .eq('id', user.id)
+    .single()
+  if (profile?.height_cm) heightCm = profile.height_cm
+
   const createdAt = new Date(row.created_at).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'long',
@@ -182,7 +245,13 @@ export default async function ResultsPage({
 
         {/* ── Frame gallery ── */}
         {frameUrls.length > 0 && (
-          <FrameGallery frameUrls={frameUrls} poseFrames={poseFrames ?? undefined} />
+          <FrameGallery
+            frameUrls={frameUrls}
+            poseFrames={poseFrames ?? undefined}
+            visibleSide={
+              (biomechanics as { visibleSide?: 'left' | 'right' | 'frontal' } | null)?.visibleSide
+            }
+          />
         )}
 
         {/* ── Highlights: strengths ── */}
@@ -260,6 +329,11 @@ export default async function ResultsPage({
                       </p>
                     )}
 
+                    {/* Drill dosage */}
+                    {drillLib?.dosage && (
+                      <DosageBlock dosage={drillLib.dosage} />
+                    )}
+
                     {/* Expandable instructions */}
                     {drillLib?.instructions && (
                       <details className="group">
@@ -294,7 +368,7 @@ export default async function ResultsPage({
 
         {/* ── Biomechanics dashboard ── */}
         {biomechanics && (
-          <BiomechanicsCard biomechanics={biomechanics as never} />
+          <BiomechanicsCard biomechanics={biomechanics as never} heightCm={heightCm ?? undefined} />
         )}
 
         {/* ── Disclaimer ── */}

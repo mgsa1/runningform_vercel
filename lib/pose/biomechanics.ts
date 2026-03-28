@@ -21,6 +21,8 @@ import {
   FOOT_PLACEMENT_RANGES,
   TRUNK_LEAN_RANGES,
   VERTICAL_OSCILLATION_RANGES,
+  CADENCE_RANGES,
+  GCT_RANGES,
   assessMetric,
   assessAsymmetry,
 } from './referenceRanges'
@@ -215,6 +217,76 @@ function computeVerticalOscillation(
   }
 }
 
+// ─── Cadence ─────────────────────────────────────────────────────────────────
+
+function computeCadence(
+  strideTimes: number[],
+  paceTier: PaceTier
+): MeasuredMetric | null {
+  if (strideTimes.length === 0) return null
+  const avgStrideTime = strideTimes.reduce((sum, t) => sum + t, 0) / strideTimes.length
+  if (avgStrideTime <= 0) return null
+  // strideTimes are full gait cycles (same-foot to same-foot = 2 steps)
+  // cadence (spm) = 2 steps × 60s / avgStrideTime
+  const cadenceSpm = 120 / avgStrideTime
+  const { assessment, referenceRange } = assessMetric(cadenceSpm, CADENCE_RANGES, paceTier)
+  const confidence: Confidence =
+    strideTimes.length >= 3 ? 'high' : strideTimes.length === 2 ? 'medium' : 'low'
+  return {
+    value: Math.round(cadenceSpm),
+    unit: 'spm',
+    referenceRange,
+    assessment,
+    framesUsed: [],
+    confidence,
+    paceContext: paceTier,
+  }
+}
+
+// ─── Ground contact time ──────────────────────────────────────────────────────
+
+function computeGroundContactTime(
+  frames: FramePoseData[],
+  contactFrameIndices: number[],
+  toeOffFrameIndices: number[],
+  paceTier: PaceTier
+): MeasuredMetric | null {
+  const gctValues: number[] = []
+  const framesUsed: number[] = []
+
+  for (const contactFi of contactFrameIndices) {
+    const contactFrame = frames.find((f) => f.frameIndex === contactFi)
+    if (!contactFrame) continue
+    const nextToeOffFi = toeOffFrameIndices.find((fi) => fi > contactFi)
+    if (nextToeOffFi === undefined) continue
+    const toeOffFrame = frames.find((f) => f.frameIndex === nextToeOffFi)
+    if (!toeOffFrame) continue
+    const gctMs = (toeOffFrame.timestamp - contactFrame.timestamp) * 1000
+    // Sanity bounds: GCT for running should be 50–500ms
+    if (gctMs > 50 && gctMs < 500) {
+      gctValues.push(gctMs)
+      framesUsed.push(contactFi, nextToeOffFi)
+    }
+  }
+
+  if (gctValues.length < 2) return null
+
+  const avgGct = gctValues.reduce((sum, v) => sum + v, 0) / gctValues.length
+  const { assessment, referenceRange } = assessMetric(avgGct, GCT_RANGES, paceTier)
+  const confidence: Confidence =
+    gctValues.length >= 3 ? 'high' : gctValues.length === 2 ? 'medium' : 'low'
+
+  return {
+    value: Math.round(avgGct),
+    unit: 'ms',
+    referenceRange,
+    assessment,
+    framesUsed: [...new Set(framesUsed)],
+    confidence,
+    paceContext: paceTier,
+  }
+}
+
 // ─── Full biomechanics report ────────────────────────────────────────────────
 
 export function computeBiomechanics(
@@ -235,6 +307,15 @@ export function computeBiomechanics(
 
   const trunkLean = computeTrunkLean(frames, paceTier, gaitCycles)
   const verticalOscillation = computeVerticalOscillation(frames, paceTier, gaitCycles)
+
+  const cadence = computeCadence(gaitResult.strideTimes, paceTier)
+
+  const groundContactTime = computeGroundContactTime(
+    frames,
+    gaitResult.contactFrameIndices,
+    gaitResult.toeOffFrameIndices,
+    paceTier
+  )
 
   // Asymmetry
   const asymmetry = detectAsymmetry(frames, gaitResult)
@@ -260,6 +341,8 @@ export function computeBiomechanics(
     footStrikeType,
     trunkLean,
     verticalOscillation,
+    cadence,
+    groundContactTime,
     contactTimeAsymmetry,
     footPlacementAsymmetry: null, // computed in asymmetry but deferred for simplicity
     visibleSide: gaitResult.visibleSide === 'frontal' ? 'frontal' : side,
