@@ -33,7 +33,10 @@ const FormAnalysisItemSchema = z.object({
       why: z.string().nullable(),
     })
     .nullable(),
-})
+}).refine(
+  (item) => item.status !== 'good' || item.severity === 'none',
+  { message: 'severity must be "none" when status is "good"' }
+)
 
 const RunnerCoachResultSchema = z.object({
   summary: z.object({
@@ -230,25 +233,30 @@ export const analysisFunction = inngest.createFunction(
 
       const contextParts: string[] = []
 
+      // Temporal context for frames
+      contextParts.push(
+        `<frame_sequence>These ${(base64Frames as string[]).length} frames are in chronological order, selected from key gait phases (initial contact, midstance, toe-off) to capture the full running gait cycle.</frame_sequence>`
+      )
+
       // Runner context
       if (runnerContext?.pace || runnerContext?.fatigue != null) {
         contextParts.push(
-          `Runner context: ${[
+          `<runner_context>${[
             runnerContext.pace ? `pace ${runnerContext.pace}` : null,
             runnerContext.fatigue != null ? `fatigue ${runnerContext.fatigue}/10` : null,
           ]
             .filter(Boolean)
-            .join(', ')}.`
+            .join(', ')}</runner_context>`
         )
       }
 
       // Biomechanics data
       if (biomechanicsData) {
-        contextParts.push(formatBiomechanicsForPrompt(biomechanicsData, runnerContext))
+        contextParts.push(`<biomechanics>\n${formatBiomechanicsForPrompt(biomechanicsData, runnerContext)}\n</biomechanics>`)
       }
 
       contextParts.push(
-        'Please analyse the running form visible in these sequential video frames and provide your structured coaching assessment.'
+        '<task>Analyse the running form visible in these sequential video frames and provide your structured coaching assessment.</task>'
       )
 
       const userText = contextParts.join('\n\n')
@@ -256,41 +264,117 @@ export const analysisFunction = inngest.createFunction(
       const response = await client.messages.create({
         model: 'claude-sonnet-4-6',
         max_tokens: 2048,
+        temperature: 0.3,
         system: getSystemPrompt(),
         tools: [
           {
             name: 'submit_analysis',
-            description: 'Submit the structured running form coaching analysis.',
+            description:
+              'Submit the structured running form coaching analysis. The form_analysis array must be sorted by severity: critical → moderate → minor → none (good traits last).',
             input_schema: {
               type: 'object' as const,
               required: ['summary', 'form_analysis'],
+              additionalProperties: false,
               properties: {
                 summary: {
                   type: 'object',
                   required: ['headline', 'videoQuality', 'qualityNotes'],
+                  additionalProperties: false,
                   properties: {
-                    headline: { type: 'string' },
-                    videoQuality: { type: 'string', enum: ['Good', 'Fair', 'Poor'] },
-                    qualityNotes: { type: 'string' },
+                    headline: {
+                      type: 'string',
+                      description: 'One encouraging sentence summarizing the overall form assessment.',
+                    },
+                    videoQuality: {
+                      type: 'string',
+                      enum: ['Good', 'Fair', 'Poor'],
+                      description: 'Overall video quality rating based on lighting, framing, and clarity.',
+                    },
+                    qualityNotes: {
+                      type: 'string',
+                      description:
+                        'Briefly note any severe lighting or framing issues. Empty string if none.',
+                    },
                   },
                 },
                 form_analysis: {
                   type: 'array',
+                  description:
+                    'All form observations sorted by severity: critical first, then moderate, minor, and none (good traits) last.',
                   items: {
                     type: 'object',
                     required: ['trait', 'status', 'severity', 'observation', 'drill'],
+                    additionalProperties: false,
                     properties: {
-                      trait: { type: 'string' },
-                      status: { type: 'string', enum: ['good', 'needs_work'] },
-                      severity: { type: 'string', enum: ['critical', 'moderate', 'minor', 'none'] },
-                      observation: { type: 'string' },
-                      measured_value: { oneOf: [{ type: 'string' }, { type: 'null' }] },
-                      reference_range: { oneOf: [{ type: 'string' }, { type: 'null' }] },
+                      trait: {
+                        type: 'string',
+                        description:
+                          'The biomechanical trait being assessed (e.g., Overstriding, Arm Drive, Posture, Hip Drop).',
+                      },
+                      status: {
+                        type: 'string',
+                        enum: ['good', 'needs_work'],
+                        description: 'Whether this trait is good or needs work.',
+                      },
+                      severity: {
+                        type: 'string',
+                        enum: ['critical', 'moderate', 'minor', 'none'],
+                        description:
+                          'Impact severity. Must be "none" when status is "good". Use "critical" only for flaws with high injury risk or major efficiency loss.',
+                      },
+                      observation: {
+                        type: 'string',
+                        description:
+                          'Strictly 1-2 concise sentences. Reference specific measured biomechanics values when available.',
+                      },
+                      measured_value: {
+                        oneOf: [{ type: 'string' }, { type: 'null' }],
+                        description:
+                          'The measured biomechanics value if available (e.g., "0.05 ahead of hip", "11° forward lean"). Null if no measurement.',
+                      },
+                      reference_range: {
+                        oneOf: [{ type: 'string' }, { type: 'null' }],
+                        description:
+                          'The pace-adjusted reference range (e.g., "< 0.03 at tempo pace", "3-9° at tempo"). Null if no measurement.',
+                      },
                       drill: {
                         type: 'object',
+                        additionalProperties: false,
+                        description:
+                          'One drill from the approved list for "needs_work" traits. Null name and why for "good" traits.',
                         properties: {
-                          name: { oneOf: [{ type: 'string' }, { type: 'null' }] },
-                          why: { oneOf: [{ type: 'string' }, { type: 'null' }] },
+                          name: {
+                            oneOf: [
+                              {
+                                type: 'string',
+                                enum: [
+                                  'Cadence Builder',
+                                  'Short Stride Run',
+                                  'A-Skip Drill',
+                                  'Barefoot Grass Strides',
+                                  'Wall Lean Drill',
+                                  'Run Tall Drill',
+                                  'Gaze Focus Drill',
+                                  'Arm Drive Drill',
+                                  '90-Degree Elbow Run',
+                                  'Shoulder Drop Check',
+                                  'Single-Leg Balance',
+                                  'Glute Bridge',
+                                  'High Knees',
+                                  'Butt Kicks',
+                                  'Low Horizontal Bounds',
+                                ],
+                              },
+                              { type: 'null' },
+                            ],
+                            description:
+                              'Drill name from the approved list. Null when status is "good".',
+                          },
+                          why: {
+                            oneOf: [{ type: 'string' }, { type: 'null' }],
+                            description:
+                              'One short sentence explaining how this drill addresses the specific issue. Null when status is "good".',
+                          },
                         },
                       },
                     },
