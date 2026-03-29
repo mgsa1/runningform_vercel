@@ -65,16 +65,16 @@ function matchDrill(item: FormAnalysisItem, drills: Drill[]): Drill | null {
 }
 
 function severityAccent(severity: string) {
-  if (severity === 'critical') return 'border-l-2 border-l-red-500'
+  if (severity === 'critical') return 'border-l-2 border-l-orange-500'
   if (severity === 'moderate') return 'border-l-2 border-l-amber-500/60'
-  if (severity === 'minor') return 'border-l-2 border-l-[#444444]'
+  if (severity === 'minor') return 'border-l-2 border-l-[#555555]'
   return ''
 }
 
 function severityTextClass(severity: string) {
-  if (severity === 'critical') return 'text-red-400'
+  if (severity === 'critical') return 'text-orange-500'
   if (severity === 'moderate') return 'text-amber-400'
-  return 'text-[#888888]'
+  return 'text-[#AAAAAA]'
 }
 
 
@@ -82,17 +82,17 @@ function DosageBlock({ dosage }: { dosage: DrillDosage }) {
   return (
     <div className="mt-3 space-y-1.5">
       <div className="flex flex-wrap gap-2">
-        <span className="inline-flex items-center bg-[#1A1A1A] border border-[#1A1A1A] px-2.5 py-1 text-xs text-[#888888]">
+        <span className="inline-flex items-center bg-[#242424] border border-[#282828] px-2.5 py-1 text-xs text-[#AAAAAA]">
           {dosage.frequency}
         </span>
-        <span className="inline-flex items-center bg-[#1A1A1A] border border-[#1A1A1A] px-2.5 py-1 text-xs text-[#888888]">
+        <span className="inline-flex items-center bg-[#242424] border border-[#282828] px-2.5 py-1 text-xs text-[#AAAAAA]">
           {dosage.volume}
         </span>
-        <span className="inline-flex items-center bg-[#1A1A1A] border border-[#1A1A1A] px-2.5 py-1 text-xs text-[#888888]">
+        <span className="inline-flex items-center bg-[#242424] border border-[#282828] px-2.5 py-1 text-xs text-[#AAAAAA]">
           {dosage.when}
         </span>
       </div>
-      <p className="text-xs text-[#444444]">
+      <p className="text-xs text-[#6B6B6B]">
         Re-test in {dosage.retest_after_weeks} week{dosage.retest_after_weeks !== 1 ? 's' : ''}
       </p>
     </div>
@@ -198,7 +198,7 @@ export default async function ResultsPage({
         {/* ── Header ── */}
         <div className="space-y-1">
           <h1 className="text-2xl font-bold text-white">Running Form Analysis</h1>
-          <p className="text-sm text-[#888888]">
+          <p className="text-sm text-[#AAAAAA]">
             {filename && <span className="mr-2">{filename}</span>}
             <span>{createdAt}</span>
           </p>
@@ -238,7 +238,7 @@ export default async function ResultsPage({
           <section className="space-y-5">
             <h2 className="text-lg font-semibold text-white">
               Your Fix Plan
-              <span className="ml-2 text-sm font-normal text-[#888888]">
+              <span className="ml-2 text-sm font-normal text-[#AAAAAA]">
                 {topFixes.length} drill{topFixes.length !== 1 ? 's' : ''} ranked by priority
               </span>
             </h2>
@@ -246,25 +246,25 @@ export default async function ResultsPage({
             {topFixes.map(({ item, drillLib }, i) => (
               <div
                 key={i}
-                className={`border border-[#1A1A1A] bg-[#0A0A0A] overflow-hidden ${severityAccent(item.severity)}`}
+                className={`border border-[#282828] bg-[#141414] overflow-hidden ${severityAccent(item.severity)}`}
               >
                 {/* Issue header */}
                 <div className="px-5 pt-5 pb-4 space-y-2">
                   <h3 className={`text-base font-semibold ${severityTextClass(item.severity)}`}>{item.trait}</h3>
-                  <p className="text-sm text-[#888888] leading-relaxed">{item.observation}</p>
+                  <p className="text-sm text-[#AAAAAA] leading-relaxed">{item.observation}</p>
 
                   {/* Measured value + reference range */}
                   {(item.measured_value || item.reference_range) && (
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 px-3 py-2 bg-[#1A1A1A]">
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 px-3 py-2 bg-[#242424]">
                       {item.measured_value && (
                         <span className="text-sm font-mono">
-                          <span className="text-[#888888]">You: </span>
+                          <span className="text-[#AAAAAA]">You: </span>
                           <span className="text-white font-medium">{item.measured_value}</span>
                         </span>
                       )}
                       {item.reference_range && (
                         <span className="text-sm font-mono">
-                          <span className="text-[#888888]">Target: </span>
+                          <span className="text-[#AAAAAA]">Target: </span>
                           <span className="text-green-400">{item.reference_range}</span>
                         </span>
                       )}
@@ -274,7 +274,7 @@ export default async function ResultsPage({
 
                 {/* Drill block */}
                 {(drillLib || item.drill?.name) && (
-                  <div className="mx-5 mb-5 border border-[#1A1A1A] p-4 space-y-3">
+                  <div className="mx-5 mb-5 border border-[#282828] p-4 space-y-3">
 
                     {/* Drill header row */}
                     <div className="flex items-center gap-2">
@@ -286,7 +286,7 @@ export default async function ResultsPage({
                           href={drillLib.video_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="ml-auto inline-flex items-center gap-1.5 border border-[#1A1A1A] px-2.5 py-1 text-xs font-medium text-[#888888] hover:border-white hover:text-white transition-colors duration-100"
+                          className="ml-auto inline-flex items-center gap-1.5 border border-[#282828] px-2.5 py-1 text-xs font-medium text-[#AAAAAA] hover:border-white hover:text-white transition-colors duration-100"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -298,7 +298,7 @@ export default async function ResultsPage({
 
                     {/* Why this drill */}
                     {item.drill?.why && (
-                      <p className="text-sm text-[#888888] leading-relaxed">
+                      <p className="text-sm text-[#AAAAAA] leading-relaxed">
                         {item.drill.why}
                       </p>
                     )}
@@ -311,7 +311,7 @@ export default async function ResultsPage({
                     {/* Expandable instructions */}
                     {drillLib?.instructions && (
                       <details className="group">
-                        <summary className="flex items-center justify-between w-full cursor-pointer select-none border border-[#1A1A1A] px-3 py-2 text-sm text-[#888888] hover:border-white hover:text-white transition-colors duration-100 list-none">
+                        <summary className="flex items-center justify-between w-full cursor-pointer select-none border border-[#282828] px-3 py-2 text-sm text-[#AAAAAA] hover:border-white hover:text-white transition-colors duration-100 list-none">
                           <span>Step-by-step instructions</span>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -326,7 +326,7 @@ export default async function ResultsPage({
                             />
                           </svg>
                         </summary>
-                        <ol className="mt-3 text-sm text-[#888888] leading-relaxed border-t border-[#1A1A1A] pt-3 list-decimal list-inside space-y-1.5">
+                        <ol className="mt-3 text-sm text-[#AAAAAA] leading-relaxed border-t border-[#282828] pt-3 list-decimal list-inside space-y-1.5">
                           {drillLib.instructions.split('. ').filter(Boolean).map((step: string, si: number) => (
                             <li key={si}>{step.replace(/\.$/, '')}</li>
                           ))}
@@ -343,14 +343,14 @@ export default async function ResultsPage({
         {/* ── Prior traits not assessable in this video ── */}
         {notAssessableItems.length > 0 && (
           <section className="space-y-2">
-            <h2 className="text-xs font-medium tracking-widest uppercase text-[#444444]">Couldn&apos;t assess from this video</h2>
-            <div className="border border-[#1A1A1A] divide-y divide-[#1A1A1A]">
+            <h2 className="text-xs font-medium tracking-widest uppercase text-[#6B6B6B]">Couldn&apos;t assess from this video</h2>
+            <div className="border border-[#282828] divide-y divide-[#282828]">
               {notAssessableItems.map((item, i) => (
                 <div key={i} className="px-4 py-3 flex items-start gap-3">
-                  <span className="mt-0.5 text-[#444444]">—</span>
+                  <span className="mt-0.5 text-[#6B6B6B]">—</span>
                   <div>
-                    <p className="text-sm font-medium text-[#888888]">{item.trait}</p>
-                    <p className="text-xs text-[#444444] mt-0.5">{item.observation}</p>
+                    <p className="text-sm font-medium text-[#AAAAAA]">{item.trait}</p>
+                    <p className="text-xs text-[#6B6B6B] mt-0.5">{item.observation}</p>
                   </div>
                 </div>
               ))}
@@ -364,7 +364,7 @@ export default async function ResultsPage({
         )}
 
         {/* ── Disclaimer ── */}
-        <p className="text-xs text-[#444444] leading-relaxed border-t border-[#1A1A1A] pt-6">
+        <p className="text-xs text-[#6B6B6B] leading-relaxed border-t border-[#282828] pt-6">
           This analysis is AI-generated and intended for educational purposes only. It is not a
           substitute for advice from a qualified running coach or physiotherapist.
         </p>
@@ -373,7 +373,7 @@ export default async function ResultsPage({
         <div className="pb-4">
           <Link
             href="/upload"
-            className="text-sm text-[#888888] hover:text-white transition-colors duration-100"
+            className="text-sm text-[#AAAAAA] hover:text-white transition-colors duration-100"
           >
             ← Upload another video
           </Link>

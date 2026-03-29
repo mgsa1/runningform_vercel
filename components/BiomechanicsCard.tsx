@@ -50,7 +50,7 @@ const paceLabels: Record<string, string> = {
 const assessmentColors: Record<string, { bar: string; text: string; bg: string }> = {
   good: { bar: 'bg-green-500', text: 'text-green-300', bg: 'bg-green-500/10' },
   moderate: { bar: 'bg-amber-500', text: 'text-amber-300', bg: 'bg-amber-500/10' },
-  significant: { bar: 'bg-red-500', text: 'text-red-300', bg: 'bg-red-500/10' },
+  significant: { bar: 'bg-orange-500', text: 'text-orange-400', bg: 'bg-orange-500/10' },
 }
 
 
@@ -77,13 +77,13 @@ function RangeBar({ metric }: { metric: MeasuredMetric }) {
   const margin = rangeSpan * 0.1
   let dotColor = 'bg-green-500' // inside
   if (value < referenceRange.min - margin || value > referenceRange.max + margin) {
-    dotColor = 'bg-red-500' // outside
+    dotColor = 'bg-orange-500' // outside
   } else if (value < referenceRange.min || value > referenceRange.max) {
     dotColor = 'bg-amber-500' // on the border
   }
 
   return (
-    <div className="relative h-1.5 bg-[#1A1A1A] overflow-hidden">
+    <div className="relative h-1.5 bg-[#242424] overflow-hidden">
       {/* Good zone */}
       <div
         className="absolute h-full bg-green-500/25"
@@ -119,17 +119,17 @@ function MetricRow({
           <span className="text-sm font-mono text-white">
             {formatValue(metric.value, metric.unit)}
           </span>
-          {cmValue && <span className="text-xs text-[#444444]">{cmValue}</span>}
+          {cmValue && <span className="text-xs text-[#6B6B6B]">{cmValue}</span>}
         </span>
       </div>
       <RangeBar metric={metric} />
-      <div className="flex items-center justify-between text-xs text-[#444444]">
+      <div className="flex items-center justify-between text-xs text-[#6B6B6B]">
         <span>
           Range: {formatValue(metric.referenceRange.min, metric.unit)} –{' '}
           {formatValue(metric.referenceRange.max, metric.unit)}
           {pace ? ` at ${pace}` : ''}
         </span>
-        {subtitle && <span className="text-[#888888]">{subtitle}</span>}
+        {subtitle && <span className="text-[#AAAAAA]">{subtitle}</span>}
       </div>
     </div>
   )
@@ -176,22 +176,22 @@ export default function BiomechanicsCard({ biomechanics, heightCm }: Biomechanic
   if (!hasMetrics && !footStrikeType) return null
 
   return (
-    <section className="border border-[#1A1A1A] bg-[#0A0A0A] p-4 space-y-5">
+    <section className="border border-[#282828] bg-[#141414] p-4 space-y-5">
       <div className="flex items-center justify-between">
         <h2 className="text-base font-semibold text-white">Biomechanics</h2>
-        <span className="text-xs text-[#444444]">
+        <span className="text-xs text-[#6B6B6B]">
           {gaitCyclesDetected} gait cycle{gaitCyclesDetected !== 1 ? 's' : ''} detected
         </span>
       </div>
 
       {/* Foot strike callout */}
       {footStrikeType && (
-        <div className="flex items-center gap-3 px-3 py-2.5 bg-[#1A1A1A] border border-[#1A1A1A]">
+        <div className="flex items-center gap-3 px-3 py-2.5 bg-[#242424] border border-[#282828]">
           <div>
             <p className="text-sm font-medium text-white capitalize">
               {footStrikeType.type} strike
             </p>
-            <p className="text-xs text-[#888888]">
+            <p className="text-xs text-[#AAAAAA]">
               {footStrikeType.confidence} confidence
               {footStrikeType.contactCount > 0 &&
                 ` · ${footStrikeType.contactCount} contact${footStrikeType.contactCount !== 1 ? 's' : ''} analyzed`}
@@ -239,11 +239,11 @@ export default function BiomechanicsCard({ biomechanics, heightCm }: Biomechanic
 
       {/* Asymmetry section */}
       {(contactTimeAsymmetry || footPlacementAsymmetry) && (
-        <div className="border-t border-[#1A1A1A] pt-4 space-y-3">
-          <h3 className="text-xs font-medium text-[#444444] uppercase tracking-widest">
+        <div className="border-t border-[#282828] pt-4 space-y-3">
+          <h3 className="text-xs font-medium text-[#6B6B6B] uppercase tracking-widest">
             Asymmetry
           </h3>
-          <p className="text-xs text-[#444444] leading-relaxed">
+          <p className="text-xs text-[#6B6B6B] leading-relaxed">
             Difference between left and right side. Under 3% is normal — larger gaps may reduce running efficiency.
           </p>
           <div className="grid grid-cols-2 gap-3">
@@ -268,10 +268,10 @@ function AsymmetryChip({ label, metric }: { label: string; metric: MeasuredMetri
   return (
     <div
       className={`px-3 py-2 border ${
-        flagged ? 'border-amber-500/30 bg-amber-500/5' : 'border-[#1A1A1A] bg-[#0A0A0A]'
+        flagged ? 'border-amber-500/30 bg-amber-500/5' : 'border-[#282828] bg-[#141414]'
       }`}
     >
-      <p className="text-xs text-[#888888]">{label}</p>
+      <p className="text-xs text-[#AAAAAA]">{label}</p>
       <p className={`text-sm font-mono font-medium ${colors.text}`}>{pct}% diff</p>
     </div>
   )

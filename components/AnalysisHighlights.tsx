@@ -9,17 +9,17 @@ export default function AnalysisHighlights({
 
   return (
     <div className="space-y-3">
-      <h3 className="text-xs font-medium tracking-widest uppercase text-[#444444]">
+      <h3 className="text-xs font-medium tracking-widest uppercase text-[#6B6B6B]">
         Doing well
       </h3>
-      <div className="border-t border-[#1A1A1A]">
+      <div className="border-t border-[#282828]">
         {goodTraits.map((item, i) => (
           <div
             key={i}
-            className="flex gap-4 items-start py-4 border-b border-[#1A1A1A]"
+            className="flex gap-4 items-start py-4 border-b border-[#282828]"
           >
             <svg
-              className="mt-0.5 w-4 h-4 text-[#888888] shrink-0"
+              className="mt-0.5 w-4 h-4 text-[#AAAAAA] shrink-0"
               viewBox="0 0 12 12"
               fill="none"
               stroke="currentColor"
@@ -33,7 +33,7 @@ export default function AnalysisHighlights({
               <p className="text-sm font-medium text-white">
                 {item.trait}
               </p>
-              <p className="text-sm text-[#888888] mt-0.5 line-clamp-2">
+              <p className="text-sm text-[#AAAAAA] mt-0.5 line-clamp-2">
                 {item.observation}
               </p>
             </div>

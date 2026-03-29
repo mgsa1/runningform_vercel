@@ -124,7 +124,7 @@ export default function UploadClient({ userId }: Props) {
   return (
     <div className="space-y-6">
       {/* Filming tips */}
-      <div className="border border-[#1A1A1A]">
+      <div className="border border-[#282828]">
         <button
           type="button"
           onClick={() => setTipsOpen((v) => !v)}
@@ -147,7 +147,7 @@ export default function UploadClient({ userId }: Props) {
           </span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className={`h-4 w-4 text-[#444444] transition-transform shrink-0 ${tipsOpen ? 'rotate-180' : ''}`}
+            className={`h-4 w-4 text-[#6B6B6B] transition-transform shrink-0 ${tipsOpen ? 'rotate-180' : ''}`}
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -159,7 +159,7 @@ export default function UploadClient({ userId }: Props) {
           </svg>
         </button>
         {tipsOpen && (
-          <ul className="px-4 pb-4 space-y-2 border-t border-[#1A1A1A] pt-3">
+          <ul className="px-4 pb-4 space-y-2 border-t border-[#282828] pt-3">
             {FILMING_TIPS.map((tip, i) => (
               <li key={i} className="flex gap-2 text-sm text-[#888888] leading-snug">
                 <span className="text-white shrink-0 mt-0.5">✓</span>
@@ -172,9 +172,9 @@ export default function UploadClient({ userId }: Props) {
 
       {/* Run context */}
       <div className="space-y-3">
-        <p className="text-xs font-medium text-[#444444] uppercase tracking-widest">
+        <p className="text-xs font-medium text-[#6B6B6B] uppercase tracking-widest">
           Run context{' '}
-          <span className="normal-case font-normal text-[#444444]">
+          <span className="normal-case font-normal text-[#6B6B6B]">
             — optional, helps the AI give better advice
           </span>
         </p>
@@ -187,12 +187,12 @@ export default function UploadClient({ userId }: Props) {
                 value={paceValue}
                 onChange={(e) => setPaceValue(e.target.value)}
                 placeholder="5:30"
-                className="flex-1 min-w-0 bg-black border border-[#1A1A1A] px-3 py-2 text-sm text-white placeholder-[#444444] focus:outline-none focus:border-white transition-colors duration-100"
+                className="flex-1 min-w-0 bg-black border border-[#282828] px-3 py-2 text-sm text-white placeholder-[#444444] focus:outline-none focus:border-white transition-colors duration-100"
               />
               <select
                 value={paceUnit}
                 onChange={(e) => setPaceUnit(e.target.value as 'km' | 'mi')}
-                className="bg-[#0A0A0A] border border-l-0 border-[#1A1A1A] px-2 py-2 text-sm text-[#888888] focus:outline-none focus:border-white transition-colors duration-100"
+                className="bg-[#0A0A0A] border border-l-0 border-[#282828] px-2 py-2 text-sm text-[#888888] focus:outline-none focus:border-white transition-colors duration-100"
               >
                 <option value="km">/km</option>
                 <option value="mi">/mi</option>
@@ -204,7 +204,7 @@ export default function UploadClient({ userId }: Props) {
             <select
               value={fatigue}
               onChange={(e) => setFatigue(e.target.value === '' ? '' : Number(e.target.value))}
-              className="w-full bg-black border border-[#1A1A1A] px-3 py-2 text-sm text-white focus:outline-none focus:border-white transition-colors duration-100"
+              className="w-full bg-black border border-[#282828] px-3 py-2 text-sm text-white focus:outline-none focus:border-white transition-colors duration-100"
             >
               <option value="">Not specified</option>
               <option value="2">Fresh</option>
@@ -217,11 +217,8 @@ export default function UploadClient({ userId }: Props) {
 
       {/* Injury / pain context */}
       <div className="space-y-3">
-        <p className="text-xs font-medium text-[#444444] uppercase tracking-widest">
-          Any pain or niggles?{' '}
-          <span className="normal-case font-normal text-[#444444]">
-            — helps prioritise the right drill
-          </span>
+        <p className="text-xs font-medium text-[#6B6B6B] uppercase tracking-widest">
+          Any pain or niggles?
         </p>
         <div className="flex flex-wrap gap-2">
           {[
@@ -242,7 +239,7 @@ export default function UploadClient({ userId }: Props) {
                 className={`px-3 py-1.5 text-xs border transition-colors duration-100 ${
                   active
                     ? 'border-white text-white bg-white/5'
-                    : 'border-[#1A1A1A] text-[#555555] hover:border-[#333333] hover:text-[#888888]'
+                    : 'border-[#282828] text-[#888888] hover:border-[#333333] hover:text-[#888888]'
                 }`}
               >
                 {label}
