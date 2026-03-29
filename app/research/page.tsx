@@ -162,17 +162,17 @@ const metrics = [
 
 export default function ResearchPage() {
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <div className="max-w-3xl mx-auto px-4 py-10 space-y-10">
+    <div className="min-h-screen">
+      <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-12 space-y-10">
         <div className="space-y-3">
           <h1 className="font-heading text-2xl font-bold">Research Basis</h1>
-          <p className="text-sm text-gray-400 leading-relaxed">
+          <p className="text-sm text-[#888888] leading-relaxed">
             RunningForm uses biomechanics reference ranges derived from peer-reviewed
             sports science research. This page documents the evidence behind each metric,
             our measurement methodology, and known limitations. We believe in transparency
             about what the science supports and where our analysis is approximate.
           </p>
-          <p className="text-sm text-gray-400 leading-relaxed">
+          <p className="text-sm text-[#888888] leading-relaxed">
             All biomechanics measurements are computed client-side from 2D video using
             MediaPipe Pose Landmarker. They are estimates, not lab-grade measurements.
             Reference ranges are pace-adjusted across three tiers: easy (&gt; 6:00/km),
@@ -183,26 +183,26 @@ export default function ResearchPage() {
         {metrics.map((metric) => (
           <section
             key={metric.name}
-            className="rounded-xl border border-gray-800 bg-gray-900 p-5 space-y-5"
+            className="border border-[#1A1A1A] bg-[#0A0A0A] p-5 space-y-5"
           >
-            <h2 className="text-lg font-semibold text-gray-100">{metric.name}</h2>
+            <h2 className="text-lg font-semibold text-white">{metric.name}</h2>
 
             {/* Unit */}
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-[#444444]">
               Unit: {metric.unit}
             </div>
 
             {/* Thresholds */}
             <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-300">Thresholds</h3>
+              <h3 className="text-sm font-medium text-[#888888]">Thresholds</h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {Object.entries(metric.thresholds).map(([pace, range]) => (
                   <div
                     key={pace}
-                    className="rounded-md bg-gray-800/70 px-3 py-2 text-xs"
+                    className="bg-[#0A0A0A] border border-[#1A1A1A] px-3 py-2 text-xs"
                   >
-                    <span className="text-gray-400 capitalize">{pace}: </span>
-                    <span className="text-gray-200">{range}</span>
+                    <span className="text-[#888888] capitalize">{pace}: </span>
+                    <span className="text-white">{range}</span>
                   </div>
                 ))}
               </div>
@@ -210,8 +210,8 @@ export default function ResearchPage() {
 
             {/* Methodology */}
             <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-gray-300">How we measure it</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
+              <h3 className="text-sm font-medium text-[#888888]">How we measure it</h3>
+              <p className="text-sm text-[#888888] leading-relaxed">
                 {metric.methodology}
               </p>
             </div>
@@ -224,7 +224,7 @@ export default function ResearchPage() {
                   {metric.caveats.map((caveat, i) => (
                     <li
                       key={i}
-                      className="flex gap-2 text-sm text-gray-400 leading-relaxed"
+                      className="flex gap-2 text-sm text-[#888888] leading-relaxed"
                     >
                       <span className="text-amber-500 shrink-0 mt-0.5">*</span>
                       {caveat}
@@ -236,7 +236,7 @@ export default function ResearchPage() {
 
             {/* Sources */}
             <div className="space-y-2">
-              <h3 className="text-sm font-medium text-gray-300">Sources</h3>
+              <h3 className="text-sm font-medium text-[#888888]">Sources</h3>
               <ul className="space-y-3">
                 {metric.sources.map((source, i) => (
                   <li key={i} className="text-sm space-y-0.5">
@@ -244,11 +244,11 @@ export default function ResearchPage() {
                       href={source.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-300 transition-colors underline underline-offset-2"
+                      className="text-[#888888] hover:text-white transition-colors underline underline-offset-2"
                     >
                       {source.text}
                     </a>
-                    <p className="text-gray-500 text-xs pl-4">
+                    <p className="text-[#444444] text-xs pl-4">
                       {source.finding}
                     </p>
                   </li>
@@ -259,7 +259,7 @@ export default function ResearchPage() {
         ))}
 
         {/* Disclaimer */}
-        <p className="text-xs text-gray-500 leading-relaxed border-t border-gray-800 pt-6">
+        <p className="text-xs text-[#444444] leading-relaxed border-t border-[#1A1A1A] pt-6">
           This analysis is AI-generated and intended for educational purposes only. It is not a
           substitute for advice from a qualified running coach or physiotherapist. Biomechanics
           metrics are estimates from 2D side-view video, not lab-grade measurements.
@@ -268,7 +268,7 @@ export default function ResearchPage() {
         <div className="pb-4">
           <Link
             href="/upload"
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+            className="text-sm text-[#888888] hover:text-white transition-colors"
           >
             ← Back to upload
           </Link>

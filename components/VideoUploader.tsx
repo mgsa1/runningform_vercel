@@ -354,10 +354,10 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
           if (!selectedFile && !isProcessing) fileInputRef.current?.click()
         }}
         className={[
-          'relative border-2 border-dashed rounded-xl p-10 text-center transition-colors',
+          'relative border border-dashed p-12 text-center transition-colors duration-150',
           isDragging
-            ? 'border-gray-500 bg-gray-800'
-            : 'border-gray-700 hover:border-gray-500',
+            ? 'border-white bg-white/[0.03]'
+            : 'border-white/30 hover:border-white',
           !selectedFile && !isProcessing ? 'cursor-pointer' : 'cursor-default',
         ].join(' ')}
       >
@@ -373,12 +373,27 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
         />
 
         {!selectedFile ? (
-          <div>
-            <p className="text-sm font-medium text-gray-400">
+          <div className="space-y-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="mx-auto text-[#444444]"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <polyline points="5 12 12 5 19 12" />
+            </svg>
+            <p className="text-sm font-medium text-[#888888]">
               Drop your video here, or{' '}
-              <span className="text-white underline">browse</span>
+              <span className="text-white underline underline-offset-2">browse</span>
             </p>
-            <p className="mt-1 text-xs text-gray-600">
+            <p className="text-xs text-[#444444]">
               MP4 · MOV · WebM &nbsp;·&nbsp; max 500 MB &nbsp;·&nbsp; min 3 seconds
             </p>
           </div>
@@ -388,7 +403,7 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
               <p className="text-sm font-medium text-white truncate">
                 {selectedFile.name}
               </p>
-              <p className="text-xs text-gray-400 mt-0.5">
+              <p className="text-xs text-[#888888] mt-0.5">
                 {(selectedFile.size / (1024 * 1024)).toFixed(1)} MB
               </p>
             </div>
@@ -399,7 +414,7 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
                   e.stopPropagation()
                   clearSelection()
                 }}
-                className="text-xs text-gray-400 hover:text-gray-600 shrink-0"
+                className="text-xs text-[#888888] hover:text-white transition-colors duration-100 shrink-0"
               >
                 Remove
               </button>
@@ -410,7 +425,7 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
 
       {/* Progress message */}
       {progressMsg && (
-        <p className="text-center text-sm text-gray-500">{progressMsg}</p>
+        <p className="text-center text-sm text-[#888888]">{progressMsg}</p>
       )}
 
       {/* Progress bar */}
@@ -421,11 +436,9 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
         const total = parseInt(match[2])
         const pct = Math.round((current / total) * 100)
         return (
-          <div className="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+          <div className="w-full bg-[#1A1A1A] h-px overflow-hidden">
             <div
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                status === 'detecting' ? 'bg-purple-500' : 'bg-blue-500'
-              }`}
+              className="h-px bg-white transition-all duration-300"
               style={{ width: `${pct}%` }}
             />
           </div>
@@ -438,10 +451,10 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
           {qualityFeedback.issues.map((issue, i) => (
             <div
               key={i}
-              className={`text-sm px-4 py-3 rounded-lg ${
+              className={`text-sm px-4 py-3 border ${
                 issue.severity === 'error'
-                  ? 'bg-red-500/10 border border-red-500/30 text-red-400'
-                  : 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
+                  ? 'border-red-500/30 text-red-400'
+                  : 'border-amber-500/30 text-amber-400'
               }`}
             >
               {issue.message}
@@ -455,20 +468,20 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
         <button
           type="button"
           onClick={startUpload}
-          className="w-full py-2.5 px-4 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+          className="w-full py-3 px-4 bg-white text-black text-sm font-semibold tracking-wide hover:bg-[#E5E5E5] transition-colors duration-100"
         >
           Analyse my run
         </button>
       )}
 
       {isProcessing && (
-        <div className="w-full py-2.5 px-4 bg-gray-800 text-gray-400 text-sm font-medium rounded-lg text-center select-none">
+        <div className="w-full py-3 px-4 border border-[#1A1A1A] text-[#888888] text-sm font-medium text-center select-none">
           {status === 'detecting' ? 'Analyzing your running form…' : 'Processing…'}
         </div>
       )}
 
       {status === 'done' && (
-        <div className="w-full py-2.5 px-4 bg-green-500/10 text-green-400 border border-green-500/30 text-sm font-medium rounded-lg text-center">
+        <div className="w-full py-3 px-4 border border-green-500/30 text-green-400 text-sm font-medium text-center">
           Frames uploaded — preparing analysis…
         </div>
       )}

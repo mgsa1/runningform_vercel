@@ -26,17 +26,17 @@ export default function DeleteSessionButton({ sessionId }: Props) {
   if (confirming) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-400">Delete this attempt?</span>
+        <span className="text-xs text-[#888888]">Delete this attempt?</span>
         <button
           onClick={handleDelete}
           disabled={deleting}
-          className="text-xs text-red-400 hover:text-red-300 font-medium disabled:opacity-50"
+          className="text-xs text-red-400 hover:text-red-300 font-medium disabled:opacity-50 transition-colors duration-100"
         >
           {deleting ? 'Deleting…' : 'Yes, delete'}
         </button>
         <button
           onClick={() => setConfirming(false)}
-          className="text-xs text-gray-500 hover:text-gray-400"
+          className="text-xs text-[#444444] hover:text-[#888888] transition-colors duration-100"
         >
           Cancel
         </button>
@@ -51,7 +51,7 @@ export default function DeleteSessionButton({ sessionId }: Props) {
         e.stopPropagation()
         setConfirming(true)
       }}
-      className="text-xs text-gray-600 hover:text-red-400 transition-colors"
+      className="text-xs text-[#444444] hover:text-red-400 transition-colors duration-100"
     >
       Delete
     </button>

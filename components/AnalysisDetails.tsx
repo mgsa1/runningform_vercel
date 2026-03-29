@@ -19,26 +19,27 @@ function BodySection({ title, items }: { title: string; items: BodyDetail[] }) {
   if (!items?.length) return null
   return (
     <div className="space-y-3">
-      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-widest">{title}</h3>
+      <h3 className="text-xs font-medium tracking-widest uppercase text-[#444444]">{title}</h3>
       {items.map((item, i) => (
         <div
           key={i}
-          className="p-4 rounded-lg border border-gray-800 bg-gray-900 space-y-1.5"
+          className="p-4 border border-[#1A1A1A] bg-[#0A0A0A] space-y-1.5"
         >
           <div className="flex items-center gap-2 flex-wrap">
-            <span aria-label={item.status === 'good' ? 'Good' : 'Needs work'}>
-              {item.status === 'good' ? '🟢' : '🟡'}
-            </span>
+            <span
+              className={`w-1.5 h-1.5 rounded-full shrink-0 ${item.status === 'good' ? 'bg-green-400' : 'bg-amber-400'}`}
+              aria-label={item.status === 'good' ? 'Good' : 'Needs work'}
+            />
             <span className="font-medium text-white text-sm">{item.trait}</span>
             {item.confidence !== 'high' && (
               <span
-                className={`ml-auto text-xs ${confidenceColor[item.confidence] ?? 'text-gray-400'}`}
+                className={`ml-auto text-xs ${confidenceColor[item.confidence] ?? 'text-[#888888]'}`}
               >
                 {item.confidence} confidence
               </span>
             )}
           </div>
-          <p className="text-sm text-gray-300 leading-relaxed">{item.description}</p>
+          <p className="text-sm text-[#888888] leading-relaxed">{item.description}</p>
         </div>
       ))}
     </div>

@@ -26,7 +26,7 @@ export default function AnalysisHero({
   return (
     <div className="space-y-4">
       {thumbnailUrl && (
-        <div className="rounded-xl overflow-hidden bg-gray-800 aspect-video">
+        <div className="overflow-hidden bg-[#0A0A0A] border border-[#1A1A1A] aspect-video">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={thumbnailUrl}
@@ -37,12 +37,12 @@ export default function AnalysisHero({
       )}
 
       <div className="space-y-3">
-        <p className="text-base text-gray-100 leading-relaxed">{headline}</p>
+        <p className="text-base text-white leading-relaxed">{headline}</p>
 
         <div>
           <button
             onClick={() => setShowNotes((v) => !v)}
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold transition-opacity hover:opacity-80 ${qualityStyles[videoQuality] ?? qualityStyles.Fair}`}
+            className={`inline-flex items-center gap-1.5 px-3 py-1 border text-xs font-semibold transition-opacity hover:opacity-80 ${qualityStyles[videoQuality] ?? qualityStyles.Fair}`}
             aria-expanded={showNotes}
           >
             {videoQuality} Quality
@@ -52,7 +52,7 @@ export default function AnalysisHero({
           </button>
 
           {showNotes && qualityNotes && (
-            <p className="mt-2 text-sm text-gray-400 leading-relaxed bg-gray-800/60 rounded-lg p-3 border border-gray-700">
+            <p className="mt-2 text-sm text-[#888888] leading-relaxed bg-[#0A0A0A] p-3 border border-[#1A1A1A]">
               {qualityNotes}
             </p>
           )}

@@ -22,11 +22,11 @@ export default async function OnboardingPage() {
   const displayName: string = user.user_metadata?.display_name ?? ''
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-lg">
         <div className="mb-8">
-          <h1 className="font-heading text-2xl font-semibold text-white">Set up your profile</h1>
-          <p className="mt-1 text-sm text-gray-400">
+          <h1 className="text-2xl font-bold text-white">Set up your profile</h1>
+          <p className="mt-1 text-sm text-[#888888]">
             Tell us a bit about yourself so we can tailor the analysis.
           </p>
         </div>

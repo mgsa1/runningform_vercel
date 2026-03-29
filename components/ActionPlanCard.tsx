@@ -4,17 +4,17 @@ interface ActionPlanCardProps {
 
 export default function ActionPlanCard({ href = '#drill-plan' }: ActionPlanCardProps) {
   return (
-    <div className="p-6 rounded-2xl border border-blue-500/30 bg-blue-600/5 text-center space-y-3">
+    <div className="border border-[#1A1A1A] bg-[#0A0A0A] p-6 text-center space-y-4">
       <div className="space-y-1">
-        <p className="text-xs font-semibold text-blue-300 uppercase tracking-wide">Next step</p>
+        <p className="text-xs font-medium tracking-widest uppercase text-[#888888]">Next step</p>
         <h3 className="text-base font-semibold text-white">Ready to improve?</h3>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-[#888888]">
           We&apos;ve selected drills tailored to your focus areas below.
         </p>
       </div>
       <a
         href={href}
-        className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold text-sm transition-colors"
+        className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 bg-white text-black font-semibold text-sm tracking-wide hover:bg-[#E5E5E5] active:scale-[0.98] transition-colors duration-100"
       >
         View Your Custom Drill Plan
         <span aria-hidden="true">↓</span>

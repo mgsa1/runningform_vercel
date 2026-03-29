@@ -67,7 +67,7 @@ export default function FrameGallery({ frameUrls, poseFrames, visibleSide }: Fra
   const currentPose = hasPose ? poseFrames[selected] : null
 
   return (
-    <div className="rounded-xl overflow-hidden bg-gray-800">
+    <div className="overflow-hidden bg-black border border-[#1A1A1A]">
       {/* Main frame — fixed aspect ratio */}
       <div className="relative w-full aspect-video">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -92,7 +92,7 @@ export default function FrameGallery({ frameUrls, poseFrames, visibleSide }: Fra
 
         {/* Frame counter — top-right */}
         {frameUrls.length > 1 && (
-          <span className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/60 text-xs text-gray-300 font-mono backdrop-blur-sm">
+          <span className="absolute top-2 right-2 px-2 py-0.5 bg-black/60 text-xs text-[#888888] font-mono backdrop-blur-sm">
             {selected + 1} / {frameUrls.length}
           </span>
         )}
@@ -102,10 +102,10 @@ export default function FrameGallery({ frameUrls, poseFrames, visibleSide }: Fra
           <button
             type="button"
             onClick={() => setShowSkeleton((v) => !v)}
-            className={`absolute bottom-2 left-2 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md backdrop-blur-sm text-xs font-medium transition-colors ${
+            className={`absolute bottom-2 left-2 flex items-center gap-1.5 px-2.5 py-1.5 backdrop-blur-sm text-xs font-medium transition-colors ${
               showSkeleton
-                ? 'bg-green-500/25 text-green-300 border border-green-500/50'
-                : 'bg-black/50 text-gray-300 border border-white/15'
+                ? 'bg-black/60 text-white border border-white/30'
+                : 'bg-black/60 text-[#888888] border border-white/15'
             }`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
@@ -122,14 +122,14 @@ export default function FrameGallery({ frameUrls, poseFrames, visibleSide }: Fra
 
       {/* Slider to select frame */}
       {frameUrls.length > 1 && (
-        <div className="px-3 py-2.5 bg-gray-900/60 flex items-center gap-3">
+        <div className="px-3 py-2.5 bg-[#0A0A0A] flex items-center gap-3 border-t border-[#1A1A1A]">
           <input
             type="range"
             min={0}
             max={frameUrls.length - 1}
             value={selected}
             onChange={(e) => setSelected(Number(e.target.value))}
-            className="flex-1 h-1.5 accent-blue-500 cursor-pointer"
+            className="flex-1 h-1.5 accent-white cursor-pointer"
             aria-label="Select frame"
           />
         </div>

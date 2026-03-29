@@ -17,10 +17,10 @@ export default function NavLinks() {
         <Link
           key={href}
           href={href}
-          className={`text-sm transition-colors ${
+          className={`text-sm font-medium transition-colors duration-100 ${
             pathname === href
-              ? 'text-white font-medium'
-              : 'text-gray-400 hover:text-white'
+              ? 'text-white'
+              : 'text-[#888888] hover:text-white'
           }`}
         >
           {label}

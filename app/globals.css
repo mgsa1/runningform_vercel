@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-bg:           #000000;
+  --color-surface:      #0A0A0A;
+  --color-border:       #1A1A1A;
+  --color-text:         #FFFFFF;
+  --color-text-muted:   #888888;
+  --color-text-dim:     #444444;
+  --color-cta-bg:       #FFFFFF;
+  --color-cta-text:     #000000;
+  --color-good:         #22C55E;
+  --color-critical:     #EF4444;
+  --color-moderate:     #F59E0B;
+  --color-minor:        #6B7280;
+}
+
 /* Frame gallery range slider — dark track */
 input[type="range"] {
   -webkit-appearance: none;

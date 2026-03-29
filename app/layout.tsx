@@ -22,13 +22,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={jakarta.variable}>
-      <body className={`${jakarta.className} bg-gray-950`}>
+      <body className={`${jakarta.className} bg-black text-white`}>
         <Nav />
         {children}
-        <footer className="text-center text-sm text-gray-500 py-8 space-y-1">
+        <footer className="text-center text-xs text-[#444444] py-12 space-y-1">
           <p>made with love in sf</p>
           <p>mgsa</p>
-          <Link href="/research" className="inline-block py-2 text-gray-400 hover:text-gray-300 transition-colors">
+          <Link href="/research" className="inline-block py-2 text-[#444444] hover:text-[#888888] transition-colors">
             Research basis
           </Link>
         </footer>

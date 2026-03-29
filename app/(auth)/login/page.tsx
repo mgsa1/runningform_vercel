@@ -45,15 +45,15 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="bg-gray-900 rounded-2xl border border-gray-800 p-8">
+    <div className="border border-[#1A1A1A] bg-[#0A0A0A] p-8">
       <div className="mb-8">
-        <h1 className="font-heading text-2xl font-semibold text-white">Welcome back</h1>
-        <p className="mt-1 text-sm text-gray-400">Sign in to your RunningForm account</p>
+        <h1 className="text-2xl font-bold text-white">Welcome back</h1>
+        <p className="mt-1 text-sm text-[#888888]">Sign in to your RunningForm account</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-[#888888] mb-1.5">
             Email
           </label>
           <input
@@ -63,19 +63,19 @@ export default function LoginPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2.5 bg-black border border-[#1A1A1A] text-sm text-white placeholder-[#444444] focus:outline-none focus:border-white transition-colors duration-100"
             placeholder="you@example.com"
           />
         </div>
 
         <div>
-          <div className="flex items-center justify-between mb-1">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+          <div className="flex items-center justify-between mb-1.5">
+            <label htmlFor="password" className="block text-sm font-medium text-[#888888]">
               Password
             </label>
             <Link
               href="/forgot-password"
-              className="text-xs text-gray-500 hover:text-gray-300 hover:underline"
+              className="text-xs text-[#444444] hover:text-white transition-colors duration-100"
             >
               Forgot password?
             </Link>
@@ -88,13 +88,13 @@ export default function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 pr-10 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2.5 pr-10 bg-black border border-[#1A1A1A] text-sm text-white placeholder-[#444444] focus:outline-none focus:border-white transition-colors duration-100"
               placeholder="••••••••"
             />
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-300"
+              className="absolute inset-y-0 right-0 flex items-center px-3 text-[#444444] hover:text-white transition-colors duration-100"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? (
@@ -113,7 +113,7 @@ export default function LoginPage() {
         </div>
 
         {error && (
-          <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
+          <p className="text-sm text-red-400 border border-red-500/30 px-3 py-2">
             {error}
           </p>
         )}
@@ -121,13 +121,13 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-2.5 px-4 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full py-3 px-4 bg-white text-black text-sm font-semibold tracking-wide hover:bg-[#E5E5E5] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-100"
         >
           {loading ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-400">
+      <p className="mt-6 text-center text-sm text-[#888888]">
         Don&apos;t have an account?{' '}
         <Link href="/signup" className="font-medium text-white hover:underline">
           Sign up

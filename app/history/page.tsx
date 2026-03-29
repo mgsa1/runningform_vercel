@@ -41,21 +41,21 @@ function formatDate(iso: string) {
 
 function statusBadge(status: string) {
   const map: Record<string, { label: string; classes: string }> = {
-    queued:     { label: 'Queued',     classes: 'bg-gray-500/20 text-gray-300' },
-    processing: { label: 'Processing', classes: 'bg-blue-500/20 text-blue-300' },
-    completed:  { label: 'Complete',   classes: 'bg-green-500/20 text-green-300' },
-    failed:     { label: 'Failed',     classes: 'bg-red-500/20 text-red-300' },
+    queued:     { label: 'Queued',     classes: 'bg-[#1A1A1A] text-[#888888]' },
+    processing: { label: 'Processing', classes: 'bg-[#1A1A1A] text-white' },
+    completed:  { label: 'Complete',   classes: 'bg-[#1A1A1A] text-green-400' },
+    failed:     { label: 'Failed',     classes: 'bg-[#1A1A1A] text-red-400' },
   }
-  return map[status] ?? { label: status, classes: 'bg-gray-500/20 text-gray-300' }
+  return map[status] ?? { label: status, classes: 'bg-[#1A1A1A] text-[#888888]' }
 }
 
 function qualityBadge(quality: string) {
   const map: Record<string, string> = {
-    good: 'bg-green-500/20 text-green-300',
-    fair: 'bg-amber-500/20 text-amber-300',
-    poor: 'bg-red-500/20 text-red-300',
+    good: 'bg-[#1A1A1A] text-green-400',
+    fair: 'bg-[#1A1A1A] text-amber-400',
+    poor: 'bg-[#1A1A1A] text-red-400',
   }
-  return map[quality] ?? 'bg-gray-500/20 text-gray-300'
+  return map[quality] ?? 'bg-[#1A1A1A] text-[#888888]'
 }
 
 // form_score may be null for sessions analysed before the migration — fall back to computing it
@@ -93,43 +93,37 @@ export default async function HistoryPage() {
     }))
     .reverse()
 
-  const latestScore  = completedPoints.at(-1)?.score ?? null
+  const latestScore   = completedPoints.at(-1)?.score ?? null
   const previousScore = completedPoints.length > 1 ? completedPoints.at(-2)!.score : null
-  const bestScore    = completedPoints.length > 0 ? Math.max(...completedPoints.map(d => d.score)) : null
+  const bestScore     = completedPoints.length > 0 ? Math.max(...completedPoints.map(d => d.score)) : null
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <div className="max-w-2xl mx-auto px-4 py-10 space-y-6">
+    <div className="min-h-screen pb-20 md:pb-0">
+      <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-12 space-y-8">
 
         {/* ── Header ── */}
         <div className="flex items-center justify-between">
-          <h1 className="font-heading text-2xl font-bold">Your Analyses</h1>
+          <h1 className="text-2xl font-bold text-white">Your Analyses</h1>
           <Link
             href="/upload"
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+            className="hidden md:inline-flex items-center justify-center px-6 py-2 min-h-[40px] bg-white text-black font-semibold text-sm tracking-wide hover:bg-[#E5E5E5] transition-colors duration-100"
           >
-            Upload new video
+            Upload new
           </Link>
         </div>
 
         {/* ── Zero-session empty state ── */}
         {sessions.length === 0 && (
-          <div className="space-y-4">
-            <div className="rounded-xl border border-gray-800 bg-gray-900 p-5 space-y-3 opacity-50">
-              <p className="text-sm font-medium text-gray-300">Form Score</p>
-              <div className="h-24 rounded-lg bg-gray-800 flex items-center justify-center">
-                <p className="text-sm text-gray-500">Your progress chart will appear here</p>
-              </div>
-            </div>
-            <div className="text-center py-10 space-y-4">
-              <p className="text-gray-400">You haven&apos;t analysed any runs yet.</p>
-              <Link
-                href="/upload"
-                className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-              >
-                Upload your first video
-              </Link>
-            </div>
+          <div className="py-24 text-center space-y-4">
+            <p className="text-8xl font-extrabold text-[#1A1A1A] select-none">0</p>
+            <p className="text-xl font-semibold text-white">No runs analyzed yet.</p>
+            <p className="text-sm text-[#888888]">Upload your first video to get started.</p>
+            <Link
+              href="/upload"
+              className="inline-flex items-center justify-center mt-4 px-8 py-3 min-h-[44px] bg-white text-black font-semibold text-sm tracking-wide hover:bg-[#E5E5E5] transition-colors duration-100"
+            >
+              Upload a video
+            </Link>
           </div>
         )}
 
@@ -138,16 +132,16 @@ export default async function HistoryPage() {
           <>
             {/* ── Score summary + sparkline ── */}
             {latestScore !== null && (
-              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4 space-y-4">
+              <div className="border border-[#1A1A1A] bg-[#0A0A0A] p-6 space-y-4">
                 {/* Summary strip */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-5">
                   <FormScoreRing score={latestScore} size="md" />
                   <div className="flex-1 min-w-0 space-y-1.5">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-gray-200">Latest score</p>
+                      <p className="text-sm font-semibold text-white">Latest score</p>
                       <ScoreDelta current={latestScore} previous={previousScore} />
                     </div>
-                    <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-gray-400">
+                    <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-[#888888]">
                       {bestScore !== null && (
                         <span>Best: <span className="text-white font-medium">{bestScore}</span></span>
                       )}
@@ -156,7 +150,7 @@ export default async function HistoryPage() {
                       </span>
                     </div>
                     {completedPoints.length === 1 && (
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-[#444444]">
                         Upload another video to start tracking your progress
                       </p>
                     )}
@@ -171,7 +165,7 @@ export default async function HistoryPage() {
                   />
                   {completedPoints.length === 1 && (
                     <div className="absolute inset-0 flex items-end justify-center pb-1 pointer-events-none">
-                      <p className="text-xs text-gray-600">
+                      <p className="text-xs text-[#444444]">
                         After your next analysis you&apos;ll see your trend
                       </p>
                     </div>
@@ -181,7 +175,7 @@ export default async function HistoryPage() {
             )}
 
             {/* ── Session list ── */}
-            <ul className="space-y-3">
+            <ul className="divide-y divide-[#1A1A1A] border-t border-[#1A1A1A]">
               {sessions.map((session, idx) => {
                 const result = session.analysis_results?.[0] ?? null
                 const badge  = statusBadge(session.status)
@@ -196,7 +190,7 @@ export default async function HistoryPage() {
 
                 const cardScore = isComplete && result ? resolveScore(result) : null
 
-                // Previous completed card (older, lower index in array = more recent, so search after idx)
+                // Previous completed score for delta
                 const prevResult = sessions
                   .slice(idx + 1)
                   .find(s => s.status === 'completed' && s.analysis_results?.[0])
@@ -204,61 +198,60 @@ export default async function HistoryPage() {
                 const prevScore = prevResult ? resolveScore(prevResult) : null
 
                 const CardInner = (
-                  <div className="p-4 rounded-lg border border-gray-800 bg-gray-900 hover:border-gray-600 transition-colors">
-                    <div className="flex items-center gap-3">
-                      {/* Score ring — only for completed */}
-                      {cardScore !== null && (
-                        <div className="shrink-0">
-                          <FormScoreRing score={cardScore} size="sm" />
-                        </div>
-                      )}
+                  <div className="py-5 flex items-center gap-4 group">
+                    {/* Score ring — only for completed */}
+                    {cardScore !== null && (
+                      <div className="shrink-0">
+                        <FormScoreRing score={cardScore} size="sm" />
+                      </div>
+                    )}
+                    {/* Placeholder width when no ring */}
+                    {cardScore === null && <div className="w-12 shrink-0" />}
 
-                      <div className="flex-1 min-w-0 space-y-2">
-                        {/* Filename + date */}
-                        <div className="flex items-start justify-between gap-4">
-                          <p className="font-medium text-white text-sm truncate">
-                            {session.original_filename ?? 'Untitled video'}
-                          </p>
-                          <p className="text-xs text-gray-500 shrink-0">
-                            {formatDate(session.queued_at)}
-                          </p>
-                        </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-4">
+                        <p className="text-sm font-medium text-white truncate group-hover:text-[#888888] transition-colors duration-100">
+                          {session.original_filename ?? 'Untitled video'}
+                        </p>
+                        <p className="text-xs text-[#444444] shrink-0 pt-0.5">
+                          {formatDate(session.queued_at)}
+                        </p>
+                      </div>
 
-                        {/* Badge row */}
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${badge.classes}`}>
-                            {badge.label}
+                      <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                        <span className={`px-2 py-0.5 rounded-sm text-xs font-medium tracking-wide ${badge.classes}`}>
+                          {badge.label}
+                        </span>
+                        {cardScore !== null && (
+                          <ScoreDelta current={cardScore} previous={prevScore} />
+                        )}
+                        {isComplete && result?.result?.summary?.videoQuality && (
+                          <span className={`px-2 py-0.5 rounded-sm text-xs font-medium capitalize ${qualityBadge(result.result.summary.videoQuality.toLowerCase())}`}>
+                            {result.result.summary.videoQuality.toLowerCase()} video
                           </span>
-                          {cardScore !== null && (
-                            <ScoreDelta current={cardScore} previous={prevScore} />
-                          )}
-                          {isComplete && result?.result?.summary?.videoQuality && (
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${qualityBadge(result.result.summary.videoQuality.toLowerCase())}`}>
-                              {result.result.summary.videoQuality.toLowerCase()} video
-                            </span>
-                          )}
-                          {result?.usefulness_rating != null && (
-                            <span
-                              className="text-sm"
-                              title={result.usefulness_rating === 5 ? 'Rated useful' : 'Rated not useful'}
-                            >
-                              {result.usefulness_rating === 5 ? '👍' : '👎'}
-                            </span>
-                          )}
-                        </div>
+                        )}
+                        {result?.usefulness_rating != null && (
+                          <span
+                            className="text-sm"
+                            title={result.usefulness_rating === 5 ? 'Rated useful' : 'Rated not useful'}
+                          >
+                            {result.usefulness_rating === 5 ? '👍' : '👎'}
+                          </span>
+                        )}
                       </div>
                     </div>
+
+                    {!isComplete && (
+                      <div className="shrink-0">
+                        <DeleteSessionButton sessionId={session.id} />
+                      </div>
+                    )}
                   </div>
                 )
 
                 return (
-                  <li key={session.id} className="relative">
+                  <li key={session.id}>
                     {href ? <Link href={href} className="block">{CardInner}</Link> : CardInner}
-                    {!isComplete && (
-                      <div className="absolute bottom-4 right-4">
-                        <DeleteSessionButton sessionId={session.id} />
-                      </div>
-                    )}
                   </li>
                 )
               })}

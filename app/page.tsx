@@ -2,6 +2,24 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 
+const steps = [
+  {
+    index: '01',
+    title: 'Film a short clip',
+    body: 'Any phone or action camera. 5-20 seconds of running is all you need.',
+  },
+  {
+    index: '02',
+    title: 'Get frame-by-frame analysis',
+    body: 'AI examines your stride, arm drive, lean, and posture from extracted frames.',
+  },
+  {
+    index: '03',
+    title: 'Practice with matched drills',
+    body: 'Specific drills for what needs work — not generic advice.',
+  },
+]
+
 export default async function LandingPage() {
   const supabase = createClient()
   const {
@@ -11,65 +29,70 @@ export default async function LandingPage() {
   if (user) redirect('/history')
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-20 text-center">
+    <div className="min-h-screen flex flex-col">
 
-        <h1 className="font-heading text-4xl sm:text-5xl font-bold tracking-tight max-w-xl">
-          Improve your running form with AI
-        </h1>
+      {/* Hero */}
+      <section className="flex-1 px-6 sm:px-10 lg:px-16 pt-20 pb-24 sm:pt-28 sm:pb-32">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-xs font-medium tracking-widest uppercase text-[#888888] mb-6">
+            AI Running Coach
+          </p>
 
-        <p className="mt-5 text-lg text-gray-400 max-w-md">
-          Upload a 30-second video. Get AI coaching on your stride in under a minute.
-        </p>
+          <h1 className="text-6xl sm:text-8xl lg:text-9xl font-extrabold tracking-tight leading-none text-white">
+            Run Better.
+          </h1>
 
-        <div className="mt-10 flex flex-col sm:flex-row gap-3">
-          <Link
-            href="/signup"
-            className="flex items-center justify-center px-8 py-3 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
-          >
-            Get started free
-          </Link>
-          <Link
-            href="/login"
-            className="flex items-center justify-center px-8 py-3 min-h-[44px] border border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white font-semibold rounded-lg transition-colors"
-          >
-            Sign in
-          </Link>
+          <p className="mt-8 text-lg sm:text-xl text-[#888888] max-w-lg leading-relaxed">
+            If you&apos;re running, you&apos;re already doing it right.
+            <br />
+            Let&apos;s see how to make it even better.
+          </p>
+
+          <div className="mt-10 flex flex-wrap gap-4">
+            <Link
+              href="/signup"
+              className="inline-flex items-center justify-center px-8 py-3 min-h-[44px] bg-white text-black font-semibold text-sm tracking-wide hover:bg-[#E5E5E5] transition-colors duration-100"
+            >
+              Get started free
+            </Link>
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center px-8 py-3 min-h-[44px] border border-white text-white font-semibold text-sm tracking-wide hover:bg-white hover:text-black transition-colors duration-100"
+            >
+              Sign in
+            </Link>
+          </div>
         </div>
+      </section>
 
-        <div className="mt-16 max-w-md w-full text-left space-y-6">
-          {[
-            {
-              title: 'Film a short clip',
-              body: 'Any phone or action camera. 30 seconds of running is all you need.',
-            },
-            {
-              title: 'Get frame-by-frame analysis',
-              body: 'AI examines your stride, arm drive, lean, and posture from extracted frames.',
-            },
-            {
-              title: 'Practice with matched drills',
-              body: 'Specific drills for what needs work — not generic advice.',
-            },
-          ].map(({ title, body }, i) => (
-            <div key={title} className="flex gap-4 items-start">
-              <span className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600/10 text-blue-400 text-sm font-medium flex items-center justify-center">
-                {i + 1}
-              </span>
-              <div>
-                <p className="font-semibold text-white">{title}</p>
-                <p className="mt-1 text-sm text-gray-400 leading-relaxed">{body}</p>
+      {/* How it works */}
+      <section className="px-6 sm:px-10 lg:px-16 pb-24 sm:pb-32">
+        <div className="max-w-5xl mx-auto">
+          <div className="border-t border-[#1A1A1A]">
+            {steps.map(({ index, title, body }) => (
+              <div
+                key={index}
+                className="flex items-start gap-8 py-8 border-b border-[#1A1A1A]"
+              >
+                <span className="text-xs font-medium tracking-widest text-[#444444] pt-0.5 w-6 shrink-0">
+                  {index}
+                </span>
+                <div>
+                  <p className="text-base font-semibold text-white">{title}</p>
+                  <p className="mt-1 text-sm text-[#888888] leading-relaxed">{body}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+      </section>
 
-        <p className="mt-12 text-xs text-gray-600 max-w-sm">
-          AI-generated analysis only. Not a substitute for advice from a
-          qualified running coach or physiotherapist.
-        </p>
+      {/* Disclaimer */}
+      <p className="px-6 pb-8 text-xs text-[#444444] max-w-md">
+        AI-generated analysis only. Not a substitute for advice from a qualified
+        running coach or physiotherapist.
+      </p>
 
-      </div>
     </div>
   )
 }

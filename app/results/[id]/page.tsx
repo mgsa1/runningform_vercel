@@ -66,9 +66,15 @@ function matchDrill(item: FormAnalysisItem, drills: Drill[]): Drill | null {
 
 function severityAccent(severity: string) {
   if (severity === 'critical') return 'border-l-2 border-l-red-500'
-  if (severity === 'moderate') return 'border-l-2 border-l-amber-500'
-  if (severity === 'minor') return 'border-l-2 border-l-blue-400'
+  if (severity === 'moderate') return 'border-l-2 border-l-amber-500/60'
+  if (severity === 'minor') return 'border-l-2 border-l-[#444444]'
   return ''
+}
+
+function severityTextClass(severity: string) {
+  if (severity === 'critical') return 'text-red-400'
+  if (severity === 'moderate') return 'text-amber-400'
+  return 'text-[#888888]'
 }
 
 
@@ -76,17 +82,17 @@ function DosageBlock({ dosage }: { dosage: DrillDosage }) {
   return (
     <div className="mt-3 space-y-1.5">
       <div className="flex flex-wrap gap-2">
-        <span className="inline-flex items-center rounded-full bg-gray-800 border border-gray-700 px-2.5 py-1 text-xs text-gray-300">
+        <span className="inline-flex items-center bg-[#1A1A1A] border border-[#1A1A1A] px-2.5 py-1 text-xs text-[#888888]">
           {dosage.frequency}
         </span>
-        <span className="inline-flex items-center rounded-full bg-gray-800 border border-gray-700 px-2.5 py-1 text-xs text-gray-300">
+        <span className="inline-flex items-center bg-[#1A1A1A] border border-[#1A1A1A] px-2.5 py-1 text-xs text-[#888888]">
           {dosage.volume}
         </span>
-        <span className="inline-flex items-center rounded-full bg-gray-800 border border-gray-700 px-2.5 py-1 text-xs text-gray-300">
+        <span className="inline-flex items-center bg-[#1A1A1A] border border-[#1A1A1A] px-2.5 py-1 text-xs text-[#888888]">
           {dosage.when}
         </span>
       </div>
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-[#444444]">
         Re-test in {dosage.retest_after_weeks} week{dosage.retest_after_weeks !== 1 ? 's' : ''}
       </p>
     </div>
@@ -186,13 +192,13 @@ export default async function ResultsPage({
   const notAssessableItems = formAnalysis.filter((item) => item.status === 'not_assessable')
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <div className="max-w-2xl mx-auto px-4 py-10 space-y-8">
+    <div className="min-h-screen pb-20 md:pb-0">
+      <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-12 space-y-10">
 
         {/* ── Header ── */}
         <div className="space-y-1">
-          <h1 className="font-heading text-2xl font-bold">Running Form Analysis</h1>
-          <p className="text-sm text-gray-400">
+          <h1 className="text-2xl font-bold text-white">Running Form Analysis</h1>
+          <p className="text-sm text-[#888888]">
             {filename && <span className="mr-2">{filename}</span>}
             <span>{createdAt}</span>
           </p>
@@ -230,9 +236,9 @@ export default async function ResultsPage({
         {/* ── Priority fixes with drills ── */}
         {topFixes.length > 0 && (
           <section className="space-y-5">
-            <h2 className="text-lg font-semibold text-gray-100">
+            <h2 className="text-lg font-semibold text-white">
               Your Fix Plan
-              <span className="ml-2 text-sm font-normal text-gray-500">
+              <span className="ml-2 text-sm font-normal text-[#888888]">
                 {topFixes.length} drill{topFixes.length !== 1 ? 's' : ''} ranked by priority
               </span>
             </h2>
@@ -240,26 +246,26 @@ export default async function ResultsPage({
             {topFixes.map(({ item, drillLib }, i) => (
               <div
                 key={i}
-                className={`rounded-xl border border-gray-800 bg-gray-900 overflow-hidden ${severityAccent(item.severity)}`}
+                className={`border border-[#1A1A1A] bg-[#0A0A0A] overflow-hidden ${severityAccent(item.severity)}`}
               >
                 {/* Issue header */}
-                <div className="px-4 pt-4 pb-3 space-y-1.5">
-                  <h3 className="text-base font-semibold text-white">{item.trait}</h3>
-                  <p className="text-sm text-gray-300 leading-relaxed">{item.observation}</p>
+                <div className="px-5 pt-5 pb-4 space-y-2">
+                  <h3 className={`text-base font-semibold ${severityTextClass(item.severity)}`}>{item.trait}</h3>
+                  <p className="text-sm text-[#888888] leading-relaxed">{item.observation}</p>
 
                   {/* Measured value + reference range */}
                   {(item.measured_value || item.reference_range) && (
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 px-3 py-2 rounded-md bg-gray-800/80">
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 px-3 py-2 bg-[#1A1A1A]">
                       {item.measured_value && (
                         <span className="text-sm font-mono">
-                          <span className="text-gray-400">You: </span>
+                          <span className="text-[#888888]">You: </span>
                           <span className="text-white font-medium">{item.measured_value}</span>
                         </span>
                       )}
                       {item.reference_range && (
                         <span className="text-sm font-mono">
-                          <span className="text-gray-400">Target: </span>
-                          <span className="text-green-300">{item.reference_range}</span>
+                          <span className="text-[#888888]">Target: </span>
+                          <span className="text-green-400">{item.reference_range}</span>
                         </span>
                       )}
                     </div>
@@ -268,11 +274,11 @@ export default async function ResultsPage({
 
                 {/* Drill block */}
                 {(drillLib || item.drill?.name) && (
-                  <div className="mx-4 mb-4 rounded-lg bg-gray-800/70 border border-gray-700 p-4 space-y-3">
+                  <div className="mx-5 mb-5 border border-[#1A1A1A] p-4 space-y-3">
 
                     {/* Drill header row */}
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-gray-200">
+                      <span className="text-sm font-semibold text-white">
                         {drillLib?.name ?? item.drill!.name}
                       </span>
                       {drillLib?.video_url && (
@@ -280,7 +286,7 @@ export default async function ResultsPage({
                           href={drillLib.video_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-gray-600 px-2.5 py-1 text-xs font-medium text-gray-300 hover:border-gray-400 hover:text-white transition-colors"
+                          className="ml-auto inline-flex items-center gap-1.5 border border-[#1A1A1A] px-2.5 py-1 text-xs font-medium text-[#888888] hover:border-white hover:text-white transition-colors duration-100"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -292,7 +298,7 @@ export default async function ResultsPage({
 
                     {/* Why this drill */}
                     {item.drill?.why && (
-                      <p className="text-sm text-gray-300 leading-relaxed">
+                      <p className="text-sm text-[#888888] leading-relaxed">
                         {item.drill.why}
                       </p>
                     )}
@@ -305,7 +311,7 @@ export default async function ResultsPage({
                     {/* Expandable instructions */}
                     {drillLib?.instructions && (
                       <details className="group">
-                        <summary className="flex items-center justify-between w-full cursor-pointer select-none rounded-md border border-gray-600 px-3 py-2 text-sm text-gray-400 hover:border-gray-500 hover:text-gray-300 transition-colors list-none">
+                        <summary className="flex items-center justify-between w-full cursor-pointer select-none border border-[#1A1A1A] px-3 py-2 text-sm text-[#888888] hover:border-white hover:text-white transition-colors duration-100 list-none">
                           <span>Step-by-step instructions</span>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -320,7 +326,7 @@ export default async function ResultsPage({
                             />
                           </svg>
                         </summary>
-                        <ol className="mt-3 text-sm text-gray-400 leading-relaxed border-t border-gray-700 pt-3 list-decimal list-inside space-y-1.5">
+                        <ol className="mt-3 text-sm text-[#888888] leading-relaxed border-t border-[#1A1A1A] pt-3 list-decimal list-inside space-y-1.5">
                           {drillLib.instructions.split('. ').filter(Boolean).map((step: string, si: number) => (
                             <li key={si}>{step.replace(/\.$/, '')}</li>
                           ))}
@@ -337,14 +343,14 @@ export default async function ResultsPage({
         {/* ── Prior traits not assessable in this video ── */}
         {notAssessableItems.length > 0 && (
           <section className="space-y-2">
-            <h2 className="text-sm font-medium text-gray-500">Couldn&apos;t assess from this video</h2>
-            <div className="rounded-xl border border-gray-800 bg-gray-900/50 divide-y divide-gray-800">
+            <h2 className="text-xs font-medium tracking-widest uppercase text-[#444444]">Couldn&apos;t assess from this video</h2>
+            <div className="border border-[#1A1A1A] divide-y divide-[#1A1A1A]">
               {notAssessableItems.map((item, i) => (
                 <div key={i} className="px-4 py-3 flex items-start gap-3">
-                  <span className="mt-0.5 text-gray-600">—</span>
+                  <span className="mt-0.5 text-[#444444]">—</span>
                   <div>
-                    <p className="text-sm font-medium text-gray-400">{item.trait}</p>
-                    <p className="text-xs text-gray-600 mt-0.5">{item.observation}</p>
+                    <p className="text-sm font-medium text-[#888888]">{item.trait}</p>
+                    <p className="text-xs text-[#444444] mt-0.5">{item.observation}</p>
                   </div>
                 </div>
               ))}
@@ -358,7 +364,7 @@ export default async function ResultsPage({
         )}
 
         {/* ── Disclaimer ── */}
-        <p className="text-sm text-gray-400 leading-relaxed border-t border-gray-800 pt-6">
+        <p className="text-xs text-[#444444] leading-relaxed border-t border-[#1A1A1A] pt-6">
           This analysis is AI-generated and intended for educational purposes only. It is not a
           substitute for advice from a qualified running coach or physiotherapist.
         </p>
@@ -367,7 +373,7 @@ export default async function ResultsPage({
         <div className="pb-4">
           <Link
             href="/upload"
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+            className="text-sm text-[#888888] hover:text-white transition-colors duration-100"
           >
             ← Upload another video
           </Link>

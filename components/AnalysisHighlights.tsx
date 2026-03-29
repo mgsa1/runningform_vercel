@@ -9,33 +9,31 @@ export default function AnalysisHighlights({
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-green-300">
+      <h3 className="text-xs font-medium tracking-widest uppercase text-[#444444]">
         Doing well
       </h3>
-      <div className="grid grid-cols-1 gap-2">
+      <div className="border-t border-[#1A1A1A]">
         {goodTraits.map((item, i) => (
           <div
             key={i}
-            className="flex gap-3 items-start p-3 rounded-lg bg-green-500/5 border border-green-500/15"
+            className="flex gap-4 items-start py-4 border-b border-[#1A1A1A]"
           >
-            <div className="mt-0.5 w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
-              <svg
-                className="w-3 h-3 text-green-400"
-                viewBox="0 0 12 12"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M2 6l3 3 5-5" />
-              </svg>
-            </div>
+            <svg
+              className="mt-0.5 w-4 h-4 text-[#888888] shrink-0"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M2 6l3 3 5-5" />
+            </svg>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-green-200">
+              <p className="text-sm font-medium text-white">
                 {item.trait}
               </p>
-              <p className="text-sm text-gray-400 mt-0.5 line-clamp-2">
+              <p className="text-sm text-[#888888] mt-0.5 line-clamp-2">
                 {item.observation}
               </p>
             </div>

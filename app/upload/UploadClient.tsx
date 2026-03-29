@@ -121,7 +121,7 @@ export default function UploadClient({ userId }: Props) {
   return (
     <div className="space-y-6">
       {/* Filming tips */}
-      <div className="rounded-lg border border-blue-500/20 bg-blue-500/5">
+      <div className="border border-[#1A1A1A]">
         <button
           type="button"
           onClick={() => setTipsOpen((v) => !v)}
@@ -129,7 +129,7 @@ export default function UploadClient({ userId }: Props) {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 text-blue-400 shrink-0"
+            className="h-4 w-4 text-[#888888] shrink-0"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -139,12 +139,12 @@ export default function UploadClient({ userId }: Props) {
               clipRule="evenodd"
             />
           </svg>
-          <span className="flex-1 text-sm font-medium text-blue-300">
+          <span className="flex-1 text-sm font-medium text-[#888888]">
             How to film for best results
           </span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className={`h-4 w-4 text-blue-500/60 transition-transform shrink-0 ${tipsOpen ? 'rotate-180' : ''}`}
+            className={`h-4 w-4 text-[#444444] transition-transform shrink-0 ${tipsOpen ? 'rotate-180' : ''}`}
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -156,10 +156,10 @@ export default function UploadClient({ userId }: Props) {
           </svg>
         </button>
         {tipsOpen && (
-          <ul className="px-4 pb-4 space-y-2 border-t border-blue-500/10 pt-3">
+          <ul className="px-4 pb-4 space-y-2 border-t border-[#1A1A1A] pt-3">
             {FILMING_TIPS.map((tip, i) => (
-              <li key={i} className="flex gap-2 text-sm text-blue-200/70 leading-snug">
-                <span className="text-blue-400 shrink-0 mt-0.5">✓</span>
+              <li key={i} className="flex gap-2 text-sm text-[#888888] leading-snug">
+                <span className="text-white shrink-0 mt-0.5">✓</span>
                 {tip}
               </li>
             ))}
@@ -169,27 +169,27 @@ export default function UploadClient({ userId }: Props) {
 
       {/* Run context */}
       <div className="space-y-3">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        <p className="text-xs font-medium text-[#444444] uppercase tracking-widest">
           Run context{' '}
-          <span className="normal-case font-normal text-gray-600">
+          <span className="normal-case font-normal text-[#444444]">
             — optional, helps the AI give better advice
           </span>
         </p>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-xs text-gray-400 mb-1.5 block">Pace</label>
+            <label className="text-xs text-[#888888] mb-1.5 block">Pace</label>
             <div className="flex">
               <input
                 type="text"
                 value={paceValue}
                 onChange={(e) => setPaceValue(e.target.value)}
                 placeholder="5:30"
-                className="flex-1 min-w-0 bg-gray-900 border border-gray-700 rounded-l-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-gray-500"
+                className="flex-1 min-w-0 bg-black border border-[#1A1A1A] px-3 py-2 text-sm text-white placeholder-[#444444] focus:outline-none focus:border-white transition-colors duration-100"
               />
               <select
                 value={paceUnit}
                 onChange={(e) => setPaceUnit(e.target.value as 'km' | 'mi')}
-                className="bg-gray-800 border border-l-0 border-gray-700 rounded-r-lg px-2 py-2 text-sm text-gray-300 focus:outline-none focus:border-gray-500"
+                className="bg-[#0A0A0A] border border-l-0 border-[#1A1A1A] px-2 py-2 text-sm text-[#888888] focus:outline-none focus:border-white transition-colors duration-100"
               >
                 <option value="km">/km</option>
                 <option value="mi">/mi</option>
@@ -197,11 +197,11 @@ export default function UploadClient({ userId }: Props) {
             </div>
           </div>
           <div>
-            <label className="text-xs text-gray-400 mb-1.5 block">Fatigue level</label>
+            <label className="text-xs text-[#888888] mb-1.5 block">Fatigue level</label>
             <select
               value={fatigue}
               onChange={(e) => setFatigue(e.target.value === '' ? '' : Number(e.target.value))}
-              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-gray-500"
+              className="w-full bg-black border border-[#1A1A1A] px-3 py-2 text-sm text-white focus:outline-none focus:border-white transition-colors duration-100"
             >
               <option value="">Not specified</option>
               <option value="2">Fresh</option>
@@ -218,7 +218,7 @@ export default function UploadClient({ userId }: Props) {
         onError={handleError}
       />
       {error && (
-        <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3">
+        <p className="text-sm text-red-400 border border-red-500/30 px-4 py-3">
           {error}
         </p>
       )}
