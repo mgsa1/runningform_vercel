@@ -124,6 +124,70 @@ const metrics = [
     ],
   },
   {
+    name: 'Cadence',
+    unit: 'steps per minute (spm)',
+    thresholds: {
+      easy: '165–180 spm good, 155–190 spm moderate',
+      tempo: '170–185 spm good, 160–195 spm moderate',
+      fast: '175–195 spm good, 165–205 spm moderate',
+    },
+    methodology:
+      'Estimated from stride times detected in the gait cycle analysis. A full gait cycle (same-foot to same-foot) covers 2 steps, so cadence = 120 / average_stride_time_seconds. Accuracy depends on detecting at least 2 clean gait cycles.',
+    caveats: [
+      'Cadence from video has lower precision than wearables — a ±5 spm margin is expected. Do not over-interpret small deviations.',
+      'Low cadence (<160 spm) is strongly correlated with overstriding and is reported alongside foot placement — the two are treated as one finding rather than two separate issues.',
+    ],
+    sources: [
+      {
+        text: 'Heiderscheit et al. 2011 — "Effects of Step Rate Manipulation on Joint Mechanics during Running." Medicine & Science in Sports & Exercise, 43(2), 296-302',
+        url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC3022995/',
+        finding: 'Increasing step rate 5–10% above preferred reduced energy absorption at the hip and knee, decreased braking impulse, and reduced center-of-mass vertical excursion — without changing speed. A low-barrier, evidence-backed intervention.',
+      },
+      {
+        text: 'Bramah et al. 2019 — "Is There a Pathological Gait Associated With Common Soft Tissue Running Injuries?" American Journal of Sports Medicine, 47(3)',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/30726139/',
+        finding: 'Cadence below 160 spm was associated with overstriding patterns across injured runners. Higher cadence correlated with reduced peak hip adduction.',
+      },
+      {
+        text: 'Stöggl & Schießl 2017 — "Sex differences in running economy, energetic contribution, and kinematics during marathon running." Frontiers in Physiology',
+        url: 'https://www.frontiersin.org/articles/10.3389/fphys.2017.00583/full',
+        finding: 'Elite marathoners averaged 180–185 spm across both sexes at race pace.',
+      },
+    ],
+  },
+  {
+    name: 'Ground Contact Time & Duty Factor',
+    unit: 'milliseconds (ms) | duty factor = GCT ÷ stride time (dimensionless)',
+    thresholds: {
+      easy: '240–300 ms good, 210–340 ms moderate',
+      tempo: '200–260 ms good, 175–290 ms moderate',
+      fast: '170–220 ms good, 150–250 ms moderate',
+    },
+    methodology:
+      'Ground contact time is measured as the duration from initial foot contact to toe-off for the visible side. Duty factor is computed as GCT divided by the full stride time (derived from cadence), giving the fraction of each stride spent on the ground. Both are reported together.',
+    caveats: [
+      'Raw GCT is speed-dependent and should not be framed as "lower is always better." Runners with equal running economy can have very different duty factors — the body uses multiple strategies.',
+      'GCT from 2D video is estimated from frame timestamps and gait event detection. Precision is approximately ±20–30 ms at 17 fps.',
+    ],
+    sources: [
+      {
+        text: 'Lussiana et al. 2019 — "The implications of time on the ground on running economy: less is not always better." Journal of Experimental Biology, 222(23)',
+        url: 'https://journals.biologists.com/jeb/article/222/23/jeb192542/223888/',
+        finding: '40 well-trained runners split into high and low duty factor groups showed no significant difference in energy cost. Multiple biomechanical strategies can be equally efficient at endurance speeds.',
+      },
+      {
+        text: 'Weyand et al. 2000 — "Faster top running speeds are achieved with greater ground forces not more rapid leg movements." Journal of Applied Physiology, 89(5)',
+        url: 'https://journals.physiology.org/doi/full/10.1152/jappl.2000.89.5.1991',
+        finding: 'Faster runners apply greater ground support forces in shorter contact times — speed improvement comes from force production, not simply reducing GCT or increasing leg turnover.',
+      },
+      {
+        text: 'Morin et al. 2011 — "Mechanical determinants of 100-m sprint running performance." European Journal of Applied Physiology, 111(9)',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/21213019/',
+        finding: 'Recreational runners at easy pace average 240–300 ms GCT; trained distance runners 200–260 ms at tempo pace.',
+      },
+    ],
+  },
+  {
     name: 'Contact Time Asymmetry',
     unit: '% difference between left and right ground contact time',
     thresholds: {
@@ -257,6 +321,43 @@ export default function ResearchPage() {
             </div>
           </section>
         ))}
+
+        {/* Why we don't target stride length */}
+        <section className="border border-[#1A1A1A] bg-[#0A0A0A] p-5 space-y-4">
+          <h2 className="text-lg font-semibold text-white">Why we don&apos;t prescribe a target stride length</h2>
+          <p className="text-sm text-[#888888] leading-relaxed">
+            Many running coaches suggest shortening or lengthening stride length as a coaching cue.
+            RunningForm deliberately does not prescribe a target stride length, and the science is clear on why.
+          </p>
+          <p className="text-sm text-[#888888] leading-relaxed">
+            Cavanagh &amp; Williams (1982) showed that trained runners self-select a stride length that is at or
+            very near their individual metabolic optimum — the point where oxygen uptake is minimized for their
+            speed. Deviating from preferred stride length in either direction (too short or too long) increased
+            VO₂ by an average of 2.6–3.4 ml/kg/min. The body finds its own optimum through training adaptation.
+          </p>
+          <p className="text-sm text-[#888888] leading-relaxed">
+            What we <em>do</em> flag is <strong className="text-white">overstriding</strong> — when the foot
+            lands significantly ahead of the centre of mass, creating a braking impulse regardless of stride
+            length. The fix for overstriding is increasing cadence slightly or shortening the reach of the foot
+            at contact, not prescribing a specific stride length target.
+          </p>
+          <div className="space-y-2 pt-1">
+            <h3 className="text-sm font-medium text-[#888888]">Source</h3>
+            <div className="text-sm space-y-0.5">
+              <a
+                href="https://pubmed.ncbi.nlm.nih.gov/7070254/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#888888] hover:text-white transition-colors underline underline-offset-2"
+              >
+                Cavanagh &amp; Williams 1982 — &quot;The effect of stride length variation on oxygen uptake during distance running.&quot; Medicine &amp; Science in Sports &amp; Exercise, 14(1)
+              </a>
+              <p className="text-[#444444] text-xs pl-4">
+                All subjects showed a U-shaped relationship between stride length and VO₂ with an individual optimum. Trained runners self-selected a stride length at or near their metabolic optimum.
+              </p>
+            </div>
+          </div>
+        </section>
 
         {/* Disclaimer */}
         <p className="text-xs text-[#444444] leading-relaxed border-t border-[#1A1A1A] pt-6">

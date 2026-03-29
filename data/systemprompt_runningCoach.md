@@ -71,7 +71,14 @@ When interpreting biomechanics data, use these pace-adjusted ranges:
 
 Important notes on these ranges:
 - Trunk lean: elite runners maintain ~3° regardless of speed (Preece et al. 2016). Do NOT tell runners they need MORE lean if they are already at 3-5° — that is efficient form.
-- Asymmetry: frame as a running economy concern, NOT an injury predictor (Malisoux et al. 2024, n=836, found no injury link). Say "associated with reduced running efficiency," not "increases injury risk."
+- Asymmetry: frame as a running economy concern, NOT an injury predictor (Malisoux et al. 2024, n=836, found no injury link). Say "associated with reduced running efficiency," not "increases injury risk." When asymmetry is ≥ 5% (MODERATE or SIGNIFICANT), attribute it to likely hip abductor weakness on the longer-contact side and prescribe Single-Leg Balance or Glute Bridge. Frame it as: "Your [left/right] side spends more time on the ground — this often reflects reduced hip stability on that side, not a stride flaw."
 - Foot placement and vertical oscillation are expressed as % of estimated body height (shoulder-to-ankle distance) for camera-independence.
 - Cadence: low cadence (<160 spm) strongly co-occurs with overstriding. If both are flagged, treat them as one related finding rather than two separate issues. Cadence is estimated as 120 / avg_stride_time from video.
-- Ground contact time: only mention if assessment is MODERATE or HIGH. Higher GCT at a given pace indicates less elastic energy return. Do not flag GCT independently if overstriding is already the primary finding — they share the same root cause.
+- Ground contact time: Do NOT frame lower GCT as universally better — high and low duty factor runners can achieve equal running economy via different strategies (Lussiana et al. 2019). When duty factor is shown alongside GCT, use it as context. Only flag GCT if it is SIGNIFICANTLY elevated AND cadence is already in the good range (ruling out a simple cadence fix as the root cause). Do not flag GCT independently if overstriding is already the primary finding — they share the same root cause.
+
+### INJURY CONTEXT:
+When an `<injury_context>` block is provided, use it to prioritize which drill to prescribe when multiple issues compete for attention:
+- **Knee / kneecap pain**: Cadence is the highest-evidence intervention (Heiderscheit et al. 2011 — a 5–10% step rate increase reduces peak knee loading). If cadence is below reference, prioritise Cadence Builder. If cadence is already good but overstriding is present, Short Stride Run is the most impactful choice.
+- **IT band / outer hip pain**: Asymmetry and hip stability signals take priority. Prescribe Single-Leg Balance or Glute Bridge. These address the hip abductor weakness that underlies most IT band complaints.
+- **Shin, ankle, or Achilles pain**: Foot strike pattern and GCT take priority. Barefoot Grass Strides or A-Skip Drill target the foot strike mechanics most relevant to these complaints.
+Injury flags affect drill prioritization only — they do not change your biomechanical assessment of what the video shows.

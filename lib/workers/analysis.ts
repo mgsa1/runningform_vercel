@@ -69,7 +69,7 @@ interface BiomechanicsReport {
 
 function formatBiomechanicsForPrompt(
   bio: BiomechanicsReport,
-  runnerContext: { pace?: string; fatigue?: number } | null
+  runnerContext: { pace?: string; fatigue?: number; injury_flags?: string[] } | null
 ): string {
   const lines: string[] = ['--- MEASURED BIOMECHANICS (from pose detection) ---']
 
@@ -142,7 +142,12 @@ function formatBiomechanicsForPrompt(
     const gctLabel = gct.assessment === 'good' ? 'GOOD' :
       gct.assessment === 'moderate' ? 'ELEVATED for pace' :
       'HIGH — significantly above efficient range; may indicate reduced leg stiffness'
-    lines.push(`Ground Contact Time: ${gct.value} ${gct.unit} (${gctPaceCtx} reference: ${gct.referenceRange.min}–${gct.referenceRange.max} ms)`)
+    // Compute duty factor if cadence is available (duty factor = GCT / stride time)
+    // stride time (ms) = 120000 / cadence_spm (2 steps per full gait cycle)
+    const dutyFactorStr = bio.cadence && bio.cadence.value > 0
+      ? ` | Duty Factor: ${(gct.value / (120000 / bio.cadence.value)).toFixed(2)}`
+      : ''
+    lines.push(`Ground Contact Time: ${gct.value} ${gct.unit}${dutyFactorStr} (${gctPaceCtx} reference: ${gct.referenceRange.min}–${gct.referenceRange.max} ms)`)
     lines.push(`  Assessment: ${gctLabel}`)
     lines.push(`  Confidence: ${gct.confidence.toUpperCase()}`)
     lines.push('')
@@ -154,6 +159,10 @@ function formatBiomechanicsForPrompt(
       cta.assessment === 'moderate' ? 'borderline — worth noting' : 'significant — potential compensation pattern'
     lines.push(`Asymmetry:`)
     lines.push(`  Contact time difference: ${cta.value}% — ${label}`)
+    if (cta.assessment !== 'good') {
+      lines.push(`  → Likely cause: hip abductor weakness on the longer-contact side`)
+      lines.push(`  → Drill priority: Single-Leg Balance or Glute Bridge`)
+    }
   }
 
   lines.push('')
@@ -199,7 +208,7 @@ export const analysisFunction = inngest.createFunction(
       sessionId: string
       userId: string
       framePaths: string[]
-      runnerContext: { pace?: string; fatigue?: number } | null
+      runnerContext: { pace?: string; fatigue?: number; injury_flags?: string[] } | null
     }
 
     // Step 1: Mark session as processing
@@ -288,6 +297,21 @@ export const analysisFunction = inngest.createFunction(
           ]
             .filter(Boolean)
             .join(', ')}</runner_context>`
+        )
+      }
+
+      // Injury context — affects drill prioritization
+      if (runnerContext?.injury_flags && runnerContext.injury_flags.length > 0) {
+        const INJURY_LABELS: Record<string, string> = {
+          knee: 'Knee / kneecap pain',
+          it_band: 'IT band / outer hip pain',
+          shin_achilles: 'Shin, ankle, or Achilles pain',
+        }
+        const flagLabels = runnerContext.injury_flags
+          .map((f) => INJURY_LABELS[f] ?? f)
+          .join(', ')
+        contextParts.push(
+          `<injury_context>Runner reports: ${flagLabels}. Use this to prioritize drill selection as described in your instructions.</injury_context>`
         )
       }
 

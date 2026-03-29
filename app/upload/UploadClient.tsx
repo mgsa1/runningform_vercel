@@ -8,6 +8,7 @@ import type { PoseExtractionResult, BiomechanicsReport } from '@/lib/pose/types'
 interface RunnerContext {
   pace?: string
   fatigue?: number
+  injury_flags?: string[]
 }
 
 interface Props {
@@ -29,6 +30,7 @@ export default function UploadClient({ userId }: Props) {
   const [paceValue, setPaceValue] = useState('')
   const [paceUnit, setPaceUnit] = useState<'km' | 'mi'>('km')
   const [fatigue, setFatigue] = useState<number | ''>('')
+  const [injuryFlags, setInjuryFlags] = useState<string[]>([])
   const [tipsOpen, setTipsOpen] = useState(false)
 
   async function handleUploadComplete(
@@ -43,6 +45,7 @@ export default function UploadClient({ userId }: Props) {
     const runnerContext: RunnerContext = {}
     if (paceValue.trim()) runnerContext.pace = `${paceValue.trim()} /${paceUnit}`
     if (fatigue !== '') runnerContext.fatigue = Number(fatigue)
+    if (injuryFlags.length > 0) runnerContext.injury_flags = injuryFlags
 
     // Re-compute biomechanics with pace context if pose data is available
     let biomechanics = biomechanicsRaw
@@ -209,6 +212,43 @@ export default function UploadClient({ userId }: Props) {
               <option value="8">Tired</option>
             </select>
           </div>
+        </div>
+      </div>
+
+      {/* Injury / pain context */}
+      <div className="space-y-3">
+        <p className="text-xs font-medium text-[#444444] uppercase tracking-widest">
+          Any pain or niggles?{' '}
+          <span className="normal-case font-normal text-[#444444]">
+            — helps prioritise the right drill
+          </span>
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {[
+            { id: 'knee', label: 'Knee' },
+            { id: 'it_band', label: 'IT band / hip' },
+            { id: 'shin_achilles', label: 'Shin / Achilles' },
+          ].map(({ id, label }) => {
+            const active = injuryFlags.includes(id)
+            return (
+              <button
+                key={id}
+                type="button"
+                onClick={() =>
+                  setInjuryFlags((prev) =>
+                    active ? prev.filter((f) => f !== id) : [...prev, id]
+                  )
+                }
+                className={`px-3 py-1.5 text-xs border transition-colors duration-100 ${
+                  active
+                    ? 'border-white text-white bg-white/5'
+                    : 'border-[#1A1A1A] text-[#555555] hover:border-[#333333] hover:text-[#888888]'
+                }`}
+              >
+                {label}
+              </button>
+            )
+          })}
         </div>
       </div>
 
