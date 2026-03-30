@@ -125,12 +125,6 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* Disclaimer */}
-      <p className="px-5 sm:px-8 pb-8 text-xs text-[#5C5C6E] max-w-md">
-        AI-generated analysis only. Not a substitute for advice from a qualified
-        running coach or physiotherapist.
-      </p>
-
     </div>
   )
 }

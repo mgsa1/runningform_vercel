@@ -31,6 +31,10 @@ export default function RootLayout({
           <Link href="/research" className="inline-block py-2 text-[#5C5C6E] hover:text-[#9898A8] transition-colors">
             Research basis
           </Link>
+          <p className="mt-2 max-w-md mx-auto text-[#5C5C6E]">
+            AI-generated analysis only. Not a substitute for advice from a qualified
+            running coach or physiotherapist.
+          </p>
         </footer>
       </body>
     </html>
