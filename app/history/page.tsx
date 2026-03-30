@@ -10,7 +10,6 @@ import { computeFormScore } from '@/lib/scoring'
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 interface AnalysisResult {
-  summary?: { videoQuality?: string }
   form_analysis?: { trait: string; status: string; severity: string }[]
 }
 
@@ -41,21 +40,12 @@ function formatDate(iso: string) {
 
 function statusBadge(status: string) {
   const map: Record<string, { label: string; classes: string }> = {
-    queued:     { label: 'Queued',     classes: 'bg-[#1A1A1A] text-[#888888]' },
-    processing: { label: 'Processing', classes: 'bg-[#1A1A1A] text-white' },
-    completed:  { label: 'Complete',   classes: 'bg-[#1A1A1A] text-green-400' },
-    failed:     { label: 'Failed',     classes: 'bg-[#1A1A1A] text-red-400' },
+    queued:     { label: 'Queued',     classes: 'bg-[#2A2A35] text-[#9898A8]' },
+    processing: { label: 'Processing', classes: 'bg-teal-400/12 text-teal-400' },
+    completed:  { label: 'Complete',   classes: 'bg-emerald-400/12 text-emerald-400' },
+    failed:     { label: 'Failed',     classes: 'bg-red-400/12 text-red-400' },
   }
-  return map[status] ?? { label: status, classes: 'bg-[#1A1A1A] text-[#888888]' }
-}
-
-function qualityBadge(quality: string) {
-  const map: Record<string, string> = {
-    good: 'bg-[#1A1A1A] text-green-400',
-    fair: 'bg-[#1A1A1A] text-amber-400',
-    poor: 'bg-[#1A1A1A] text-red-400',
-  }
-  return map[quality] ?? 'bg-[#1A1A1A] text-[#888888]'
+  return map[status] ?? { label: status, classes: 'bg-[#2A2A35] text-[#9898A8]' }
 }
 
 // form_score may be null for sessions analysed before the migration — fall back to computing it
@@ -99,14 +89,14 @@ export default async function HistoryPage() {
 
   return (
     <div className="min-h-screen pb-20 md:pb-0">
-      <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-12 space-y-8">
+      <div className="max-w-4xl mx-auto px-5 sm:px-8 lg:px-12 py-10 space-y-6">
 
         {/* ── Header ── */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-white">Your Analyses</h1>
+          <h1 className="text-2xl font-bold">Your Analyses</h1>
           <Link
             href="/upload"
-            className="hidden md:inline-flex items-center justify-center px-6 py-2 min-h-[40px] bg-white text-black font-semibold text-sm tracking-wide hover:bg-[#E5E5E5] transition-colors duration-100"
+            className="hidden md:inline-flex items-center justify-center px-6 py-2.5 min-h-[44px] bg-[#F0F0F5] text-[#111116] font-semibold text-sm rounded-xl hover:bg-[#D8D8E0] active:scale-[0.98] transition-all duration-150"
           >
             Upload new
           </Link>
@@ -114,13 +104,12 @@ export default async function HistoryPage() {
 
         {/* ── Zero-session empty state ── */}
         {sessions.length === 0 && (
-          <div className="py-24 text-center space-y-4">
-            <p className="text-8xl font-extrabold text-[#1A1A1A] select-none">0</p>
-            <p className="text-xl font-semibold text-white">No runs analyzed yet.</p>
-            <p className="text-sm text-[#888888]">Upload your first video to get started.</p>
+          <div className="py-16 text-center space-y-4">
+            <p className="text-lg font-semibold">No runs analyzed yet.</p>
+            <p className="text-sm text-[#9898A8]">Upload your first video to get started.</p>
             <Link
               href="/upload"
-              className="inline-flex items-center justify-center mt-4 px-8 py-3 min-h-[44px] bg-white text-black font-semibold text-sm tracking-wide hover:bg-[#E5E5E5] transition-colors duration-100"
+              className="inline-flex items-center justify-center mt-4 px-6 py-2.5 min-h-[44px] bg-[#2DD4BF] text-[#111116] font-semibold text-sm rounded-xl hover:bg-[#14B8A6] active:scale-[0.98] transition-all duration-150"
             >
               Upload a video
             </Link>
@@ -132,50 +121,52 @@ export default async function HistoryPage() {
           <>
             {/* ── Score summary + sparkline ── */}
             {latestScore !== null && (
-              <div className="border border-[#1A1A1A] bg-[#0A0A0A] p-6 space-y-4">
-                {/* Summary strip */}
-                <div className="flex items-center gap-5">
-                  <FormScoreRing score={latestScore} size="md" />
-                  <div className="flex-1 min-w-0 space-y-1.5">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-white">Latest score</p>
-                      <ScoreDelta current={latestScore} previous={previousScore} />
-                    </div>
-                    <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-[#888888]">
-                      {bestScore !== null && (
-                        <span>Best: <span className="text-white font-medium">{bestScore}</span></span>
+              <div className="border border-[#2A2A35] bg-[#1A1A22] rounded-2xl p-5 sm:p-6">
+                <div className="flex items-center gap-6">
+                  {/* Left: score ring + stats */}
+                  <div className="flex items-center gap-4 shrink-0">
+                    <FormScoreRing score={latestScore} size="md" />
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-semibold">Latest score</p>
+                        <ScoreDelta current={latestScore} previous={previousScore} />
+                      </div>
+                      <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-[#9898A8]">
+                        {bestScore !== null && (
+                          <span>Best: <span className="text-[#F0F0F5] font-medium">{bestScore}</span></span>
+                        )}
+                        <span>
+                          Analyses: <span className="text-[#F0F0F5] font-medium">{completedPoints.length}</span>
+                        </span>
+                      </div>
+                      {completedPoints.length === 1 && (
+                        <p className="text-xs text-[#5C5C6E]">
+                          Upload another video to start tracking your progress
+                        </p>
                       )}
-                      <span>
-                        Analyses: <span className="text-white font-medium">{completedPoints.length}</span>
-                      </span>
                     </div>
+                  </div>
+
+                  {/* Right: sparkline */}
+                  <div className="flex-1 min-w-0 relative">
+                    <ScoreTrendChart
+                      dataPoints={completedPoints}
+                      height={completedPoints.length === 1 ? 72 : 100}
+                    />
                     {completedPoints.length === 1 && (
-                      <p className="text-xs text-[#444444]">
-                        Upload another video to start tracking your progress
-                      </p>
+                      <div className="absolute inset-0 flex items-end justify-center pb-1 pointer-events-none">
+                        <p className="text-xs text-[#5C5C6E]">
+                          After your next analysis you&apos;ll see your trend
+                        </p>
+                      </div>
                     )}
                   </div>
-                </div>
-
-                {/* Sparkline */}
-                <div className="relative">
-                  <ScoreTrendChart
-                    dataPoints={completedPoints}
-                    height={completedPoints.length === 1 ? 72 : 100}
-                  />
-                  {completedPoints.length === 1 && (
-                    <div className="absolute inset-0 flex items-end justify-center pb-1 pointer-events-none">
-                      <p className="text-xs text-[#444444]">
-                        After your next analysis you&apos;ll see your trend
-                      </p>
-                    </div>
-                  )}
                 </div>
               </div>
             )}
 
             {/* ── Session list ── */}
-            <ul className="divide-y divide-[#1A1A1A] border-t border-[#1A1A1A]">
+            <ul className="divide-y divide-[#2A2A35] border-t border-[#2A2A35]">
               {sessions.map((session, idx) => {
                 const result = session.analysis_results?.[0] ?? null
                 const badge  = statusBadge(session.status)
@@ -198,7 +189,7 @@ export default async function HistoryPage() {
                 const prevScore = prevResult ? resolveScore(prevResult) : null
 
                 const CardInner = (
-                  <div className="py-5 flex items-center gap-4 group">
+                  <div className="py-4 flex items-center gap-4 group">
                     {/* Score ring — only for completed */}
                     {cardScore !== null && (
                       <div className="shrink-0">
@@ -210,25 +201,20 @@ export default async function HistoryPage() {
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-4">
-                        <p className="text-sm font-medium text-white truncate group-hover:text-[#888888] transition-colors duration-100">
+                        <p className="text-sm font-medium truncate group-hover:text-[#9898A8] transition-colors duration-150">
                           {session.original_filename ?? 'Untitled video'}
                         </p>
-                        <p className="text-xs text-[#444444] shrink-0 pt-0.5">
+                        <p className="text-xs text-[#5C5C6E] shrink-0 pt-0.5">
                           {formatDate(session.queued_at)}
                         </p>
                       </div>
 
                       <div className="flex flex-wrap items-center gap-2 mt-1.5">
-                        <span className={`px-2 py-0.5 rounded-sm text-xs font-medium tracking-wide ${badge.classes}`}>
+                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${badge.classes}`}>
                           {badge.label}
                         </span>
                         {cardScore !== null && (
                           <ScoreDelta current={cardScore} previous={prevScore} />
-                        )}
-                        {isComplete && result?.result?.summary?.videoQuality && (
-                          <span className={`px-2 py-0.5 rounded-sm text-xs font-medium capitalize ${qualityBadge(result.result.summary.videoQuality.toLowerCase())}`}>
-                            {result.result.summary.videoQuality.toLowerCase()} video
-                          </span>
                         )}
                         {result?.usefulness_rating != null && (
                           <span
@@ -251,7 +237,7 @@ export default async function HistoryPage() {
 
                 return (
                   <li key={session.id}>
-                    {href ? <Link href={href} className="block">{CardInner}</Link> : CardInner}
+                    {href ? <Link href={href} className="block hover:bg-[#1A1A22] rounded-xl px-2 -mx-2 transition-colors duration-150">{CardInner}</Link> : CardInner}
                   </li>
                 )
               })}

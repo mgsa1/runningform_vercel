@@ -13,12 +13,7 @@ interface ScoreTrendChartProps {
   height?: number
 }
 
-function scoreColor(score: number): string {
-  if (score >= 75) return '#22c55e'
-  if (score >= 50) return '#f59e0b'
-  return '#ef4444'
-}
-
+const ACCENT = '#2DD4BF' // teal accent
 const W = 400
 const PAD = { t: 12, r: 20, b: 8, l: 28 }
 const INNER_W = W - PAD.l - PAD.r
@@ -48,7 +43,7 @@ export default function ScoreTrendChart({ dataPoints, height = 120 }: ScoreTrend
       width="100%"
       height={height}
       viewBox={`0 0 ${W} ${height}`}
-      preserveAspectRatio="none"
+      preserveAspectRatio="xMidYMid meet"
       className="overflow-visible"
     >
       {/* Reference lines */}
@@ -59,16 +54,18 @@ export default function ScoreTrendChart({ dataPoints, height = 120 }: ScoreTrend
             y1={toY(ref, height)}
             x2={W - PAD.r}
             y2={toY(ref, height)}
-            stroke="#1f2937"
+            stroke="#2A2A35"
             strokeWidth="1"
+            strokeDasharray="4 4"
           />
           <text
             x={PAD.l - 4}
             y={toY(ref, height)}
             textAnchor="end"
             dominantBaseline="middle"
-            fill="#374151"
+            fill="#5C5C6E"
             fontSize="11"
+            fontFamily="monospace"
           >
             {ref}
           </text>
@@ -80,11 +77,11 @@ export default function ScoreTrendChart({ dataPoints, height = 120 }: ScoreTrend
         <polyline
           points={polylinePoints}
           fill="none"
-          stroke="#3b82f6"
+          stroke={ACCENT}
           strokeWidth="1.5"
           strokeLinejoin="round"
           strokeLinecap="round"
-          opacity="0.7"
+          opacity="0.8"
         />
       )}
 
@@ -92,9 +89,10 @@ export default function ScoreTrendChart({ dataPoints, height = 120 }: ScoreTrend
       {dataPoints.map((d, i) => {
         const cx = toX(i, n)
         const cy = toY(d.score, height)
+        const isLatest = i === n - 1
         return (
           <g key={d.resultId}>
-            <circle cx={cx} cy={cy} r={4} fill={scoreColor(d.score)} stroke="#030712" strokeWidth="1.5" />
+            <circle cx={cx} cy={cy} r={isLatest ? 5 : 3.5} fill={ACCENT} stroke="#1A1A22" strokeWidth="2" />
             {/* Larger invisible hit target */}
             <circle
               cx={cx}

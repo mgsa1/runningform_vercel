@@ -30,16 +30,16 @@ export default function RatingButtons({ resultId, initialRating }: RatingButtons
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <p className="text-sm text-[#888888]">Was this analysis useful?</p>
+      <p className="text-sm text-[#9898A8]">Was this analysis useful?</p>
       <div className="flex gap-2">
         <button
           onClick={() => rate(5)}
           disabled={saving}
           aria-label="Thumbs up — useful"
-          className={`flex items-center gap-1.5 px-3 py-1.5 border text-sm font-medium transition-colors duration-100 disabled:opacity-50 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors duration-150 disabled:opacity-50 ${
             selected === 5
-              ? 'border-green-500 text-green-400'
-              : 'border-[#1A1A1A] text-[#888888] hover:border-green-500 hover:text-green-400'
+              ? 'border-emerald-400 text-emerald-400'
+              : 'border-[#2A2A35] text-[#9898A8] hover:border-emerald-400 hover:text-emerald-400'
           }`}
         >
           Yes
@@ -48,17 +48,17 @@ export default function RatingButtons({ resultId, initialRating }: RatingButtons
           onClick={() => rate(1)}
           disabled={saving}
           aria-label="Thumbs down — not useful"
-          className={`flex items-center gap-1.5 px-3 py-1.5 border text-sm font-medium transition-colors duration-100 disabled:opacity-50 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors duration-150 disabled:opacity-50 ${
             selected === 1
-              ? 'border-red-500 text-red-400'
-              : 'border-[#1A1A1A] text-[#888888] hover:border-red-500 hover:text-red-400'
+              ? 'border-red-400 text-red-400'
+              : 'border-[#2A2A35] text-[#9898A8] hover:border-red-400 hover:text-red-400'
           }`}
         >
           No
         </button>
       </div>
       {selected !== null && (
-        <span className="text-xs text-[#444444]">
+        <span className="text-xs text-[#5C5C6E]">
           {selected === 5 ? 'Thanks for the feedback!' : "Thanks — we'll improve."}
         </span>
       )}

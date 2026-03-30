@@ -50,15 +50,15 @@ export default function MobileNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 h-16 bg-black border-t border-[#1A1A1A] md:hidden z-50 flex items-center">
+    <nav className="fixed bottom-0 left-0 right-0 h-16 bg-[#1A1A22]/90 backdrop-blur-md border-t border-[#2A2A35] md:hidden z-50 flex items-center pb-[env(safe-area-inset-bottom)]">
       {tabs.map(({ href, label, icon }) => {
         const active = pathname === href || pathname.startsWith(href + '/')
         return (
           <Link
             key={href}
             href={href}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 transition-colors duration-100 ${
-              active ? 'text-white' : 'text-[#444444]'
+            className={`flex-1 flex flex-col items-center justify-center gap-1 transition-colors duration-150 ${
+              active ? 'text-[#2DD4BF]' : 'text-[#5C5C6E]'
             }`}
           >
             {icon(active)}

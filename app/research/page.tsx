@@ -227,16 +227,16 @@ const metrics = [
 export default function ResearchPage() {
   return (
     <div className="min-h-screen">
-      <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-12 space-y-10">
+      <div className="max-w-4xl mx-auto px-5 sm:px-8 lg:px-12 py-10 space-y-8">
         <div className="space-y-3">
           <h1 className="font-heading text-2xl font-bold">Research Basis</h1>
-          <p className="text-sm text-[#888888] leading-relaxed">
+          <p className="text-sm text-[#9898A8] leading-relaxed">
             RunningForm uses biomechanics reference ranges derived from peer-reviewed
             sports science research. This page documents the evidence behind each metric,
             our measurement methodology, and known limitations. We believe in transparency
             about what the science supports and where our analysis is approximate.
           </p>
-          <p className="text-sm text-[#888888] leading-relaxed">
+          <p className="text-sm text-[#9898A8] leading-relaxed">
             All biomechanics measurements are computed client-side from 2D video using
             MediaPipe Pose Landmarker. They are estimates, not lab-grade measurements.
             Reference ranges are pace-adjusted across three tiers: easy (&gt; 6:00/km),
@@ -247,26 +247,26 @@ export default function ResearchPage() {
         {metrics.map((metric) => (
           <section
             key={metric.name}
-            className="border border-[#1A1A1A] bg-[#0A0A0A] p-5 space-y-5"
+            className="border border-[#2A2A35] bg-[#1A1A22] rounded-2xl p-5 space-y-5"
           >
-            <h2 className="text-lg font-semibold text-white">{metric.name}</h2>
+            <h2 className="text-lg font-semibold">{metric.name}</h2>
 
             {/* Unit */}
-            <div className="text-xs text-[#444444]">
+            <div className="text-xs text-[#5C5C6E]">
               Unit: {metric.unit}
             </div>
 
             {/* Thresholds */}
             <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-[#888888]">Thresholds</h3>
+              <h3 className="text-sm font-medium text-[#9898A8]">Thresholds</h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {Object.entries(metric.thresholds).map(([pace, range]) => (
                   <div
                     key={pace}
-                    className="bg-[#0A0A0A] border border-[#1A1A1A] px-3 py-2 text-xs"
+                    className="bg-[#22222C] border border-[#2A2A35] rounded-xl px-3 py-2 text-xs"
                   >
-                    <span className="text-[#888888] capitalize">{pace}: </span>
-                    <span className="text-white">{range}</span>
+                    <span className="text-[#9898A8] capitalize">{pace}: </span>
+                    <span className="text-[#F0F0F5]">{range}</span>
                   </div>
                 ))}
               </div>
@@ -274,8 +274,8 @@ export default function ResearchPage() {
 
             {/* Methodology */}
             <div className="space-y-1.5">
-              <h3 className="text-sm font-medium text-[#888888]">How we measure it</h3>
-              <p className="text-sm text-[#888888] leading-relaxed">
+              <h3 className="text-sm font-medium text-[#9898A8]">How we measure it</h3>
+              <p className="text-sm text-[#9898A8] leading-relaxed">
                 {metric.methodology}
               </p>
             </div>
@@ -288,9 +288,9 @@ export default function ResearchPage() {
                   {metric.caveats.map((caveat, i) => (
                     <li
                       key={i}
-                      className="flex gap-2 text-sm text-[#888888] leading-relaxed"
+                      className="flex gap-2 text-sm text-[#9898A8] leading-relaxed"
                     >
-                      <span className="text-amber-500 shrink-0 mt-0.5">*</span>
+                      <span className="text-amber-400 shrink-0 mt-0.5">*</span>
                       {caveat}
                     </li>
                   ))}
@@ -300,7 +300,7 @@ export default function ResearchPage() {
 
             {/* Sources */}
             <div className="space-y-2">
-              <h3 className="text-sm font-medium text-[#888888]">Sources</h3>
+              <h3 className="text-sm font-medium text-[#9898A8]">Sources</h3>
               <ul className="space-y-3">
                 {metric.sources.map((source, i) => (
                   <li key={i} className="text-sm space-y-0.5">
@@ -308,11 +308,11 @@ export default function ResearchPage() {
                       href={source.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[#888888] hover:text-white transition-colors underline underline-offset-2"
+                      className="text-[#9898A8] hover:text-[#F0F0F5] transition-colors underline underline-offset-2"
                     >
                       {source.text}
                     </a>
-                    <p className="text-[#444444] text-xs pl-4">
+                    <p className="text-[#5C5C6E] text-xs pl-4">
                       {source.finding}
                     </p>
                   </li>
@@ -323,36 +323,36 @@ export default function ResearchPage() {
         ))}
 
         {/* Why we don't target stride length */}
-        <section className="border border-[#1A1A1A] bg-[#0A0A0A] p-5 space-y-4">
-          <h2 className="text-lg font-semibold text-white">Why we don&apos;t prescribe a target stride length</h2>
-          <p className="text-sm text-[#888888] leading-relaxed">
+        <section className="border border-[#2A2A35] bg-[#1A1A22] rounded-2xl p-5 space-y-4">
+          <h2 className="text-lg font-semibold">Why we don&apos;t prescribe a target stride length</h2>
+          <p className="text-sm text-[#9898A8] leading-relaxed">
             Many running coaches suggest shortening or lengthening stride length as a coaching cue.
             RunningForm deliberately does not prescribe a target stride length, and the science is clear on why.
           </p>
-          <p className="text-sm text-[#888888] leading-relaxed">
+          <p className="text-sm text-[#9898A8] leading-relaxed">
             Cavanagh &amp; Williams (1982) showed that trained runners self-select a stride length that is at or
             very near their individual metabolic optimum — the point where oxygen uptake is minimized for their
             speed. Deviating from preferred stride length in either direction (too short or too long) increased
             VO₂ by an average of 2.6–3.4 ml/kg/min. The body finds its own optimum through training adaptation.
           </p>
-          <p className="text-sm text-[#888888] leading-relaxed">
-            What we <em>do</em> flag is <strong className="text-white">overstriding</strong> — when the foot
+          <p className="text-sm text-[#9898A8] leading-relaxed">
+            What we <em>do</em> flag is <strong className="text-[#F0F0F5]">overstriding</strong> — when the foot
             lands significantly ahead of the centre of mass, creating a braking impulse regardless of stride
             length. The fix for overstriding is increasing cadence slightly or shortening the reach of the foot
             at contact, not prescribing a specific stride length target.
           </p>
           <div className="space-y-2 pt-1">
-            <h3 className="text-sm font-medium text-[#888888]">Source</h3>
+            <h3 className="text-sm font-medium text-[#9898A8]">Source</h3>
             <div className="text-sm space-y-0.5">
               <a
                 href="https://pubmed.ncbi.nlm.nih.gov/7070254/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#888888] hover:text-white transition-colors underline underline-offset-2"
+                className="text-[#9898A8] hover:text-[#F0F0F5] transition-colors underline underline-offset-2"
               >
                 Cavanagh &amp; Williams 1982 — &quot;The effect of stride length variation on oxygen uptake during distance running.&quot; Medicine &amp; Science in Sports &amp; Exercise, 14(1)
               </a>
-              <p className="text-[#444444] text-xs pl-4">
+              <p className="text-[#5C5C6E] text-xs pl-4">
                 All subjects showed a U-shaped relationship between stride length and VO₂ with an individual optimum. Trained runners self-selected a stride length at or near their metabolic optimum.
               </p>
             </div>
@@ -360,7 +360,7 @@ export default function ResearchPage() {
         </section>
 
         {/* Disclaimer */}
-        <p className="text-xs text-[#444444] leading-relaxed border-t border-[#1A1A1A] pt-6">
+        <p className="text-xs text-[#5C5C6E] leading-relaxed border-t border-[#2A2A35] pt-6">
           This analysis is AI-generated and intended for educational purposes only. It is not a
           substitute for advice from a qualified running coach or physiotherapist. Biomechanics
           metrics are estimates from 2D side-view video, not lab-grade measurements.
@@ -369,7 +369,7 @@ export default function ResearchPage() {
         <div className="pb-4">
           <Link
             href="/upload"
-            className="text-sm text-[#888888] hover:text-white transition-colors"
+            className="text-sm text-[#9898A8] hover:text-[#F0F0F5] transition-colors"
           >
             ← Back to upload
           </Link>

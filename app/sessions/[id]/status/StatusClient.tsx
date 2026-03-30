@@ -100,13 +100,13 @@ export default function StatusClient({ sessionId }: Props) {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/history"
-              className="inline-flex items-center justify-center px-6 py-3 min-h-[44px] border border-white text-white font-semibold text-sm tracking-wide hover:bg-white hover:text-black transition-colors duration-100"
+              className="inline-flex items-center justify-center px-6 py-2.5 min-h-[44px] border border-[#3A3A48] text-[#F0F0F5] font-medium text-sm rounded-xl hover:bg-[#22222C] transition-all duration-150"
             >
               Go to History
             </Link>
             <button
               onClick={() => router.push('/upload')}
-              className="inline-flex items-center justify-center px-6 py-3 min-h-[44px] bg-white text-black font-semibold text-sm tracking-wide hover:bg-[#E5E5E5] transition-colors duration-100"
+              className="inline-flex items-center justify-center px-6 py-2.5 min-h-[44px] bg-[#F0F0F5] text-[#111116] font-semibold text-sm rounded-xl hover:bg-[#D8D8E0] active:scale-[0.98] transition-all duration-150"
             >
               Upload a new video
             </button>
@@ -121,25 +121,25 @@ export default function StatusClient({ sessionId }: Props) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="max-w-md w-full text-center space-y-6">
-          <h1 className="text-2xl font-bold text-white">Analysis failed</h1>
+          <h1 className="text-2xl font-bold">Analysis failed</h1>
           {jobData.originalFilename && (
-            <p className="text-[#888888] text-sm truncate">{jobData.originalFilename}</p>
+            <p className="text-[#9898A8] text-sm truncate">{jobData.originalFilename}</p>
           )}
-          <p className="text-[#888888] text-sm">
+          <p className="text-[#9898A8] text-sm">
             Something went wrong while analysing your video. You can upload a new video or delete
             this attempt.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
               onClick={() => router.push('/upload')}
-              className="inline-flex items-center justify-center px-6 py-3 min-h-[44px] bg-white text-black font-semibold text-sm tracking-wide hover:bg-[#E5E5E5] transition-colors duration-100"
+              className="inline-flex items-center justify-center px-6 py-2.5 min-h-[44px] bg-[#F0F0F5] text-[#111116] font-semibold text-sm rounded-xl hover:bg-[#D8D8E0] active:scale-[0.98] transition-all duration-150"
             >
               Upload new video
             </button>
             <button
               onClick={handleDelete}
               disabled={isDeleting}
-              className="inline-flex items-center justify-center px-6 py-3 min-h-[44px] border border-red-500/40 text-red-400 text-sm font-medium hover:border-red-500 hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-100"
+              className="inline-flex items-center justify-center px-6 py-2.5 min-h-[44px] border border-red-400/40 text-red-400 text-sm font-medium rounded-xl hover:border-red-400 hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
             >
               {isDeleting ? 'Deleting…' : 'Delete this attempt'}
             </button>
@@ -155,32 +155,32 @@ export default function StatusClient({ sessionId }: Props) {
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center space-y-8">
-        {/* White arc spinner */}
+        {/* Teal arc spinner */}
         <div className="flex justify-center">
-          <div className="w-16 h-16 border-2 border-[#1A1A1A] border-t-white rounded-full animate-spin" />
+          <div className="w-16 h-16 border-2 border-[#2A2A35] border-t-[#2DD4BF] rounded-full animate-spin" />
         </div>
 
         <div className="space-y-3">
-          <h1 className="text-2xl font-bold text-white">
+          <h1 className="text-xl font-semibold">
             Analyzing your run
           </h1>
-          <p className="text-[#888888] text-sm">
+          <p className="text-[#9898A8] text-sm">
             Examining stride, arm drive, and posture&hellip;
           </p>
           {filename && (
-            <p className="text-[#444444] text-xs truncate px-4">{filename}</p>
+            <p className="text-[#5C5C6E] text-xs truncate px-4">{filename}</p>
           )}
-          <p className="text-[#444444] text-xs">Usually takes 20–60 seconds</p>
+          <p className="text-[#5C5C6E] text-xs">Usually takes 20–60 seconds</p>
         </div>
 
         {/* Thin indeterminate progress bar */}
-        <div className="w-full bg-[#1A1A1A] h-px overflow-hidden">
-          <div className="h-full bg-white animate-[progress_2s_ease-in-out_infinite]" />
+        <div className="w-full bg-[#2A2A35] h-px rounded-full overflow-hidden">
+          <div className="h-full bg-[#2DD4BF] animate-[progress_2s_ease-in-out_infinite]" />
         </div>
 
-        <p className="text-[#444444] text-xs">
+        <p className="text-[#5C5C6E] text-xs">
           You can leave this page — your result will appear in{' '}
-          <Link href="/history" className="text-[#888888] hover:text-white underline transition-colors duration-100">
+          <Link href="/history" className="text-[#9898A8] hover:text-[#F0F0F5] underline transition-colors duration-150">
             History
           </Link>{' '}
           when it&apos;s ready.

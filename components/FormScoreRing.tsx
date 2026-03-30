@@ -5,12 +5,13 @@ interface FormScoreRingProps {
   size?: Size
 }
 
-const SIZES: Record<Size, number> = { sm: 44, md: 80, lg: 120 }
+const SIZES: Record<Size, number> = { sm: 44, md: 80, lg: 96 }
 
-// White stroke — opacity dims for very low scores
-function getStrokeOpacity(score: number) {
-  if (score >= 30) return 1
-  return 0.6
+function getStrokeColor(score: number): string {
+  if (score >= 75) return '#34D399' // emerald-400
+  if (score >= 50) return '#FBBF24' // amber-400
+  if (score >= 25) return '#FB923C' // orange-400
+  return '#F87171'                  // red-400
 }
 
 export default function FormScoreRing({ score, size = 'lg' }: FormScoreRingProps) {
@@ -18,7 +19,7 @@ export default function FormScoreRing({ score, size = 'lg' }: FormScoreRingProps
   const radius = 50
   const circumference = 2 * Math.PI * radius
   const offset = circumference - (score / 100) * circumference
-  const opacity = getStrokeOpacity(score)
+  const strokeColor = getStrokeColor(score)
 
   return (
     <div className="flex flex-col items-center shrink-0">
@@ -28,27 +29,26 @@ export default function FormScoreRing({ score, size = 'lg' }: FormScoreRingProps
         viewBox="0 0 120 120"
       >
         {/* Background track */}
-        <circle cx="60" cy="60" r={radius} fill="none" stroke="#1A1A1A" strokeWidth="8" />
+        <circle cx="60" cy="60" r={radius} fill="none" stroke="#2A2A35" strokeWidth="6" />
         {/* Score arc */}
         <circle
           cx="60"
           cy="60"
           r={radius}
           fill="none"
-          stroke="#FFFFFF"
-          strokeOpacity={opacity}
-          strokeWidth="8"
+          stroke={strokeColor}
+          strokeWidth="6"
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           transform="rotate(-90 60 60)"
-          style={{ transition: 'stroke-dashoffset 1s ease-out' }}
+          style={{ transition: 'stroke-dashoffset 800ms ease-out' }}
         />
         {/* Score number */}
-        <text x="60" y="55" textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="32" fontWeight="700">
+        <text x="60" y="55" textAnchor="middle" dominantBaseline="middle" fill="#F0F0F5" fontSize="32" fontWeight="700">
           {score}
         </text>
-        <text x="60" y="78" textAnchor="middle" dominantBaseline="middle" fill="#444444" fontSize="12">
+        <text x="60" y="78" textAnchor="middle" dominantBaseline="middle" fill="#5C5C6E" fontSize="12">
           / 100
         </text>
       </svg>

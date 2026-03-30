@@ -3,21 +3,41 @@
 @tailwind utilities;
 
 :root {
-  --color-bg:           #0D0D0D;
-  --color-surface:      #141414;
-  --color-border:       #282828;
-  --color-text:         #FFFFFF;
-  --color-text-muted:   #AAAAAA;
-  --color-text-dim:     #6B6B6B;
-  --color-cta-bg:       #FFFFFF;
-  --color-cta-text:     #000000;
-  --color-good:         #22C55E;
-  --color-critical:     #EA580C;
-  --color-moderate:     #F59E0B;
-  --color-minor:        #6B7280;
+  /* Background layers */
+  --color-bg:             #111116;
+  --color-surface:        #1A1A22;
+  --color-surface-raised: #22222C;
+  --color-border:         #2A2A35;
+  --color-border-strong:  #3A3A48;
+
+  /* Text */
+  --color-text:           #F0F0F5;
+  --color-text-secondary: #9898A8;
+  --color-text-tertiary:  #5C5C6E;
+
+  /* Brand accent */
+  --color-accent:         #2DD4BF;
+  --color-accent-hover:   #14B8A6;
+  --color-accent-subtle:  rgba(45, 212, 191, 0.12);
+  --color-accent-ring:    rgba(45, 212, 191, 0.25);
+
+  /* CTA */
+  --color-cta-bg:         #F0F0F5;
+  --color-cta-text:       #111116;
+  --color-cta-hover:      #D8D8E0;
+
+  /* Semantic */
+  --color-good:           #34D399;
+  --color-good-subtle:    rgba(52, 211, 153, 0.12);
+  --color-moderate:       #FBBF24;
+  --color-moderate-subtle: rgba(251, 191, 36, 0.12);
+  --color-critical:       #F97316;
+  --color-critical-subtle: rgba(249, 115, 22, 0.12);
+  --color-minor:          #7C7C8E;
+  --color-error:          #EF4444;
 }
 
-/* Frame gallery range slider — dark track */
+/* Frame gallery range slider */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -26,19 +46,19 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-runnable-track {
   height: 6px;
   border-radius: 3px;
-  background: #1f2937; /* gray-800 */
+  background: var(--color-border);
 }
 input[type="range"]::-moz-range-track {
   height: 6px;
   border-radius: 3px;
-  background: #1f2937;
+  background: var(--color-border);
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background: #3b82f6; /* blue-500 */
+  background: var(--color-accent);
   margin-top: -5px;
   cursor: pointer;
 }
@@ -46,7 +66,7 @@ input[type="range"]::-moz-range-thumb {
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: var(--color-accent);
   border: none;
   cursor: pointer;
 }

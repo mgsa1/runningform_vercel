@@ -124,15 +124,15 @@ export default function UploadClient({ userId }: Props) {
   return (
     <div className="space-y-6">
       {/* Filming tips */}
-      <div className="border border-[#282828]">
+      <div className="border border-[#2A2A35] rounded-2xl overflow-hidden">
         <button
           type="button"
           onClick={() => setTipsOpen((v) => !v)}
-          className="w-full flex items-center gap-2.5 px-4 py-3 text-left"
+          className="w-full flex items-center gap-2.5 px-5 py-3 text-left"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 text-[#888888] shrink-0"
+            className="h-4 w-4 text-[#9898A8] shrink-0"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -142,12 +142,12 @@ export default function UploadClient({ userId }: Props) {
               clipRule="evenodd"
             />
           </svg>
-          <span className="flex-1 text-sm font-medium text-[#888888]">
+          <span className="flex-1 text-sm font-medium text-[#9898A8]">
             How to film for best results
           </span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className={`h-4 w-4 text-[#6B6B6B] transition-transform shrink-0 ${tipsOpen ? 'rotate-180' : ''}`}
+            className={`h-4 w-4 text-[#5C5C6E] transition-transform shrink-0 ${tipsOpen ? 'rotate-180' : ''}`}
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -159,10 +159,10 @@ export default function UploadClient({ userId }: Props) {
           </svg>
         </button>
         {tipsOpen && (
-          <ul className="px-4 pb-4 space-y-2 border-t border-[#282828] pt-3">
+          <ul className="px-5 pb-4 space-y-2 border-t border-[#2A2A35] pt-3">
             {FILMING_TIPS.map((tip, i) => (
-              <li key={i} className="flex gap-2 text-sm text-[#888888] leading-snug">
-                <span className="text-white shrink-0 mt-0.5">✓</span>
+              <li key={i} className="flex gap-2 text-sm text-[#9898A8] leading-snug">
+                <span className="text-emerald-400 shrink-0 mt-0.5">✓</span>
                 {tip}
               </li>
             ))}
@@ -172,27 +172,27 @@ export default function UploadClient({ userId }: Props) {
 
       {/* Run context */}
       <div className="space-y-3">
-        <p className="text-xs font-medium text-[#6B6B6B] uppercase tracking-widest">
+        <p className="text-[11px] font-medium text-[#5C5C6E] uppercase tracking-widest">
           Run context{' '}
-          <span className="normal-case font-normal text-[#6B6B6B]">
+          <span className="normal-case font-normal text-[#5C5C6E]">
             — optional, helps the AI give better advice
           </span>
         </p>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-xs text-[#888888] mb-1.5 block">Pace</label>
+            <label className="text-xs text-[#9898A8] mb-1.5 block">Pace</label>
             <div className="flex">
               <input
                 type="text"
                 value={paceValue}
                 onChange={(e) => setPaceValue(e.target.value)}
                 placeholder="5:30"
-                className="flex-1 min-w-0 bg-black border border-[#282828] px-3 py-2 text-sm text-white placeholder-[#444444] focus:outline-none focus:border-white transition-colors duration-100"
+                className="flex-1 min-w-0 bg-[#111116] border border-[#2A2A35] rounded-l-xl px-3 py-2 text-sm text-[#F0F0F5] placeholder-[#5C5C6E] focus:outline-none focus:border-[#2DD4BF] transition-colors duration-150"
               />
               <select
                 value={paceUnit}
                 onChange={(e) => setPaceUnit(e.target.value as 'km' | 'mi')}
-                className="bg-[#0A0A0A] border border-l-0 border-[#282828] px-2 py-2 text-sm text-[#888888] focus:outline-none focus:border-white transition-colors duration-100"
+                className="bg-[#1A1A22] border border-l-0 border-[#2A2A35] rounded-r-xl px-2 py-2 text-sm text-[#9898A8] focus:outline-none focus:border-[#2DD4BF] transition-colors duration-150"
               >
                 <option value="km">/km</option>
                 <option value="mi">/mi</option>
@@ -200,11 +200,11 @@ export default function UploadClient({ userId }: Props) {
             </div>
           </div>
           <div>
-            <label className="text-xs text-[#888888] mb-1.5 block">Fatigue level</label>
+            <label className="text-xs text-[#9898A8] mb-1.5 block">Fatigue level</label>
             <select
               value={fatigue}
               onChange={(e) => setFatigue(e.target.value === '' ? '' : Number(e.target.value))}
-              className="w-full bg-black border border-[#282828] px-3 py-2 text-sm text-white focus:outline-none focus:border-white transition-colors duration-100"
+              className="w-full bg-[#111116] border border-[#2A2A35] rounded-xl px-3 py-2 text-sm text-[#F0F0F5] focus:outline-none focus:border-[#2DD4BF] transition-colors duration-150"
             >
               <option value="">Not specified</option>
               <option value="2">Fresh</option>
@@ -217,7 +217,7 @@ export default function UploadClient({ userId }: Props) {
 
       {/* Injury / pain context */}
       <div className="space-y-3">
-        <p className="text-xs font-medium text-[#6B6B6B] uppercase tracking-widest">
+        <p className="text-[11px] font-medium text-[#5C5C6E] uppercase tracking-widest">
           Any pain or niggles?
         </p>
         <div className="flex flex-wrap gap-2">
@@ -236,10 +236,10 @@ export default function UploadClient({ userId }: Props) {
                     active ? prev.filter((f) => f !== id) : [...prev, id]
                   )
                 }
-                className={`px-3 py-1.5 text-xs border transition-colors duration-100 ${
+                className={`px-3 py-1.5 text-xs rounded-lg border transition-colors duration-150 ${
                   active
-                    ? 'border-white text-white bg-white/5'
-                    : 'border-[#282828] text-[#888888] hover:border-[#333333] hover:text-[#888888]'
+                    ? 'border-[#2DD4BF] text-[#2DD4BF] bg-[#2DD4BF]/10'
+                    : 'border-[#2A2A35] text-[#9898A8] hover:border-[#3A3A48]'
                 }`}
               >
                 {label}
@@ -255,7 +255,7 @@ export default function UploadClient({ userId }: Props) {
         onError={handleError}
       />
       {error && (
-        <p className="text-sm text-red-400 border border-red-500/30 px-4 py-3">
+        <p className="text-sm text-red-400 border border-red-400/30 rounded-xl px-4 py-3">
           {error}
         </p>
       )}

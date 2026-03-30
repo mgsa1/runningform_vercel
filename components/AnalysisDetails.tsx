@@ -19,27 +19,27 @@ function BodySection({ title, items }: { title: string; items: BodyDetail[] }) {
   if (!items?.length) return null
   return (
     <div className="space-y-3">
-      <h3 className="text-xs font-medium tracking-widest uppercase text-[#444444]">{title}</h3>
+      <h3 className="text-[11px] font-medium tracking-widest uppercase text-[#5C5C6E]">{title}</h3>
       {items.map((item, i) => (
         <div
           key={i}
-          className="p-4 border border-[#1A1A1A] bg-[#0A0A0A] space-y-1.5"
+          className="p-4 border border-[#2A2A35] bg-[#1A1A22] rounded-2xl space-y-1.5"
         >
           <div className="flex items-center gap-2 flex-wrap">
             <span
-              className={`w-1.5 h-1.5 rounded-full shrink-0 ${item.status === 'good' ? 'bg-green-400' : 'bg-amber-400'}`}
+              className={`w-1.5 h-1.5 rounded-full shrink-0 ${item.status === 'good' ? 'bg-emerald-400' : 'bg-amber-400'}`}
               aria-label={item.status === 'good' ? 'Good' : 'Needs work'}
             />
-            <span className="font-medium text-white text-sm">{item.trait}</span>
+            <span className="font-medium text-sm">{item.trait}</span>
             {item.confidence !== 'high' && (
               <span
-                className={`ml-auto text-xs ${confidenceColor[item.confidence] ?? 'text-[#888888]'}`}
+                className={`ml-auto text-xs ${confidenceColor[item.confidence] ?? 'text-[#9898A8]'}`}
               >
                 {item.confidence} confidence
               </span>
             )}
           </div>
-          <p className="text-sm text-[#888888] leading-relaxed">{item.description}</p>
+          <p className="text-sm text-[#9898A8] leading-relaxed">{item.description}</p>
         </div>
       ))}
     </div>

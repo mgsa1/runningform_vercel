@@ -153,14 +153,12 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
       // ── Phase 1: Dense frame extraction from middle window ─────────────
       setStatus('extracting')
 
-      // Calculate extraction window: middle of the video, up to POSE_WINDOW_S
       const windowDuration = Math.min(POSE_WINDOW_S, duration)
       const windowStart = (duration - windowDuration) / 2
       const frameCount = duration < POSE_WINDOW_S
-        ? Math.min(POSE_FRAME_COUNT, Math.round(duration * 17))  // ~17fps for short videos
+        ? Math.min(POSE_FRAME_COUNT, Math.round(duration * 17))
         : POSE_FRAME_COUNT
 
-      // Extract all dense frames to canvas and save as blobs
       const allBlobs: Blob[] = []
       const frameTimestamps: number[] = []
 
@@ -179,7 +177,6 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
       setStatus('detecting')
       setProgressMsg('Loading pose model…')
 
-      // Lazy-load the pose module to avoid bundling WASM in initial page load
       const poseModule = await import('@/lib/pose')
       await poseModule.initPoseDetector()
 
@@ -188,8 +185,6 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
       for (let i = 0; i < frameCount; i++) {
         setProgressMsg(`Analyzing stride ${i + 1} of ${frameCount}…`)
 
-        // Re-seek and draw for pose detection (canvas already processed,
-        // but we need to re-render each frame)
         const time = frameTimestamps[i]
         await seekToTime(video, time)
         ctx.drawImage(video, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
@@ -206,11 +201,9 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
       const visibleSide = poseModule.detectVisibleSide(poseFrames)
       const gaitResult = poseModule.analyzeGait(poseFrames, visibleSide)
 
-      // Quality feedback
       const feedback = poseModule.assessVideoQuality(poseFrames, frameCount, gaitResult)
       setQualityFeedback(feedback)
 
-      // Select the 10 best frames for Claude
       let selectedFrameIndices: number[]
       if (gaitResult.gaitCyclesDetected >= 1) {
         selectedFrameIndices = poseModule.selectFramesForClaude(poseFrames, gaitResult, CLAUDE_FRAME_COUNT)
@@ -218,7 +211,6 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
         selectedFrameIndices = poseModule.selectFramesEvenly(frameCount, CLAUDE_FRAME_COUNT)
       }
 
-      // Build selected frames' pose data (strip worldLandmarks to save space)
       const selectedFrames = selectedFrameIndices
         .filter((idx) => poseFrames[idx])
         .map((idx) => ({
@@ -226,7 +218,6 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
           landmarks: poseFrames[idx].landmarks,
         }))
 
-      // Build the pose extraction result
       const poseExtractionResult: PoseExtractionResult = {
         frames: poseFrames,
         selectedFrames,
@@ -236,7 +227,6 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
         framesWithValidPose: poseFrames.length,
       }
 
-      // Compute biomechanics (done client-side to avoid server cost)
       let biomechanicsReport: BiomechanicsReport | null = null
       console.log(`[pose] Gait analysis: ${gaitResult.gaitCyclesDetected} cycles detected, ${gaitResult.contactFrameIndices.length} contacts, ${poseFrames.length}/${frameCount} frames with valid pose, side=${visibleSide}`)
       if (gaitResult.gaitCyclesDetected >= 1) {
@@ -354,10 +344,10 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
           if (!selectedFile && !isProcessing) fileInputRef.current?.click()
         }}
         className={[
-          'relative border border-dashed p-12 text-center transition-colors duration-150',
+          'relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-200',
           isDragging
-            ? 'border-white bg-white/[0.03]'
-            : 'border-white/30 hover:border-white',
+            ? 'border-[#2DD4BF] bg-[#2DD4BF]/[0.06]'
+            : 'border-[#3A3A48] hover:border-[#2DD4BF]/50',
           !selectedFile && !isProcessing ? 'cursor-pointer' : 'cursor-default',
         ].join(' ')}
       >
@@ -384,26 +374,26 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="mx-auto text-[#444444]"
+              className="mx-auto text-[#5C5C6E]"
             >
               <line x1="12" y1="5" x2="12" y2="19" />
               <polyline points="5 12 12 5 19 12" />
             </svg>
-            <p className="text-sm font-medium text-[#888888]">
+            <p className="text-sm font-medium text-[#9898A8]">
               Drop your video here, or{' '}
-              <span className="text-white underline underline-offset-2">browse</span>
+              <span className="text-[#2DD4BF] underline underline-offset-2">browse</span>
             </p>
-            <p className="text-xs text-[#444444]">
+            <p className="text-xs text-[#5C5C6E]">
               MP4 · MOV · WebM &nbsp;·&nbsp; max 500 MB &nbsp;·&nbsp; min 3 seconds
             </p>
           </div>
         ) : (
           <div className="flex items-center justify-between gap-4">
             <div className="text-left min-w-0">
-              <p className="text-sm font-medium text-white truncate">
+              <p className="text-sm font-medium truncate">
                 {selectedFile.name}
               </p>
-              <p className="text-xs text-[#888888] mt-0.5">
+              <p className="text-xs text-[#9898A8] mt-0.5">
                 {(selectedFile.size / (1024 * 1024)).toFixed(1)} MB
               </p>
             </div>
@@ -414,7 +404,7 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
                   e.stopPropagation()
                   clearSelection()
                 }}
-                className="text-xs text-[#888888] hover:text-white transition-colors duration-100 shrink-0"
+                className="text-xs text-[#9898A8] hover:text-[#F0F0F5] transition-colors duration-150 shrink-0"
               >
                 Remove
               </button>
@@ -425,7 +415,7 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
 
       {/* Progress message */}
       {progressMsg && (
-        <p className="text-center text-sm text-[#888888]">{progressMsg}</p>
+        <p className="text-center text-sm text-[#9898A8]">{progressMsg}</p>
       )}
 
       {/* Progress bar */}
@@ -436,9 +426,9 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
         const total = parseInt(match[2])
         const pct = Math.round((current / total) * 100)
         return (
-          <div className="w-full bg-[#1A1A1A] h-px overflow-hidden">
+          <div className="w-full bg-[#2A2A35] h-1 rounded-full overflow-hidden">
             <div
-              className="h-px bg-white transition-all duration-300"
+              className="h-full bg-[#2DD4BF] rounded-full transition-all duration-300"
               style={{ width: `${pct}%` }}
             />
           </div>
@@ -451,10 +441,10 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
           {qualityFeedback.issues.map((issue, i) => (
             <div
               key={i}
-              className={`text-sm px-4 py-3 border ${
+              className={`text-sm px-4 py-3 rounded-xl border ${
                 issue.severity === 'error'
-                  ? 'border-red-500/30 text-red-400'
-                  : 'border-amber-500/30 text-amber-400'
+                  ? 'border-red-400/30 text-red-400'
+                  : 'border-amber-400/30 text-amber-400'
               }`}
             >
               {issue.message}
@@ -468,20 +458,20 @@ export default function VideoUploader({ userId, onUploadComplete, onError }: Pro
         <button
           type="button"
           onClick={startUpload}
-          className="w-full py-3 px-4 bg-white text-black text-sm font-semibold tracking-wide hover:bg-[#E5E5E5] transition-colors duration-100"
+          className="w-full py-3 px-4 bg-[#F0F0F5] text-[#111116] text-sm font-semibold rounded-xl hover:bg-[#D8D8E0] active:scale-[0.98] transition-all duration-150"
         >
           Analyse my run
         </button>
       )}
 
       {isProcessing && (
-        <div className="w-full py-3 px-4 border border-[#1A1A1A] text-[#888888] text-sm font-medium text-center select-none">
+        <div className="w-full py-3 px-4 border border-[#2A2A35] rounded-xl text-[#9898A8] text-sm font-medium text-center select-none">
           {status === 'detecting' ? 'Analyzing your running form…' : 'Processing…'}
         </div>
       )}
 
       {status === 'done' && (
-        <div className="w-full py-3 px-4 border border-green-500/30 text-green-400 text-sm font-medium text-center">
+        <div className="w-full py-3 px-4 border border-emerald-400/30 rounded-xl text-emerald-400 text-sm font-medium text-center">
           Frames uploaded — preparing analysis…
         </div>
       )}

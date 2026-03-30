@@ -16,9 +16,14 @@ const config: Config = {
           '50%': { transform: 'translateX(50%) scaleX(0.6)' },
           '100%': { transform: 'translateX(200%) scaleX(0.5)' },
         },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
       },
       animation: {
         progress: 'progress 2s ease-in-out infinite',
+        marquee: 'marquee 25s linear infinite',
       },
     },
   },

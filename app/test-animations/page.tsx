@@ -20,13 +20,13 @@ const drills = [
 
 export default function TestAnimations() {
   return (
-    <main className="min-h-screen bg-gray-950 p-8">
-      <h1 className="text-white text-2xl font-bold mb-8">Drill Animations</h1>
+    <main className="min-h-screen p-8">
+      <h1 className="text-2xl font-bold mb-8">Drill Animations</h1>
       <div className="grid grid-cols-3 gap-6 sm:grid-cols-4 lg:grid-cols-5">
         {drills.map(({ id, label }) => (
-          <div key={id} className="flex flex-col items-center gap-2 bg-gray-900 rounded-xl p-4">
+          <div key={id} className="flex flex-col items-center gap-2 bg-[#1A1A22] border border-[#2A2A35] rounded-xl p-4">
             <DrillAnimation drillId={id} />
-            <span className="text-gray-400 text-xs text-center">{label}</span>
+            <span className="text-[#9898A8] text-xs text-center">{label}</span>
           </div>
         ))}
       </div>

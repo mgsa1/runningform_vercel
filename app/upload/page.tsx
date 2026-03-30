@@ -21,10 +21,10 @@ export default async function UploadPage() {
 
   return (
     <div className="min-h-screen pb-20 md:pb-0">
-      <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-12 space-y-8">
+      <div className="max-w-4xl mx-auto px-5 sm:px-8 lg:px-12 py-10 space-y-6">
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold text-white">Upload a video</h1>
-          <p className="text-sm text-[#888888]">
+          <h1 className="text-2xl font-bold">Upload a video</h1>
+          <p className="text-sm text-[#9898A8]">
             MP4, MOV, or WebM · minimum 3 seconds · max 500 MB
           </p>
         </div>
