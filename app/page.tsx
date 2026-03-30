@@ -72,14 +72,15 @@ export default async function LandingPage() {
           {/* Right: video (lg+ only) */}
           <div className="hidden lg:block relative overflow-hidden">
             <video
-              src="/hero_video.mp4"
               autoPlay
               loop
               muted
               playsInline
               poster="/hero.jpg"
               className="absolute inset-0 w-full h-full object-cover object-center"
-            />
+            >
+              <source src="/hero_video.webm" type="video/webm" />
+            </video>
             {/* Left-edge fade */}
             <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-[#111116] to-transparent pointer-events-none" />
           </div>
